@@ -1,8 +1,7 @@
 HDTestReport runPackages: #(
 
 	'HelpSystem-Tests'
-	
-
+	'ToolsTest-Browser'
 	
 ).
 
