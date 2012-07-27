@@ -1,0 +1,34 @@
+#!/bin/sh
+# Run the VM, setting SQUEAK_PLUGINS if unset to the VM's containing directory
+# if unset, and ensuring LD_LIBRARY_PATH includes the VM's containing directory.
+BIN=`/usr/bin/dirname $0`/lib/squeak/4.0-2562
+if [ "${SQUEAK_PLUGINS-unset}" = unset ]; then
+	export SQUEAK_PLUGINS="$BIN"
+fi
+# At least on linux LD_LIBRARY_PATH's components must be absolute path names
+case "$BIN" in
+/*) PLUGINS="$BIN";;
+*) PLUGINS="`pwd`/$BIN"
+esac
+# On some linuxes there multiple versions of the C library.  If the image uses
+# libc (e.g. through the FFI) then it must use the same version that the VM uses
+# and so it should take precedence over /lib libc.  This is done by setting
+# LD_LIBRARY_PATH appropriately, based on ldd's idea of the libc use by the VM.
+case `/usr/bin/ldd "$BIN/squeak" | /bin/fgrep /libc. | sed 's/^.*=> //'` in
+/lib/libc*)					SVMLLP="/lib:/usr/lib";;
+/lib32/libc*)				SVMLLP="/lib32:/usr/lib32";;
+/lib64/libc*)				SVMLLP="/lib64:/usr/lib64";;
+/lib/tls/libc*)				SVMLLP="/lib/tls:/lib:/usr/lib/tls:/usr/lib";;
+/lib/i386-linux-gnu/libc*)	\
+	SVMLLP="/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu";;
+/lib/tls/i686/cmov/libc*)	\
+	SVMLLP="/lib/tls/i686/cmov:/lib:/usr/lib/tls/i686/cmov:/usr/lib";;
+/lib/tls/i686/nosegneg/libc*)	\
+	SVMLLP="/lib/i686/nosegneg/tls:/lib:/usr/lib/i686/nosegneg/tls:/usr/lib";;
+*)	echo "can't infer base LD_LIBRARY_PATH. Aborting." 1>&2;
+	exit 1
+esac
+# prepending is less flexible but safer because it ensures we find the plugins
+# in the same directory as the VM.  We must include at least /lib and /usr/lib
+# if libraries there-in are to be found.  These directories are not implicit.
+LD_LIBRARY_PATH=$PLUGINS:$SVMLLP:${LD_LIBRARY_PATH} exec "$BIN/squeak" "$@"
