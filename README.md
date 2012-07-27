@@ -1,0 +1,1 @@
+This a minimally functional way of running Squeak CI tests in a Jenkins installation.
