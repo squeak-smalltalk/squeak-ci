@@ -1,5 +1,3 @@
-| fileName |
-
 HDTestReport runPackages: #(
 	#'BalloonTests-Fills'
 	#'CollectionsTests-Abstract'
@@ -88,10 +86,8 @@ HDTestReport runPackages: #(
 	#VersionNumberTests
 ).
 
-fileName := [:s | ((s splitBy: FileDirectory pathNameDelimiter asString) last splitBy: '.') first].
-
 "Save and Quit"
 WorldState addDeferredUIMessage: [
 	SmalltalkImage current
-		saveAs: ('{1}-{2}.image' format: {fileName value: SmalltalkImage current imageName. DateAndTime now printString});
+		saveAs: ('Squeak4.4-12053-{1}.image' format: {DateAndTime now printString});
 		snapshot: true andQuit: true ]. "It seems lame to double-save the image. Do we HAVE to snapshot?"
