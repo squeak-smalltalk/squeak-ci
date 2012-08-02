@@ -7,6 +7,7 @@ mkdir -p "$WORKSPACE/target/"
 cp "$WORKSPACE/$IMAGE_NAME.image" "$WORKSPACE/target/ImageUnderTest.image"
 cp "$WORKSPACE/$IMAGE_NAME.changes" "$WORKSPACE/target/ImageUnderTest.changes"
 cp "$WORKSPACE/SqueakV41.sources" "$WORKSPACE/target/SqueakV41.sources"
+cp "$WORKSPACE/HudsonBuildTools.st" "$WORKSPACE/target/HudsonBuildTools.st"
 
 "$WORKSPACE/coglinux/bin/squeak" -headless "$WORKSPACE/target/ImageUnderTest.image" "$WORKSPACE/tests.st"
 
