@@ -1,3 +1,7 @@
+Utilities setAuthorInitials: 'TestRunner'.
+
+(FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
+
 HDTestReport runPackages: #(
 	#'BalloonTests-Fills'
 	#'CollectionsTests-Abstract'

@@ -1,10 +1,13 @@
 #! /bin/sh
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
 
-mkdir "$WORKSPACE/target/"
-cp "$WORKSPACE/Squeak4.4-12053.image" "$WORKSPACE/target/ImageUnderTest.image"
-cp "$WORKSPACE/Squeak4.4-12053.changes" "$WORKSPACE/target/ImageUnderTest.changes"
+IMAGE_NAME=Squeak4.4-11925
 
-"$WORKSPACE/coglinux/bin/squeak" -headless "$WORKSPACE/target/ImageUnderTest.image" "$WORKSPACE/tests.st"
+mkdir -p "$WORKSPACE/target/"
+cp "$WORKSPACE/$IMAGE_NAME.image" "$WORKSPACE/target/ImageUnderTest.image"
+cp "$WORKSPACE/$IMAGE_NAME.changes" "$WORKSPACE/target/ImageUnderTest.changes"
+cp "$WORKSPACE/SqueakV41.sources" "$WORKSPACE/target/SqueakV41.sources"
+
+"$WORKSPACE/coglinux/bin/squeak" "$WORKSPACE/target/ImageUnderTest.image" "$WORKSPACE/tests.st"
 
 exit 0
