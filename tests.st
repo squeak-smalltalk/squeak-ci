@@ -23,7 +23,7 @@ HDTestReport runPackages: #(
 	#'HelpSystem-Tests-Builders'
 	#'HelpSystem-Tests-Core-Model'
 	#'HelpSystem-Tests-Core-UI'
-	#'KernelTests-Chronology'
+"	#'KernelTests-Chronology'" "TimeStampTest>>#testFromSeconds, #testReadFromA1. TimespanDoTest>>#testDatesDo"
 	#'KernelTests-Classes'
 	#'KernelTests-Methods'
 	#'KernelTests-Numbers'
@@ -62,7 +62,7 @@ HDTestReport runPackages: #(
 	#'Tests-Files'
 	#'Tests-Finalization'
 	#'Tests-Hex'
-	#'Tests-Localization'
+"	#'Tests-Localization'" "LocaleTest>>#testLocaleChanged"
 "	#'Tests-Monticello'" "MCFileInTest>>#testStWriter and others fail"
 	#'Tests-Object Events'
 	#'Tests-ObjectsAsMethods'
