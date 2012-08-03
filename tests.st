@@ -103,7 +103,4 @@ HDTestReport runPackages: #(
 ).
 
 "Save and Quit"
-WorldState addDeferredUIMessage: [
-	SmalltalkImage current
-		saveAs: ('Squeak4.4-12053-{1}.image' format: {DateAndTime now printString});
-		snapshot: true andQuit: true ]. "It seems lame to double-save the image. Do we HAVE to snapshot?"
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
