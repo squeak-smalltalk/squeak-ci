@@ -10,4 +10,4 @@ cp "$WORKSPACE/$LAST_RELEASED_IMAGE_NAME.changes" "$WORKSPACE/target/UpdatedFrom
 cp "$WORKSPACE/SqueakV41.sources" "$WORKSPACE/target/SqueakV41.sources"
 cp "$WORKSPACE/HudsonBuildTools.st" "$WORKSPACE/target/HudsonBuildTools.st"
 
-"$WORKSPACE/coglinux/bin/squeak" -vm-sound-null "$WORKSPACE/target/UpdatedFromLastReleaseImage.image" "$WORKSPACE/update-image.st" "$WORKSPACE/tests.st"
+"$WORKSPACE/coglinux/bin/squeak" -vm-sound-null -vm-display-null "$WORKSPACE/target/UpdatedFromLastReleaseImage.image" "$WORKSPACE/update-image.st" "$WORKSPACE/tests.st"
