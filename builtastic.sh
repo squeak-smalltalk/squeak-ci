@@ -9,6 +9,6 @@ cp "$WORKSPACE/$IMAGE_NAME.changes" "$WORKSPACE/target/ImageUnderTest.changes"
 cp "$WORKSPACE/SqueakV41.sources" "$WORKSPACE/target/SqueakV41.sources"
 cp "$WORKSPACE/HudsonBuildTools.st" "$WORKSPACE/target/HudsonBuildTools.st"
 
-"$WORKSPACE/coglinux/bin/squeak" -headless "$WORKSPACE/target/ImageUnderTest.image" "$WORKSPACE/tests.st"
+"$WORKSPACE/coglinux/bin/squeak" -vm-sound-null -vm-display-null "$WORKSPACE/target/ImageUnderTest.image" "$WORKSPACE/tests.st"
 
 exit 0
