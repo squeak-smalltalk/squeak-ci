@@ -8,7 +8,7 @@ HDTestReport runPackages: #(
 	#'CollectionsTests-Arrayed'
 	#'CollectionsTests-Sequenceable'
 	#'CollectionsTests-Stack'
-"	#'CollectionsTests-Streams'" "RWBinaryOrTextStreamTest>>#testExisiting fails"
+	#'CollectionsTests-Streams'
 	#'CollectionsTests-Support'
 	#'CollectionsTests-Text'
 	#'CollectionsTests-Unordered'
@@ -23,7 +23,7 @@ HDTestReport runPackages: #(
 	#'HelpSystem-Tests-Builders'
 	#'HelpSystem-Tests-Core-Model'
 	#'HelpSystem-Tests-Core-UI'
-"	#'KernelTests-Chronology'" "TimeStampTest>>#testFromSeconds, #testReadFromA1. TimespanDoTest>>#testDatesDo"
+	#'KernelTests-Chronology'
 	#'KernelTests-Classes'
 	#'KernelTests-Methods'
 	#'KernelTests-Numbers'
@@ -39,7 +39,7 @@ HDTestReport runPackages: #(
 	#'MultilingualTests-Display'
 	#'MultilingualTests-TextConversion'
 	#'Nebraska-Network-ObjectSocket'
-"	#'NetworkTests-Kernel'" "SocketTest>>#testSendTimeout fails"
+	#'NetworkTests-Kernel'
 	#'NetworkTests-Protocols'
 	#'NetworkTests-RFC822'
 	#'NetworkTests-URI'
@@ -54,23 +54,23 @@ HDTestReport runPackages: #(
 	#'SystemChangeNotification-Tests'
 	#'Tests-Bugs'
 	#'Tests-Compiler'
-"	#'Tests-Dependencies'" "PackageDependencyTest>>#testMultilingual + others"
+	#'Tests-Dependencies'
 	#'Tests-Digital Signatures'
 	#'Tests-Environments'
-"	#'Tests-Exceptions'" "ExceptionTests>>#testHandlerFromAction fails"
+	#'Tests-Exceptions'
 	#'Tests-FilePackage'
 	#'Tests-Files'
 	#'Tests-Finalization'
 	#'Tests-Hex'
-"	#'Tests-Localization'" "LocaleTest>>#testLocaleChanged"
-"	#'Tests-Monticello'" "MCFileInTest>>#testStWriter and others fail"
+	#'Tests-Localization'
+	#'Tests-Monticello'
 	#'Tests-Object Events'
 	#'Tests-ObjectsAsMethods'
 	#'Tests-PrimCallController'
-"	#'Tests-Release'" "ReleaseTest>>#testNoObsoleteClasses"
+	#'Tests-Release'
 	#'Tests-System-Support'
 	#'Tests-Utilities'
-"	#'Tests-VM'" "BecomeTest>>#testBecomeIdentityHash fails"
+	#'Tests-VM'
 	#'ToolBuilder-Kernel'
 	#'ToolBuilder-MVC'
 	#'ToolBuilder-Morphic'
