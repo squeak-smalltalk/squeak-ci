@@ -1,7 +1,7 @@
 #! /bin/sh
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
 
-IMAGE_NAME=Squeak4.4-11925
+IMAGE_NAME=Squeak4.4-trunk
 
 mkdir -p "$WORKSPACE/target/"
 cp "$WORKSPACE/$IMAGE_NAME.image" "$WORKSPACE/target/ImageUnderTest.image"
