@@ -52,9 +52,9 @@ HDTestReport runPackages: #(
 	#'SUnit-Kernel'
 	#'SUnit-Tests'
 	#'SystemChangeNotification-Tests'
-	#'Tests-Bugs'
+	#'Tests-Bugs'"
 	#'Tests-Compiler'
-	#'Tests-Dependencies'
+"	#'Tests-Dependencies'
 	#'Tests-Digital Signatures'
 	#'Tests-Environments'"
 "	#'Tests-Exceptions'" "ExceptionTests>>#testHandlerFromAction fails"
@@ -86,8 +86,8 @@ HDTestReport runPackages: #(
 	#'ToolsTests-Inspector'
 	#'TraitsTests-Kernel'
 	#'Universes-Tests'
-	#'XML-Parser'"
-	#VersionNumberTests
+	#'XML-Parser'
+	#VersionNumberTests"
 ).
 
 "Save and Quit"
