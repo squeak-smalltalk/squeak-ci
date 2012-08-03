@@ -3,13 +3,13 @@ Utilities setAuthorInitials: 'TestRunner'.
 (FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
 
 HDTestReport runPackages: #(
-"	#'BalloonTests-Fills'
+	#'BalloonTests-Fills'
 	#'CollectionsTests-Abstract'
 	#'CollectionsTests-Arrayed'
 	#'CollectionsTests-Sequenceable'
-	#'CollectionsTests-Stack'"
+	#'CollectionsTests-Stack'
 "	#'CollectionsTests-Streams'" "RWBinaryOrTextStreamTest>>#testExisiting fails"
-"	#'CollectionsTests-Support'
+	#'CollectionsTests-Support'
 	#'CollectionsTests-Text'
 	#'CollectionsTests-Unordered'
 	#'CollectionsTests-Weak'
@@ -38,7 +38,7 @@ HDTestReport runPackages: #(
 	#'MorphicTests-Worlds'
 	#'MultilingualTests-Display'
 	#'MultilingualTests-TextConversion'
-	#'Nebraska-Network-ObjectSocket'"
+	#'Nebraska-Network-ObjectSocket'
 "	#'NetworkTests-Kernel'" "SocketTest>>#testSendTimeout fails"
 	#'NetworkTests-Protocols'
 	#'NetworkTests-RFC822'
@@ -54,7 +54,7 @@ HDTestReport runPackages: #(
 	#'SystemChangeNotification-Tests'
 	#'Tests-Bugs'
 	#'Tests-Compiler'
-	#'Tests-Dependencies'
+"	#'Tests-Dependencies'" "PackageDependencyTest>>#testMultilingual + others"
 	#'Tests-Digital Signatures'
 	#'Tests-Environments'
 "	#'Tests-Exceptions'" "ExceptionTests>>#testHandlerFromAction fails"
