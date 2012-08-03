@@ -3,13 +3,13 @@ Utilities setAuthorInitials: 'TestRunner'.
 (FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
 
 HDTestReport runPackages: #(
-	#'BalloonTests-Fills'
+"	#'BalloonTests-Fills'
 	#'CollectionsTests-Abstract'
 	#'CollectionsTests-Arrayed'
 	#'CollectionsTests-Sequenceable'
-	#'CollectionsTests-Stack'
+	#'CollectionsTests-Stack'"
 "	#'CollectionsTests-Streams'" "RWBinaryOrTextStreamTest>>#testExisiting fails"
-	#'CollectionsTests-Support'
+"	#'CollectionsTests-Support'
 	#'CollectionsTests-Text'
 	#'CollectionsTests-Unordered'
 	#'CollectionsTests-Weak'
@@ -38,9 +38,9 @@ HDTestReport runPackages: #(
 	#'MorphicTests-Worlds'
 	#'MultilingualTests-Display'
 	#'MultilingualTests-TextConversion'
-	#'Nebraska-Network-ObjectSocket'
+	#'Nebraska-Network-ObjectSocket'"
 "	#'NetworkTests-Kernel'" "SocketTest>>#testSendTimeout fails"
-	#'NetworkTests-Protocols'
+"	#'NetworkTests-Protocols'
 	#'NetworkTests-RFC822'
 	#'NetworkTests-URI'
 	#'NetworkTests-UUID'
@@ -56,22 +56,22 @@ HDTestReport runPackages: #(
 	#'Tests-Compiler'
 	#'Tests-Dependencies'
 	#'Tests-Digital Signatures'
-	#'Tests-Environments'
+	#'Tests-Environments'"
 "	#'Tests-Exceptions'" "ExceptionTests>>#testHandlerFromAction fails"
-	#'Tests-FilePackage'
+"	#'Tests-FilePackage'
 	#'Tests-Files'
 	#'Tests-Finalization'
 	#'Tests-Hex'
-	#'Tests-Localization'
+	#'Tests-Localization'"
 "	#'Tests-Monticello'" "MCFileInTest>>#testStWriter and others fail"
-	#'Tests-Object Events'
+"	#'Tests-Object Events'
 	#'Tests-ObjectsAsMethods'
-	#'Tests-PrimCallController'
+	#'Tests-PrimCallController'"
 "	#'Tests-Release'" "ReleaseTest>>#testNoObsoleteClasses"
-	#'Tests-System-Support'
-	#'Tests-Utilities'
+"	#'Tests-System-Support'
+	#'Tests-Utilities'"
 "	#'Tests-VM'" "BecomeTest>>#testBecomeIdentityHash fails"
-	#'ToolBuilder-Kernel'
+"	#'ToolBuilder-Kernel'
 	#'ToolBuilder-MVC'
 	#'ToolBuilder-Morphic'
 	#'ToolBuilder-SUnit'
@@ -86,7 +86,7 @@ HDTestReport runPackages: #(
 	#'ToolsTests-Inspector'
 	#'TraitsTests-Kernel'
 	#'Universes-Tests'
-	#'XML-Parser'
+	#'XML-Parser'"
 	#VersionNumberTests
 ).
 
