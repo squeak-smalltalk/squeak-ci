@@ -12,6 +12,9 @@ config := MCMcmUpdater updateFromDefaultRepository.
 config ifNil: [^self inform: 'Unable to retrieve updates from remote repository.' translated].
 Utilities setSystemVersionFromConfig: config.
 
+SmalltalkImage current snapshot: true andQuit: false.
+
+"Save the fully updated trunk image."
 (FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
 
 HDTestReport runPackages:    #(
@@ -39,5 +42,5 @@ HDTestReport runPackages:    #(
 	'MultilingualTests'
 ).
 
-"Save and Quit"
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
+"Throw away the dirty image."
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
