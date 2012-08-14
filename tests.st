@@ -1,5 +1,5 @@
 (FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
-
+Utilities setAuthorInitials: 'TestRunner'.
 HDTestReport runPackages:    #(
 	'ST80'
 	'SystemChangeNotification'
