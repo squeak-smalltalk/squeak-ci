@@ -11,5 +11,12 @@ cp "$WORKSPACE/$LAST_RELEASED_IMAGE_NAME.changes" "$WORKSPACE/target/$IMAGE_NAME
 cp "$WORKSPACE/SqueakV41.sources" "$WORKSPACE/target/SqueakV41.sources"
 cp "$WORKSPACE/HudsonBuildTools.st" "$WORKSPACE/target/HudsonBuildTools.st"
 
+# Update the image
 $VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/update-image.st"
-$VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/tests.st"
+
+# Copy the CLEAN image to TestImage
+cp "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/target/TestImage.image"
+cp "$WORKSPACE/target/$IMAGE_NAME.changes" "$WORKSPACE/target/TestImage.changes"
+
+# Keep the dirt caused by running tests away from the pristine image.
+$VM -vm-sound-null -vm-display-null "$WORKSPACE/target/TestImage.image" "$WORKSPACE/tests.st"
