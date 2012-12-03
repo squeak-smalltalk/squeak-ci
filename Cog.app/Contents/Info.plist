@@ -368,7 +368,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Croquet</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Croquet Cog 4.0.2585 http://www.mirandabanda.org</string>
+	<string>Croquet Cog 4.0.2628 http://www.mirandabanda.org</string>
 	<key>CFBundleIconFile</key>
 	<string>Croquet.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -380,11 +380,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Croquet Cog 4.0.2585</string>
+	<string>Croquet Cog 4.0.2628</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>4.0.2585</string>
+	<string>4.0.2628</string>
 	<key>CGDisableCoalescedUpdates</key>
 	<true/>
 	<key>DTCompiler</key>
