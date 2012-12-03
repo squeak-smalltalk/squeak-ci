@@ -1,29 +1,12 @@
-(FileDirectory default fileNamed: 'HudsonBuildTools.st') fileIn.
-Utilities setAuthorInitials: 'TestRunner'.
-HDTestReport runPackages:    #(
-	'ST80'
-	'SystemChangeNotification'
-	'Compression'
-	'Tests'
-	'TraitsTests'
-	'GraphicsTests'
-	'ToolsTests'
-	'ToolBuilder'
-	'CollectionsTests'
-	'SUnit'
-	'BalloonTests'
-	'NetworkTests'
-	'XML'
-	'Etoys'
-	'Nebraska'
-	'MorphicTests'
-	'KernelTests'
-	'HelpSystem'
-	'Universes'
-	'SMBase'
-	'VersionNumberTests'
-	'MultilingualTests'
-).
+(FileDirectory default readOnlyFileNamed: 'HudsonBuildTools.st') fileIn.
+
+HDTestReport runPackages: (
+	MCWorkingCopy allManagers asOrderedCollection
+		removeAllSuchThat: [ :each |
+			each package packageInfo classes
+				noneSatisfy: [ :ea | ea includesBehavior: TestCase ] ];
+		replace: [ :each | each packageName ];
+		sort).
 
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
