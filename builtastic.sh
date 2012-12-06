@@ -23,8 +23,8 @@ if [-f $INTERPRETER_VM]; then
 fi
 
 # Copy the clean image so we can run the tests without touching the artifact.
-cp "$WORKSPACE/$TEST_IMAGE_NAME.image" "$WORKSPACE/target/$RUN_TEST_IMAGE_NAME.image"
-cp "$WORKSPACE/$TEST_IMAGE_NAME.changes" "$WORKSPACE/target/$RUN_TEST_IMAGE_NAME.changes"
+cp "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/target/$RUN_TEST_IMAGE_NAME.image"
+cp "$WORKSPACE/target/$IMAGE_NAME.changes" "$WORKSPACE/target/$RUN_TEST_IMAGE_NAME.changes"
 
 # Run the tests and snapshot the image post-test.
 $VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$RUN_TEST_IMAGE_NAME.image" "$WORKSPACE/tests.st"
