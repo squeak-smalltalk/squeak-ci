@@ -18,7 +18,7 @@ $VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORK
 
 # Run the image through an interpreter VM to make sure the image format is correct.
 
-if [-f $INTERPRETER_VM];
+if [-f $INTERPRETER_VM]; then
   $INTERPRETER_VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/save-image.st"
 fi
 
