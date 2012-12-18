@@ -1,11 +1,14 @@
 #! /bin/sh
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
-
+COG_VERSION=2636
 TEST_IMAGE_NAME="Squeak4.4-trunk"
 IMAGE_NAME="TrunkImage"
 RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 VM="$WORKSPACE/coglinux/bin/squeak"
 INTERPRETER_VM="/usr/local/bin/squeak" # The path used in ./build-local.sh
+
+curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz
+tar zxvf coglinux.tgz
 
 mkdir -p "$WORKSPACE/target/"
 cp "$WORKSPACE/$TEST_IMAGE_NAME.image" "$WORKSPACE/target/$IMAGE_NAME.image"
