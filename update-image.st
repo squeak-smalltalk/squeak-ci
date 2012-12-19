@@ -12,5 +12,7 @@ config := MCMcmUpdater updateFromDefaultRepository.
 config ifNil: [^self inform: 'Unable to retrieve updates from remote repository.' translated].
 Utilities setSystemVersionFromConfig: config.
 
+FileStream fileNamed: 'VERSION' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; close].
+
 "Save the fully updated trunk image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
