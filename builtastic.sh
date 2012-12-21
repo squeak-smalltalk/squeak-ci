@@ -1,6 +1,6 @@
 #! /bin/sh
 
-COG_VERSION=2636
+COG_VERSION=2640
 
 
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
