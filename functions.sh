@@ -6,8 +6,8 @@ build_cog_vm () {
 	echo Using pre-existing Cog VM at ${COG_VM}
     else
 	echo Downloading Cog VM r${COG_VERSION}
-	mkdir -p "${SRC}/target/cog.r${COG_VERSION}"
-	(cd cog.r${COG_VERSION} && \
+	mkdir -p ${SRC}/target/cog.r${COG_VERSION}
+	(cd ${SRC}/target/cog.r${COG_VERSION} && \
 	    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
 	    tar zxvf coglinux.tgz)
     fi
