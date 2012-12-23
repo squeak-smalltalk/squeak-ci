@@ -2,12 +2,10 @@ SRC=$(cd $(dirname "$0"); pwd)
 
 INTERPRETER_VERSION=Squeak-4.10.2.2614
 COG_VERSION=2640
-BASENAME=Squeak4.4-${SQUEAK_VERSION}
 INTERPRETER_VM=target/${INTERPRETER_VERSION}-src/bld/squeak
 COG_VM="${SRC}/cog.r${COG_VERSION}/coglinux/bin/squeak"
 
 export INTERPRETER_VERSION
-export BASENAME
 export INTERPRETER_VM
 export COG_VERSION
 export COG_VM
