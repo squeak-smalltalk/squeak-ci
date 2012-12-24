@@ -25,5 +25,5 @@ ${INTERPRETER_VM} -vm-sound-null -vm-display-null ${SRC}/target/${BASENAME}.imag
 
 echo Zipping ${BASENAME}...
 # Previous runs might leave a zip lying around.
-rm ${BASENAME}.zip
+rm ${SRC}/target/${BASENAME}.zip
 (cd ${SRC}/target; zip -j ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image)
