@@ -21,8 +21,7 @@ chmod +w ${SRC}/target/${BASENAME}.changes
 chmod +w ${SRC}/target/${BASENAME}.image
 
 echo Releasing ${BASENAME}...
-# -vm-sound-null -vm-display-null
-${INTERPRETER_VM}  ${SRC}/target/${BASENAME}.image ${SRC}/release.st
+${INTERPRETER_VM} -vm-sound-null -vm-display-null ${SRC}/target/${BASENAME}.image ${SRC}/release.st
 
 echo Zipping ${BASENAME}...
 (cd ${SRC}/target; zip ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image
