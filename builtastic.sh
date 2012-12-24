@@ -11,18 +11,14 @@ RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 
 mkdir -p "${SRC}/target/"
 
-build_cog_vm
-build_interpreter_vm
-
-cp "${SRC}/$TEST_IMAGE_NAME.image" "${SRC}/target/$IMAGE_NAME.image"
-cp "${SRC}/$TEST_IMAGE_NAME.changes" "${SRC}/target/$IMAGE_NAME.changes"
-cp "${SRC}/SqueakV41.sources" "${SRC}/target/SqueakV41.sources"
-cp "${SRC}/HudsonBuildTools.st" "${SRC}/target/HudsonBuildTools.st"
+build_cog_vm "linux"
+build_interpreter_vm "linux"
+prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 
 # Update the image
 $INTERPRETER_VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/update-image.st"
 
-# # Run the image through an interpreter VM to make sure the image format is correct.
+# Run the image through an interpreter VM to make sure the image format is correct.
 
 # Find a copy of the ckformat program, any one will do
 CKFORMAT=`find /usr/local/lib/squeak -name ckformat | head -1`
