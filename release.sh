@@ -22,7 +22,7 @@ chmod +w ${SRC}/target/${BASENAME}.image
 
 echo Releasing ${BASENAME}...
 # -vm-sound-null -vm-display-null
-${INTERPRETER_VM}  ${SRC}/target/${BASENAME}.image ../release-4.4.st
+${INTERPRETER_VM}  ${SRC}/target/${BASENAME}.image ${SRC}/release.st
 
 echo Zipping ${BASENAME}...
-zip ${SRC}/target/${BASENAME}.zip ${SRC}/target/${BASENAME}.changes ${SRC}/target/${BASENAME}.image
+(cd ${SRC}/target; zip ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image
