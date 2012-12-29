@@ -9,20 +9,18 @@ TEST_IMAGE_NAME="Squeak4.4-trunk"
 IMAGE_NAME="TrunkImage"
 RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 
-mkdir -p "${SRC}/target/"
-
 build_cog_vm "linux"
 build_interpreter_vm "linux"
 prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 
 # Update the image
+echo Updating target image...
 $INTERPRETER_VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/update-image.st"
+echo Updated to update number `cat target/TrunkImage.version`
 
 # Run the image through an interpreter VM to make sure the image format is correct.
-
 # Find a copy of the ckformat program, any one will do
-CKFORMAT=`find /usr/local/lib/squeak -name ckformat | head -1`
-
+CKFORMAT=`find ${INTERPRETER_VM_DIR} -name ckformat | head -1`
 if test -x "$CKFORMAT"; then
  echo before format conversion: "${SRC}/target/$IMAGE_NAME.image" image format `${CKFORMAT} "${SRC}/target/$IMAGE_NAME.image"`
 else

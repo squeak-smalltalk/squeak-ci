@@ -42,7 +42,8 @@ build_interpreter_vm () {
 	if test -f $INTERPRETER_VM; then
             # Fall back to an assumed installed VM.
             # The path used in ./build-local.sh.
-	    INTERPRETER_VM="/usr/local/bin/squeak"
+            INTERPRETER_VM_DIR="/usr/local/bin"
+	    INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak"
 	fi
     fi
 }
