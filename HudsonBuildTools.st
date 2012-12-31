@@ -40,7 +40,9 @@ runPackage: aString
 
 !HDReport class methodsFor: 'running' stamp: 'ul 9/5/2012 23:17'!
 runPackages: aCollectionOfStrings
-	^ aCollectionOfStrings collect: [ :each | self runPackage: each ]! !
+	^ aCollectionOfStrings collect: [ :each |
+		Log value: 'Running tests for ', each, '...'.
+		self runPackage: each ]! !
 
 
 HDReport subclass: #HDTestReport
