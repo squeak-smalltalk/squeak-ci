@@ -15,7 +15,7 @@ prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 
 # Update the image, and record the update number in target/TrunkImage.version
 echo Updating target image...
-$VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/update-image.st"
+$COG_VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/update-image.st"
 echo Updated to update number `cat target/TrunkImage.version`
 
 # Run the image through an interpreter VM to make sure the image format is correct.
