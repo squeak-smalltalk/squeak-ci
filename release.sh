@@ -1,7 +1,8 @@
 #! /bin/sh
 
 # This script takes the output of builtastic.sh and creates a releasable
-# artifact.
+# artifact. It assumes the existence of target/TrunkImage.image and
+# target/TrunkImage.changes
 
 SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
