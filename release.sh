@@ -11,8 +11,8 @@ curl -o "${SRC}/target/TrunkImage.image" http://squeakci.org/job/SqueakTrunk/las
 curl -o "${SRC}/target/TrunkImage.changes" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
 curl -o "${SRC}/target/TrunkImage.version" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
 
-SQUEAK_VERSION=`cat ${SRC}/target/TrunkImage.version`
-BASENAME=Squeak4.5-${SQUEAK_VERSION}
+SQUEAK_UPDATE_NUMBER=`cat ${SRC}/target/TrunkImage.version`
+BASENAME=${SQUEAK_VERSION}-${SQUEAK_UPDATE_NUMBER}
 
 build_interpreter_vm "linux"
 
