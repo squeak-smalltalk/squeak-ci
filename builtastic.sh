@@ -15,27 +15,8 @@ prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 
 # Update the image, and record the update number in target/TrunkImage.version
 echo Updating target image...
-$COG_VM -vm-sound-null -vm-display-null "$WORKSPACE/target/$IMAGE_NAME.image" "$WORKSPACE/update-image.st"
-echo Updated to update number `cat target/TrunkImage.version`
-
-# Run the image through an interpreter VM to make sure the image format is correct.
-# Find a copy of the ckformat program, any one will do
-CKFORMAT=`find ${INTERPRETER_VM_DIR} -name ckformat | head -1`
-if test -x "$CKFORMAT"; then
- echo before format conversion: "${SRC}/target/$IMAGE_NAME.image" image format `${CKFORMAT} "${SRC}/target/$IMAGE_NAME.image"`
-else
- echo WARNING: no ckformat found
-fi
-
-if test -f $INTERPRETER_VM; then
- $INTERPRETER_VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/save-image.st"
-else
- echo WARNING: $INTERPRETER_VM not found, image not converted to format 6504
-fi
-
-if test -x "$CKFORMAT"; then
- echo after format conversion: "${SRC}/target/$IMAGE_NAME.image" image format `${CKFORMAT} "${SRC}/target/$IMAGE_NAME.image"`
-fi
+update_image ${SRC} ${COG_VM}
+ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME}
 
 # Copy the clean image so we can run the tests without touching the artifact.
 cp "${SRC}/target/$IMAGE_NAME.image" "${SRC}/target/$RUN_TEST_IMAGE_NAME.image"
