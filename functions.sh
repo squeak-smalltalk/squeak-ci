@@ -14,6 +14,9 @@ build_cog_vm () {
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
 		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
 		    tar zxvf coglinux.tgz);;
+	    "freebsd")
+		echo "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet" && \
+		exit 1;;
 	    *) echo "Unknown OS ${1} for Cog VM. Aborting." \
 		exit 1;;
 	esac
@@ -29,7 +32,7 @@ build_interpreter_vm () {
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
 	mkdir -p "${SRC}/target/"
 	case $1 in
-	    "linux")
+	    "linux|freebsd")
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxvf interpreter.tgz && \
