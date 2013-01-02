@@ -25,7 +25,7 @@ build_cog_vm () {
 
 build_interpreter_vm () {
     # Param:
-    # $1: The name of the operating system. Currently only accepts "linux"
+    # $1: The name of the operating system. Currently only accepts "linux", "freebsd"
     if test -f $INTERPRETER_VM; then
 	echo Using pre-existing interpreter VM at ${INTERPRETER_VM}
     else

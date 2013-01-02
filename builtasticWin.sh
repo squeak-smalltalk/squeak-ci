@@ -1,7 +1,7 @@
 #! /bin/sh
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
 
-TEST_IMAGE_NAME=Squeak4.4-trunk
+TEST_IMAGE_NAME="Squeak4.4"
 IMAGE_NAME="TrunkImage"
 VM="$WORKSPACE/cogwin/Croquet.exe"
 
