@@ -10,8 +10,4 @@ mkdir -p "${SRC}/target"
 TARBALL=`find . -name Squeak-vm-unix-*.tar.gz | head -1`
 mv $TARBALL "${SRC}/target/${TARBALL}"
 SOURCE=`find target -name Squeak-vm-unix-*-src | head -1`
-cd $SOURCE
-mkdir -p bld
-cd bld
-../unix/cmake/configure
-make
+(cd $SOURCE/platforms/unix; make)
