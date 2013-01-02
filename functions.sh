@@ -32,7 +32,7 @@ build_interpreter_vm () {
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
 	mkdir -p "${SRC}/target/"
 	case $1 in
-	    "linux|freebsd")
+	    "linux" | "freebsd")
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxvf interpreter.tgz && \
