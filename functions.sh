@@ -3,7 +3,7 @@ SRC=$(cd $(dirname "$0"); pwd)
 
 build_cog_vm () {
     # Param:
-    # $1: The name of the operating system. Currently only accepts "linux"
+    # $1: The name of the operating system. Currently only accepts "linux", "osx"
     if test -f $COG_VM; then
 	echo Using pre-existing Cog VM at ${COG_VM}
     else
@@ -17,6 +17,10 @@ build_cog_vm () {
 	    "freebsd")
 		echo "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet" && \
 		exit 1;;
+	    "osx")
+		(cd ${SRC}/target/cog.r${COG_VERSION} && \
+		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
+		    tar zxvf coglinux.tgz);;
 	    *) echo "Unknown OS ${1} for Cog VM. Aborting." \
 		exit 1;;
 	esac
@@ -32,7 +36,7 @@ build_interpreter_vm () {
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
 	mkdir -p "${SRC}/target/"
 	case $1 in
-	    "linux" | "freebsd")
+	    "linux" | "freebsd" | "osx")
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxvf interpreter.tgz && \
