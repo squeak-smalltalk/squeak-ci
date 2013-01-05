@@ -15,8 +15,8 @@ VM=$COG_VM
 
 # Update the image, and record the update number in target/TrunkImage.version
 echo Updating target image...
-update_image ${SRC} ${VM}
-ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME}
+update_image ${SRC} ${VM} "linux"
+ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME} "linux"
 
 # Copy the clean image so we can run the tests without touching the artifact.
 cp "${SRC}/target/$IMAGE_NAME.image" "${SRC}/target/$RUN_TEST_IMAGE_NAME.image"

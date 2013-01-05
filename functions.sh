@@ -61,9 +61,11 @@ ensure_interpreter_compatible_image() {
     # Params:
     # $1: base directory
     # $2: image name
+    # $3: OS
     # Also uses env vars from versions.sh
     SRC=$1
     IMAGE_NAME=$2
+    ARGS=$(vm_args $3)
 
     # Run the image through an interpreter VM to make sure the image format is correct.
     # Find a copy of the ckformat program, any one will do
@@ -75,7 +77,7 @@ ensure_interpreter_compatible_image() {
     fi
 
     if test -f $INTERPRETER_VM; then
-	$INTERPRETER_VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/save-image.st"
+	$INTERPRETER_VM ${ARGS} "${SRC}/target/$IMAGE_NAME.image" "${SRC}/save-image.st"
     else
 	echo WARNING: $INTERPRETER_VM not found, image not converted to format 6504
     fi
@@ -102,8 +104,23 @@ update_image() {
     # Params:
     # $1: base directory
     # $2: VM path
+    # $3: OS
     WORKSPACE=$1
     VM=$2
-    $VM -vm-sound-null -vm-display-null "${WORKSPACE}/target/$IMAGE_NAME.image" "${WORKSPACE}/update-image.st"
+    ARGS=$(vm_args $3)
+    ${VM} ${ARGS} "${WORKSPACE}/target/$IMAGE_NAME.image" "${WORKSPACE}/update-image.st"
     echo Updated to update number `cat ${WORKSPACE}/target/TrunkImage.version`
+}
+
+vm_args() {
+    # Params:
+    # $1: OS
+   local ARGS="-vm-sound-null -vm-display-null"
+   case $1 in
+	"osx")
+	    ARGS="-nosound -headless";;
+	*)
+	    ARGS="-vm-sound-null -vm-display-null";;
+    esac
+   echo $ARGS
 }
