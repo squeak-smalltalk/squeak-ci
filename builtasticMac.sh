@@ -11,7 +11,7 @@ RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 build_cog_vm "osx"
 build_interpreter_vm "osx"
 prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
-VM=$COG_VM
+VM="${SRC}/target/cog.r${COG_VERSION}/Cog.app/Contents/MacOS/Croquet"
 
 # Update the image, and record the update number in target/TrunkImage.version
 echo Updating target image...
