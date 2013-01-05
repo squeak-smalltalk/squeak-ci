@@ -16,7 +16,7 @@ VM="${SRC}/target/cog.r${COG_VERSION}/Cog.app/Contents/MacOS/Croquet"
 # Update the image, and record the update number in target/TrunkImage.version
 echo Updating target image...
 update_image ${SRC} ${VM} "osx"
-ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME}
+#ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME}
 
 # Copy the clean image so we can run the tests without touching the artifact.
 cp "${SRC}/target/$IMAGE_NAME.image" "${SRC}/target/$RUN_TEST_IMAGE_NAME.image"
@@ -24,4 +24,5 @@ cp "${SRC}/target/$IMAGE_NAME.changes" "${SRC}/target/$RUN_TEST_IMAGE_NAME.chang
 
 # Run the tests and snapshot the image post-test.
 echo Running tests on VM ${VM}...
-$VM -nosound -headless "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
+ARGS=$(vm_args "osx")
+$VM ${ARGS} "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
