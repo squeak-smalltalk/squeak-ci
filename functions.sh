@@ -118,7 +118,7 @@ vm_args() {
    local ARGS="-vm-sound-null -vm-display-null"
    case $1 in
 	"osx")
-	    ARGS="-nosound -headless";;
+	    ARGS="-headless";;
 	*)
 	    ARGS="-vm-sound-null -vm-display-null";;
     esac
