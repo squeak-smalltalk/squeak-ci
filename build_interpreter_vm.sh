@@ -7,8 +7,11 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/functions.sh"
 
 mkdir -p "${SRC}/target"
-TARBALL=`find . -name Squeak-vm-unix-*.tar.gz | head -1`
-mv $TARBALL "${SRC}/target/${TARBALL}"
-(cd "${SRC}/target/"; tar zxvf ${TARBALL})
-SOURCE=`find target -name Squeak-vm-unix-*-src | head -1`
+curl -o "${SRC}/target/archive.zip" http://squeakci.org/job/InterpreterVM/lastSuccessfulBuild/artifact/*zip*/archive.zip
+pushd "${SRC}/target/"
+unzip -o archive.zip
+mv archive/* .
+TARBALL=`find . -name Squeak-vm-unix-*-src*.tar.gz | grep -v Cog | head -1`
+tar zxvf ${TARBALL}
+SOURCE=`find . -name Squeak-vm-unix-*-src | grep -v Cog | head -1`
 (cd $SOURCE/platforms/unix; make)
