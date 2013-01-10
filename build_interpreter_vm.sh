@@ -7,7 +7,7 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/functions.sh"
 
 mkdir -p "${SRC}/target"
-curl -o "${SRC}/target/archive.zip" http://squeakci.org/job/InterpreterVM/lastSuccessfulBuild/artifact/*zip*/archive.zip
+curl -o "${SRC}/target/archive.zip" ${BASE_URL}/job/InterpreterVM/lastSuccessfulBuild/artifact/*zip*/archive.zip
 cd "${SRC}/target/"
 unzip -o archive.zip
 mv archive/* .

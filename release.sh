@@ -7,9 +7,9 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
 
-curl -o "${SRC}/target/TrunkImage.image" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
-curl -o "${SRC}/target/TrunkImage.changes" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
-curl -o "${SRC}/target/TrunkImage.version" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
+curl -o "${SRC}/target/TrunkImage.image" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
+curl -o "${SRC}/target/TrunkImage.changes" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
+curl -o "${SRC}/target/TrunkImage.version" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
 
 SQUEAK_UPDATE_NUMBER=`cat ${SRC}/target/TrunkImage.version`
 BASENAME=${SQUEAK_VERSION}-${SQUEAK_UPDATE_NUMBER}

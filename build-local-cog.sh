@@ -13,9 +13,9 @@ COG_PATTERN="Squeak-vm-unix-*-unofficial-src"
 
 prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 
-curl -o "${SRC}/target/${IMAGE_NAME}.image" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
-curl -o "${SRC}/target/${IMAGE_NAME}.changes" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
-curl -o "${SRC}/target/${IMAGE_NAME}.version" http://squeakci.org/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
+curl -o "${SRC}/target/${IMAGE_NAME}.image" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
+curl -o "${SRC}/target/${IMAGE_NAME}.changes" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
+curl -o "${SRC}/target/${IMAGE_NAME}.version" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
 
 SQUEAK_UPDATE_NUMBER=`cat ${SRC}/target/TrunkImage.version`
 BASENAME=${SQUEAK_VERSION}-${SQUEAK_UPDATE_NUMBER}

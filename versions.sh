@@ -7,6 +7,7 @@ COG_VERSION=2664
 INTERPRETER_VM_DIR="${SRC}/target/${INTERPRETER_VERSION}-src/bld"
 INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak"
 COG_VM="${SRC}/target/cog.r${COG_VERSION}/coglinux/bin/squeak"
+BASE_URL="http://build.squeak.org/"
 
 export INTERPRETER_VERSION
 export INTERPRETER_VM
