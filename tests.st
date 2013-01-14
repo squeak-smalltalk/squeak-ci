@@ -3,6 +3,7 @@ Smalltalk at: #Log put: [:msg | | str |
 	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
 	Transcript cr; show: str].
 
+Log value: 'Loading Hudson build tools...'.
 (FileDirectory default readOnlyFileNamed: 'HudsonBuildTools.st') fileIn.
 
 Log value: 'Running tests...'.
