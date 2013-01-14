@@ -30,4 +30,4 @@ VM_VERSION="(whatever version Cog the CogVM build spits out)"
 VM=/var/lib/jenkins/workspace/CogVM/tmp/squeak
 
 echo Running ${BASENAME} tests on Cog ${VM_VERSION}...
-$VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/tests.st"
+nice $VM -vm-sound-null -vm-display-null "${SRC}/target/$IMAGE_NAME.image" "${SRC}/tests.st"

@@ -25,4 +25,4 @@ cp "${SRC}/target/$IMAGE_NAME.changes" "${SRC}/target/$RUN_TEST_IMAGE_NAME.chang
 # Run the tests and snapshot the image post-test.
 echo Running tests on VM ${VM}...
 ARGS=$(vm_args "osx")
-$VM ${ARGS} "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
+nice $VM ${ARGS} "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
