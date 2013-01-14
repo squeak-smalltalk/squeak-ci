@@ -20,7 +20,8 @@ curl -o "${SRC}/target/${IMAGE_NAME}.version" ${BASE_URL}/job/SqueakTrunk/lastSu
 SQUEAK_UPDATE_NUMBER=`cat ${SRC}/target/TrunkImage.version`
 BASENAME=${SQUEAK_VERSION}-${SQUEAK_UPDATE_NUMBER}
 VM_TARBALL=`find target -name ${COG_PATTERN}-*.tar.gz | head -1`
-VM_VERSION=`find target -name ${COG_PATTERN} | head -1`
+#VM_VERSION=`find target -name ${COG_PATTERN} | head -1`
+VM_VERSION="(whatever version Cog the CogVM build spits out)"
 
 #echo Unpacking Cog source...
 #(cd target; tar zxvf $VM_TARBALL)
