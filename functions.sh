@@ -21,7 +21,7 @@ build_cog_vm () {
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
 		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
 		    tar zxvf coglinux.tgz);;
-	    *) echo "Unknown OS ${1} for Cog VM. Aborting." \
+	    *) echo "Unknown OS ${1} for Cog VM. Aborting." && \
 		exit 1;;
 	esac
     fi
