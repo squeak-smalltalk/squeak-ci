@@ -30,4 +30,7 @@ nice ${INTERPRETER_VM} -vm-sound-null -vm-display-null ${SRC}/target/${BASENAME}
 echo Zipping ${BASENAME}...
 # Previous runs might leave a zip lying around.
 rm ${SRC}/target/*.zip
-(cd ${SRC}/target; zip -j ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image)
+rm ${SRC}/target/*.tgz
+(cd ${SRC}/target; \
+  zip -j ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image; \
+  tar zcvf ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image)
