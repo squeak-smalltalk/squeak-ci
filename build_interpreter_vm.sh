@@ -2,6 +2,8 @@
 
 # Assume that something's copied the source tarball to this directory.
 
+set -e
+
 SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
@@ -14,4 +16,5 @@ mv archive/* .
 TARBALL=`find . -name 'Squeak-vm-unix-*-src*.tar.gz' | grep -v Cog | head -1`
 tar zxvf ${TARBALL}
 SOURCE=`find . -name 'Squeak-vm-unix-*-src' | grep -v Cog | head -1`
-(cd $SOURCE/platforms/unix; make)
+mv $SOURCE $SOURCE-32
+(cd $SOURCE-32/platforms/unix; make)

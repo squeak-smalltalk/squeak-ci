@@ -14,4 +14,5 @@ mv archive/* .
 TARBALL=`find . -name 'Squeak-vm-unix-*-src*.tar.gz' | grep -v Cog | head -1`
 tar zxvf ${TARBALL}
 SOURCE=`find . -name 'Squeak-vm-unix-*-src' | grep -v Cog | head -1`
-(cd $SOURCE/platforms/unix; make WIDTH=64)
+mv $SOURCE $SOURCE-64
+(cd $SOURCE-64/platforms/unix; make WIDTH=64)

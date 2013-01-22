@@ -31,22 +31,25 @@ build_interpreter_vm () {
     # Param:
     # $1: The name of the operating system. Currently only accepts "linux", "freebsd"
     # $2: "32" or "64" (defaulting to "32")
-    if test -f $INTERPRETER_VM; then
-	echo Using pre-existing interpreter VM at ${INTERPRETER_VM}
+    $WIDTH={$2:"32"}
+    if test -f ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
+	echo Using pre-existing interpreter VM in ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}
     else
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
-	$WIDTH={$2:"32"}
 	mkdir -p "${SRC}/target/"
 	case $1 in
 	    "linux" | "freebsd" | "osx")
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxvf interpreter.tgz && \
-		    cd "${SRC}/target/${INTERPRETER_VERSION}-src" && \
+		    mv "${SRC}/target/${INTERPRETER_VERSION}-src" "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
+		    cd "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    mkdir -p bld && \
 		    cd bld && \
 		    ../unix/cmake/configure && \
-		    make WIDTH=${WIDTH});;
+		    make WIDTH=${WIDTH}) && \
+		INTERPRETER_VM_DIR="${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}/bld" &&
+		INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak";;
 	    *) echo "Unknown OS ${1} for interpreter VM. Aborting." \
 		exit 1;;
 	esac
