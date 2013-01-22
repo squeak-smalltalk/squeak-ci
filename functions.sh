@@ -30,10 +30,12 @@ fetch_cog_vm () {
 build_interpreter_vm () {
     # Param:
     # $1: The name of the operating system. Currently only accepts "linux", "freebsd"
+    # $2: "32" or "64" (defaulting to "32")
     if test -f $INTERPRETER_VM; then
 	echo Using pre-existing interpreter VM at ${INTERPRETER_VM}
     else
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
+	$WIDTH={$2:"32"}
 	mkdir -p "${SRC}/target/"
 	case $1 in
 	    "linux" | "freebsd" | "osx")
@@ -44,7 +46,7 @@ build_interpreter_vm () {
 		    mkdir -p bld && \
 		    cd bld && \
 		    ../unix/cmake/configure && \
-		    make);;
+		    make WIDTH=${WIDTH});;
 	    *) echo "Unknown OS ${1} for interpreter VM. Aborting." \
 		exit 1;;
 	esac
