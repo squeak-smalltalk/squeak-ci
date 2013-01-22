@@ -9,7 +9,7 @@ TEST_IMAGE_NAME="Squeak4.4"
 IMAGE_NAME="TrunkImage"
 RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 
-#build_cog_vm "freebsd"
+#fetch_cog_vm "freebsd"
 build_interpreter_vm "freebsd"
 prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 VM=$INTERPRETER_VM

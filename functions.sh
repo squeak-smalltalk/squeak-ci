@@ -1,7 +1,7 @@
 SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 
-build_cog_vm () {
+fetch_cog_vm () {
     # Param:
     # $1: The name of the operating system. Currently only accepts "linux", "osx"
     if test -f $COG_VM; then

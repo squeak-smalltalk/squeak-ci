@@ -8,7 +8,7 @@ TEST_IMAGE_NAME="Squeak4.4"
 IMAGE_NAME="TrunkImage"
 RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 
-build_cog_vm "linux"
+fetch_cog_vm "linux"
 build_interpreter_vm "linux"
 prepare_target ${SRC} $TEST_IMAGE_NAME $IMAGE_NAME
 VM=$COG_VM
