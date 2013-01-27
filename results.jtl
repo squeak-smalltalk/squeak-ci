@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
-<sample t="10000" s="true" lb="Benchmarks Game" />
+<sample t="10027" lt="0" ts="1301920709163" s="false" lb="jp@gc - UDP Request1" rc="500" rm="java.net.SocketTimeoutException: Timeout exceeded while reading from socket" tn="Thread Group 1-12" dt="text" by="580"/>
 </testResults>
+
