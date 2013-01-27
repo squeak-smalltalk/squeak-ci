@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
-<sample t="500" ts="1144372616082" s="true" lb="Benchmarks Game" >
+<sample t="750" ts="1144372616082" s="true" lb="Benchmarks Game" >
 </sample>
-<sample t="1000" ts="1144372616082" s="true" lb="Benchmarks Game 2" >
+<sample t="1500" ts="1144372616082" s="true" lb="Benchmarks Game 2" >
 </sample>
 </testResults>
 
