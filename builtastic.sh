@@ -26,3 +26,4 @@ cp "${SRC}/*.jtl" "${SRC}/target/*.jtl"
 # Run the tests and snapshot the image post-test.
 echo Running tests on VM ${VM}...
 nice $VM -vm-sound-null -vm-display-null "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
+nice $VM -vm-sound-null -vm-display-null "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/benchmarks.st"
