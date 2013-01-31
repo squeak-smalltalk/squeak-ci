@@ -31,7 +31,7 @@ build_interpreter_vm () {
     # Param:
     # $1: The name of the operating system. Currently only accepts "linux", "freebsd"
     # $2: "32" or "64" (defaulting to "32")
-    $WIDTH={$2:"32"}
+    WIDTH={$2:-"32"}
     if test -f ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
 	echo Using pre-existing interpreter VM in ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}
     else
