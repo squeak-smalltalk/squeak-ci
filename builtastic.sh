@@ -25,5 +25,5 @@ cp "${SRC}/target/$IMAGE_NAME.changes" "${SRC}/target/$RUN_TEST_IMAGE_NAME.chang
 # Run the tests and snapshot the image post-test.
 echo Running tests on VM ${VM}...
 ARGS=$(vm_args "linux")
-echo $VM -version
+$VM -version
 nice $VM ${ARGS} -reportheadroom "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
