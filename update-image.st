@@ -1,6 +1,4 @@
 | config |
-Utilities setAuthorInitials: 'TestRunner'.
-
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
