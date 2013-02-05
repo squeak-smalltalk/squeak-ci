@@ -13,14 +13,14 @@ fetch_cog_vm () {
 	    "linux")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
 		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
-		    tar zxvf coglinux.tgz);;
+		    tar zxf coglinux.tgz);;
 	    "freebsd")
 		echo "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet" && \
 		exit 1;;
 	    "osx")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
 		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
-		    tar zxvf coglinux.tgz);;
+		    tar zxf coglinux.tgz);;
 	    *) echo "Unknown OS ${1} for Cog VM. Aborting." && \
 		exit 1;;
 	esac
@@ -31,7 +31,8 @@ build_interpreter_vm () {
     # Param:
     # $1: The name of the operating system. Currently only accepts "linux", "freebsd"
     # $2: "32" or "64" (defaulting to "32")
-    $WIDTH={$2:"32"}
+    local W=$2
+    WIDTH=${W:-32}
     if test -f ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
 	echo Using pre-existing interpreter VM in ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}
     else
@@ -41,7 +42,7 @@ build_interpreter_vm () {
 	    "linux" | "freebsd" | "osx")
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
-		    tar zxvf interpreter.tgz && \
+		    tar zxf interpreter.tgz && \
 		    mv "${SRC}/target/${INTERPRETER_VERSION}-src" "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    cd "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    mkdir -p bld && \

@@ -7,6 +7,7 @@ Log value: 'Loading Hudson build tools... from ', (FileDirectory default fullNam
 (FileDirectory default readOnlyFileNamed: 'HudsonBuildTools.st') fileIn.
 
 Log value: 'Running tests...'.
+Utilities setAuthorInitials: 'TestRunner'.
 HDTestReport runPackages: (
 	MCWorkingCopy allManagers asOrderedCollection
 		removeAllSuchThat: [ :each |
@@ -16,5 +17,6 @@ HDTestReport runPackages: (
 		sort).
 
 Log value: 'Test run complete'.
+Utilities setAuthorInitials: 'TestRunner'.
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
