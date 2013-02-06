@@ -19,11 +19,11 @@ update_image ${SRC} ${VM} "linux"
 ensure_interpreter_compatible_image ${SRC} ${IMAGE_NAME} "linux"
 
 # Copy the clean image so we can run the tests without touching the artifact.
-cp "${SRC}/target/$IMAGE_NAME.image" "${SRC}/target/$RUN_TEST_IMAGE_NAME.image"
-cp "${SRC}/target/$IMAGE_NAME.changes" "${SRC}/target/$RUN_TEST_IMAGE_NAME.changes"
+#cp "${SRC}/target/$IMAGE_NAME.image" "${SRC}/target/$RUN_TEST_IMAGE_NAME.image"
+#cp "${SRC}/target/$IMAGE_NAME.changes" "${SRC}/target/$RUN_TEST_IMAGE_NAME.changes"
 
 # Run the tests and snapshot the image post-test.
-echo Running tests on VM ${VM}...
-ARGS=$(vm_args "linux")
-$VM -version
-nice $VM ${ARGS} -reportheadroom "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"
+#echo Running tests on VM ${VM}...
+#ARGS=$(vm_args "linux")
+#$VM -version
+#nice $VM ${ARGS} -reportheadroom "${SRC}/target/$RUN_TEST_IMAGE_NAME.image" "${SRC}/tests.st"

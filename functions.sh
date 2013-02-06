@@ -43,6 +43,7 @@ build_interpreter_vm () {
 		(cd "${SRC}/target/" && \
 		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxf interpreter.tgz && \
+		    rm -rf "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    mv "${SRC}/target/${INTERPRETER_VERSION}-src" "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    cd "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    mkdir -p bld && \
