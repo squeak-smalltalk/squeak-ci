@@ -12,15 +12,15 @@ fetch_cog_vm () {
 	case $1 in
 	    "linux")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
-		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
+		    curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
 		    tar zxf coglinux.tgz);;
 	    "freebsd")
 		echo "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet" && \
 		exit 1;;
 	    "osx")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
-		    curl -o coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
-		    tar zxf coglinux.tgz);;
+		    curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
+		    tar zxf Cog.app.tgz);;
 	    *) echo "Unknown OS ${1} for Cog VM. Aborting." && \
 		exit 1;;
 	esac
@@ -33,7 +33,8 @@ build_interpreter_vm () {
     # $2: "32" or "64" (defaulting to "32")
     local W=$2
     WIDTH=${W:-32}
-    if test -f ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
+    echo Checking for "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}"
+    if test -d ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
 	echo Using pre-existing interpreter VM in ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}
     else
 	echo Downloading Interpreter VM ${INTERPRETER_VERSION}
@@ -41,7 +42,7 @@ build_interpreter_vm () {
 	case $1 in
 	    "linux" | "freebsd" | "osx")
 		(cd "${SRC}/target/" && \
-		    curl -o interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
+		    curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/${INTERPRETER_VERSION}-src.tar.gz && \
 		    tar zxf interpreter.tgz && \
 		    rm -rf "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
 		    mv "${SRC}/target/${INTERPRETER_VERSION}-src" "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}" && \
@@ -51,7 +52,8 @@ build_interpreter_vm () {
 		    ../unix/cmake/configure && \
 		    make WIDTH=${WIDTH}) && \
 		INTERPRETER_VM_DIR="${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}/bld" &&
-		INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak";;
+		INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak"
+		echo Using the shiny new VM at ${INTERPRETER_VM_DIR};;
 	    *) echo "Unknown OS ${1} for interpreter VM. Aborting." \
 		exit 1;;
 	esac
@@ -60,6 +62,7 @@ build_interpreter_vm () {
             # The path used in ./build-local.sh.
             INTERPRETER_VM_DIR="/usr/local/bin"
 	    INTERPRETER_VM="${INTERPRETER_VM_DIR}/squeak"
+	    echo Falling back to the VM at ${INTERPRETER_VM_DIR}
 	fi
     fi
 }
