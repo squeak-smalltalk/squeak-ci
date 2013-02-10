@@ -108,6 +108,7 @@ prepare_target () {
     cp ${1}/${2}.changes ${1}/target/${3}.changes
     cp ${1}/SqueakV41.sources ${1}/target/SqueakV41.sources
     cp ${1}/HudsonBuildTools.st ${1}/target/HudsonBuildTools.st
+    cp ${1}/Shootout.st ${1}/target/Shootout.st
 }
 
 update_image() {

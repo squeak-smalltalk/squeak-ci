@@ -4,7 +4,7 @@ Smalltalk at: #Log put: [:msg | | str |
 	Transcript cr; show: str].
 
 
-Log value: 'Loading shootout files'.
 Log value: 'Loading Shootout tests... from ', (FileDirectory default fullNameFor: 'Shootout.st').
-Log value: 'Done loading shootout files'.
+(FileDirectory default readOnlyFileNamed: 'Shootout.st') fileIn.
+Shootout outputBenchmarkResults.
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
