@@ -3,8 +3,9 @@ Smalltalk at: #Log put: [:msg | | str |
 	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
 	Transcript cr; show: str].
 
-
-Log value: 'Loading Shootout tests... from ', (FileDirectory default fullNameFor: 'Shootout.st').
-(FileDirectory default readOnlyFileNamed: 'Shootout.st') fileIn.
-Shootout outputBenchmarkResults.
+repo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/shooutout-benchmarks' user: '' password: ''.
+highest := repo highestNumberedVersionNameForPackageNamed: 'Shootout'.
+version := repo versionNamed: highest.
+version load.
+ShootoutTests outputBenchmarkResults. 
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
