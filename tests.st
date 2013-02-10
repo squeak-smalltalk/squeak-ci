@@ -17,6 +17,5 @@ HDTestReport runPackages: (
 		sort).
 
 Log value: 'Test run complete'.
-Utilities setAuthorInitials: 'TestRunner'.
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
