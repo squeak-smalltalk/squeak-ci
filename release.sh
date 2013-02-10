@@ -7,11 +7,13 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
 
-curl -o "${SRC}/target/TrunkImage.image" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
-curl -o "${SRC}/target/TrunkImage.changes" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
-curl -o "${SRC}/target/TrunkImage.version" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
+echo Downloading a fresh Trunk image
+curl -sSo "${SRC}/target/TrunkImage.image" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
+curl -sSo "${SRC}/target/TrunkImage.changes" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
+curl -sSo "${SRC}/target/TrunkImage.version" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version
 
 SQUEAK_UPDATE_NUMBER=`cat ${SRC}/target/TrunkImage.version`
+echo Downloaded Trunk updated to ${SQUEAK_UPDATE_NUMBER}
 BASENAME=${SQUEAK_VERSION}-${SQUEAK_UPDATE_NUMBER}
 
 build_interpreter_vm "linux"
