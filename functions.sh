@@ -123,10 +123,8 @@ run_tests() {
 	cd "${SRC}/target"; \
 	cp ${SOURCE}.image ${PACKAGE}.image && \
 	cp ${SOURCE}.changes ${PACKAGE}.changes)
-#    (nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "prepare-test-image.st" && \
-#	nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "${SRC}/package-load-tests/${PACKAGE}.st")
-    (nice $VM "${SRC}/target/${PACKAGE}.image" "prepare-test-image.st" && \
-	nice $VM "${SRC}/target/${PACKAGE}.image" "${SRC}/package-load-tests/${PACKAGE}.st")
+    (nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "prepare-test-image.st" && \
+	nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "${SRC}/package-load-tests/${PACKAGE}.st")
     (cd "${SRC}/target"; \
 	rm ${PACKAGE}.image && \
 	rm ${PACKAGE}.changes)
