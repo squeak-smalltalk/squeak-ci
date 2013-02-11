@@ -110,6 +110,28 @@ prepare_target () {
     cp ${1}/HudsonBuildTools.st ${1}/target/HudsonBuildTools.st
 }
 
+run_tests() {
+    # Params:
+    # $1: Source image name
+    # $2: Package/script name
+    SOURCE=$1
+    PACKAGE=$2
+    export ${PACKAGE}
+    ARGS=$(vm_args "linux")
+    (mkdir -p "${SRC}/target";
+	cp prepare-test-image.st "${SRC}/target/prepare-test-image.st"; \
+	cd "${SRC}/target"; \
+	cp ${SOURCE}.image ${PACKAGE}.image && \
+	cp ${SOURCE}.changes ${PACKAGE}.changes)
+#    (nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "prepare-test-image.st" && \
+#	nice $VM ${ARGS} "${SRC}/target/${PACKAGE}.image" "${SRC}/package-load-tests/${PACKAGE}.st")
+    (nice $VM "${SRC}/target/${PACKAGE}.image" "prepare-test-image.st" && \
+	nice $VM "${SRC}/target/${PACKAGE}.image" "${SRC}/package-load-tests/${PACKAGE}.st")
+    (cd "${SRC}/target"; \
+	rm ${PACKAGE}.image && \
+	rm ${PACKAGE}.changes)
+}
+
 update_image() {
     # Params:
     # $1: base directory
