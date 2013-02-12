@@ -22,6 +22,8 @@ test ! -f "${SRC}/target/TrunkImage.version" && curl -sSo "${SRC}/target/TrunkIm
 test ! -f "${SRC}/target/SqueakV41.sources" && curl -sSo "${SRC}/target/SqueakV41.sources.gz" http://ftp.squeak.org/4.4/SqueakV41.sources.gz && gunzip "${SRC}/target/SqueakV41.sources.gz"
 cp HudsonBuildTools.st "${SRC}/target/"
 
+UPDATE_NUMBER=`cat "${SRC}/target/TrunkImage.version"`
+
 # Run the tests and snapshot the image post-test.
-echo Running tests on VM ${VM}...
+echo Running tests for ${UPDATE_NUMBER} on VM ${VM}...
 run_tests ${IMAGE_NAME} ${PACKAGE}
