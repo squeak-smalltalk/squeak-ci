@@ -22,6 +22,7 @@ LATEST_UPDATE=`curl -sS ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact
 
 if test "x${CURRENT_UPDATE}x" != "x${LATEST_UPDATE}x";
 then
+    echo Downloading Trunk version ${LATEST_UPDATE}
     curl -sSo "${SRC}/target/TrunkImage.image" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.image
     curl -sSo "${SRC}/target/TrunkImage.changes" ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.changes
 fi
@@ -29,5 +30,5 @@ test ! -f "${SRC}/target/SqueakV41.sources" && curl -sSo "${SRC}/target/SqueakV4
 cp HudsonBuildTools.st "${SRC}/target/"
 
 # Run the tests and snapshot the image post-test.
-echo Running tests for ${LATEST_UPDATE} on VM ${VM}...
+echo Running tests on VM ${VM}...
 run_tests ${IMAGE_NAME} ${PACKAGE}
