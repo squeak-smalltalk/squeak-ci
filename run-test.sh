@@ -2,6 +2,8 @@
 
 # Run the tests for a particular package, passed in as $1.
 
+set -e
+
 SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
