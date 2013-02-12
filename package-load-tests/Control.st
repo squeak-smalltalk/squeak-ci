@@ -1,7 +1,6 @@
-Installer ss3
-    project: 'Control';
-    addPackage: 'Control-fbs.19.mcz';
-    addPackage: 'ControlTests-fbs.15.mcz';
+Installer squeakmap
+    update;
+    addPackage: 'Control (1.2.dev)';
     install.
 
 HDTestReport runPackage: 'ControlTests'.
