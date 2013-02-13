@@ -17,7 +17,12 @@ VM=$COG_VM
 echo Downloading a fresh Trunk image
 mkdir -p "${SRC}/target"
 
-CURRENT_UPDATE=`cat "${SRC}/target/TrunkImage.version"`
+if test -f "${SRC}/target/TrunkImage.version";
+then
+    CURRENT_UPDATE=`cat "${SRC}/target/TrunkImage.version"`
+else
+    CURRENT_UPDATE=0
+fi
 LATEST_UPDATE=`curl -sS ${BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/TrunkImage.version`
 
 if test "x${CURRENT_UPDATE}x" != "x${LATEST_UPDATE}x";
