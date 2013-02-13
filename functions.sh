@@ -116,7 +116,6 @@ run_tests() {
     # $2: Package/script name
     SOURCE=$1
     PACKAGE=$2
-    export "${PACKAGE}"
     ARGS=$(vm_args "linux")
     (mkdir -p "${SRC}/target";
 	cp prepare-test-image.st "${SRC}/target/prepare-test-image.st"; \
