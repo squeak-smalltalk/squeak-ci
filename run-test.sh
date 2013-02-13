@@ -8,7 +8,7 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
 
-PACKAGE=$1
+PACKAGE="$1"
 IMAGE_NAME="TrunkImage"
 
 fetch_cog_vm "linux"
