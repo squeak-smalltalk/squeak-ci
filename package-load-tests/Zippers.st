@@ -8,7 +8,7 @@ Installer ss3
     addPackage: 'Zippers-fbs.52.mcz';
     install.
 
-HDTestReport runPackage: 'ControlTests'.
+HDTestReport runPackage: 'Zippers-Tests'.
 
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
