@@ -5,7 +5,7 @@ Installer ss3
 
 (Smalltalk at: #ConfigurationOfNutcracker) loadDevelopment.
 
-HDTestReport runPackages: #('EitherTests' 'MaybeTests' 'MonadTests' 'UnificationTests')
+HDTestReport runPackages: #('EitherTests' 'MaybeTests' 'MonadTests' 'UnificationTests').
 
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
