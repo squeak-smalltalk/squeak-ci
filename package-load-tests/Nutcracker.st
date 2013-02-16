@@ -1,6 +1,6 @@
 Installer ss3
     project: 'Nutcracker';
-    addPackage: 'ConfigurationOfNutcracker-fbs.6.mcz';
+    addPackage: 'ConfigurationOfNutcracker-fbs.7.mcz';
     install.
 
 (Smalltalk at: #ConfigurationOfNutcracker) loadDevelopment.
