@@ -3,7 +3,7 @@ Installer squeakmap
     addPackage: 'Quaternion (1.0)';
     install.
 
-HDTestReport runPackage: 'Quaternion'.
+HDTestReport runPackage: 'Math-Quaternion'.
 
 "Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
