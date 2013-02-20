@@ -2,12 +2,17 @@
 
 # Assume that something's copied the source tarball to this directory.
 
+set -e
+
 SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
 
 mkdir -p "${SRC}/target"
 TARBALL=`find . -name Squeak-vm-unix-*.tar.gz | sort -r | head -1`
+if test "x${TARBALL}x" == "xx"; then
+    echo "Missing tarball!" && exit 1
+fi
 mv $TARBALL "${SRC}/target/${TARBALL}"
 (cd "${SRC}/target/"; tar zxvf ${TARBALL})
 SOURCE=`find target -name Squeak-vm-unix-*-src | sort -r | head -1`
