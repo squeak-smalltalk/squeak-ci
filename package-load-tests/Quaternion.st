@@ -1,6 +1,7 @@
-Installer squeakmap
-    update;
-    addPackage: 'Quaternion (1.0)';
+Installer ss
+    project: 'Quaternion';
+    addPackage: 'Math-Quaternion';
+    addPackage: 'Math-QuaternionTests';
     install.
 
 HDTestReport runPackage: 'Math-Quaternion'.
