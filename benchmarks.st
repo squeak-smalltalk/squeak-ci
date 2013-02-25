@@ -3,9 +3,14 @@ Smalltalk at: #Log put: [:msg | | str |
 	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
 	Transcript cr; show: str].
 
-repo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/shooutout-benchmarks' user: '' password: ''.
-highest := repo highestNumberedVersionNameForPackageNamed: 'Shootout'.
-version := repo versionNamed: highest.
+benchmarksRepo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/Shootout' user: '' password: ''.
+highest := benchmarksRepo highestNumberedVersionNameForPackageNamed: 'Shootout'.
+version := benchmarksRepo versionNamed: highest.
+version load.
+
+ciRepo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/SqueakCI-Benchmarking' user: '' password: ''.
+highest := ciRepo highestNumberedVersionNameForPackageNamed: 'SqueakCI-Benchmarking'.
+version := ciRepo versionNamed: highest.
 version load.
 
 Log value: 'starting benchmarks'.
