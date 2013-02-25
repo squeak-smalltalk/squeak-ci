@@ -1,6 +1,6 @@
 Installer squeakmap
     update;
-    addPackage: 'Control (1.2.dev)';
+    addPackage: 'Control (head)';
     install.
 
 HDTestReport runPackage: 'ControlTests'.
