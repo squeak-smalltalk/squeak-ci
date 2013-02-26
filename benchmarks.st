@@ -3,15 +3,8 @@ Smalltalk at: #Log put: [:msg | | str |
 	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
 	Transcript cr; show: str].
 
-benchmarksRepo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/Shootout' user: '' password: ''.
-highest := benchmarksRepo highestNumberedVersionNameForPackageNamed: 'Shootout'.
-version := benchmarksRepo versionNamed: highest.
-version load.
-
-ciRepo := MCHttpRepository location: 'http://ss3.gemstone.com/ss/SqueakCI-Benchmarking' user: '' password: ''.
-highest := ciRepo highestNumberedVersionNameForPackageNamed: 'SqueakCI-Benchmarking'.
-version := ciRepo versionNamed: highest.
-version load.
+(Installer ss3 project: 'Shootout') install: 'Shootout-nice.15.mcz'.
+(Installer ss3 project: 'SqueakCI-Benchmarking') install: 'SqueakCI-Benchmarking-JMG.3.mcz'.
 
 Log value: 'starting benchmarks'.
 ShootoutTests outputBenchmarkResults. 
