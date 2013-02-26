@@ -1,6 +1,6 @@
 Installer squeakmap
     update;
-	addPackage: 'Fuel (1.8.1)';
+	addPackage: 'Fuel (1.9)';
     install.
 
 HDTestReport runPackages: #('FuelTests' 'FuelTests-Collections' 'FuelTests-Streams').
