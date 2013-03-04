@@ -1,19 +1,6 @@
+require_relative 'test_helper'
 require 'fileutils'
 require 'rspec'
-
-COG_VERSION=2678
-SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/..")
-COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
-OS_NAME="linux"
-
-def vm_args(os_name)
-  case os_name
-  when "osx"
-    "-headless"
-  else
-    "-vm-sound-null -vm-display-null"
-  end
-end
 
 def fetch_cog_vm(os_name)
   if File.exists?(COG_VM) then
@@ -57,14 +44,6 @@ def run_test(os_name, pkg_name)
 end
 
 describe "overall test suite" do
-  before :all do
-    fetch_cog_vm(OS_NAME)
-  end
-
-  it "should pass all SqueakCheck tests" do
-    run_test(OS_NAME, "SqueakCheck")
-  end
-
   it "should pass all tests on a Cog VM" do
     `./builtastic.sh`
     $?.success?.should be_true
