@@ -35,4 +35,4 @@ rm ${SRC}/target/*.zip
 rm ${SRC}/target/*.tgz
 (cd ${SRC}/target; \
   zip -j ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image; \
-  tar zcvf ${BASENAME}.zip ${BASENAME}.changes ${BASENAME}.image)
+  tar zcvf ${BASENAME}.tgz ${BASENAME}.changes ${BASENAME}.image)
