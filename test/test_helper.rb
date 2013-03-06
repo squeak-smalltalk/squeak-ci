@@ -1,5 +1,5 @@
 BASE_URL="http://build.squeak.org/"
-COG_VERSION=2678
+COG_VERSION=2697
 OS_NAME="linux"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/..")
 COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
