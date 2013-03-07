@@ -1,5 +1,6 @@
 BASE_URL="http://build.squeak.org/"
 COG_VERSION=2697
+INTERPRETER_VERSION="Squeak-4.10.2.2614"
 OS_NAME="linux"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/..")
 COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
@@ -30,7 +31,6 @@ def assert_cog_vm(os_name)
     FileUtils.rm_rf(stale_cog)
   }
 
-
   if File.exists?(cog_dir) then
     log("Using existing Cog r.#{COG_VERSION}")
   else
@@ -48,9 +48,38 @@ def assert_cog_vm(os_name)
       raise "Unknown OS #{os_name} for Cog VM. Aborting."
     end
   end
+
+  return "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 end
 
-def assert_interpreter_vm(os_name)
+def assert_interpreter_vm(os_name, word_size = 32)
+  # word_size is 32 or 64, for 32-bit or 64-bit.
+
+  interpreter_src_dir = "#{SRC}/target/#{INTERPRETER_VERSION}-src-#{word_size}"
+  if File.exist?(interpreter_src_dir) then
+    log("Using pre-existing interpreter VM in #{interpreter_src_dir}")
+  else
+    log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
+    assert_target_dir
+    case os_name
+    when "linux", "freebsd", "osx"
+      Dir.chdir(TARGET_DIR) {
+        Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
+        run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/#{INTERPRETER_VERSION}-src.tar.gz")
+        run_cmd("tar zxf interpreter.tgz")
+        FileUtils.mv("#{INTERPRETER_VERSION}-src", interpreter_src_dir)
+        FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
+        Dir.chdir("#{interpreter_src_dir}/bld") {
+          run_cmd("../unix/cmake/configure")
+          run_cmd("make WIDTH=#{word_size}")
+        }
+      }
+    else
+      raise "Unknown OS #{os_name} for Interpreter VM. Aborting."
+    end
+  end
+
+  return "#{interpreter_src_dir}/bld/squeak"
 end
 
 def assert_trunk_image
@@ -66,7 +95,7 @@ def assert_trunk_image
 end
 
 def assert_target_dir
-  FileUtils.mkdir_p(TARGET_DIR) unless File.exists?(TARGET_DIR)
+  FileUtils.mkdir_p(TARGET_DIR)
   ["SqueakV41.sources", "HudsonBuildTools.st"].each { |name|
     FileUtils.cp(name, "#{SRC}/#{name}") unless File.exists?("#{SRC}/#{name}")
   }

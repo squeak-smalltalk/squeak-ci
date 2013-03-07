@@ -34,8 +34,8 @@ describe "External package" do
 
   before :all do
     assert_target_dir
-    assert_cog_vm(OS_NAME)
-    assert_interpreter_vm(OS_NAME)
+    @cog_vm = assert_cog_vm(OS_NAME)
+    @interpreter_vm = assert_interpreter_vm(OS_NAME)
     update_image()
     prepare_package_image(OS_NAME)
   end
@@ -43,13 +43,12 @@ describe "External package" do
   shared_examples "an external package" do
     context "should pass all tests" do
       it "on Cog" do
-        puts package.inspect
-        run_test(COG_VM, package)
+        run_test(@cog_vm, package)
       end
 
-    # it "on Interpreter" do
-    #   run_test(INTERPRETER_VM, 'SqueakCheck')
-    # end
+      it "on Interpreter" do
+        run_test(@interpreter_vm, 'SqueakCheck')
+      end
     end
   end
 

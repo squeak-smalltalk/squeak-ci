@@ -5,8 +5,8 @@ require 'rspec'
 describe "overall test suite" do
   before :all do
     assert_target_dir
-    assert_cog_vm(OS_NAME)
-    assert_interpreter_vm(OS_NAME)
+    @cog_vm = assert_cog_vm(OS_NAME)
+    @interpreter_vm = assert_interpreter_vm(OS_NAME)
     update_image()
   end
 
