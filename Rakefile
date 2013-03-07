@@ -15,7 +15,7 @@ end
 task :default => :test
 
 task :build do
-  require 'squeak-ci/build'
+  require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
   TEST_IMAGE_NAME = "Squeak4.4"
 
   assert_target_dir
