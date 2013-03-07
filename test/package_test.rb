@@ -11,24 +11,24 @@ describe "External package" do
       FileUtils.cp("#{TRUNK_IMAGE}.image", "#{PACKAGE_TEST_IMAGE}.image")
       FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
     }
-    run_image_with_cmd(COG_VM, os_name, PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
+    run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
   end
 
-  def run_test(vm, pkg_name)
+  def run_test(vm, os_name, pkg_name)
     Dir.chdir(TARGET_DIR) {
       FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{pkg_name}.image")
       FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{pkg_name}.changes")
     }
-    run_image_with_cmd(vm, OS_NAME, pkg_name, "#{SRC}/package-load-tests/#{pkg_name}.st")
+    run_image_with_cmd(vm, vm_args(os_name), pkg_name, "#{SRC}/package-load-tests/#{pkg_name}.st")
     Dir.chdir(TARGET_DIR) {
       FileUtils.rm("#{pkg_name}.image")
       FileUtils.rm("#{pkg_name}.changes")
     }
   end
 
-  def run_test_with_timeout(vm, package, timeout_secs)
+  def run_test_with_timeout(vm, os_name, package, timeout_secs)
     Timeout::timeout(timeout_secs) {
-      run_test(vm, package)
+      run_test(vm, os_name, package)
     }.should_not raise_error Timeout::Error
   end
 
@@ -41,20 +41,21 @@ describe "External package" do
 
   before :all do
     assert_target_dir
-    @cog_vm = assert_cog_vm(OS_NAME)
-    @interpreter_vm = assert_interpreter_vm(OS_NAME)
-    update_image()
-    prepare_package_image(OS_NAME)
+    @os_name = identify_os
+    @cog_vm = assert_cog_vm(@os_name)
+    @interpreter_vm = assert_interpreter_vm(@os_name)
+    update_image
+    prepare_package_image(@os_name)
   end
 
   shared_examples "an external package" do
     context "should pass all tests" do
       it "on Cog" do
-        run_test_with_timeout(@cog_vm, package, 60)
+        run_test_with_timeout(@cog_vm, @os_name, package, 60)
       end
 
       it "on Interpreter" do
-        run_test_with_timeout(@interpreter_vm, package, 60)
+        run_test_with_timeout(@interpreter_vm, @os_name, package, 60)
       end
     end
   end
