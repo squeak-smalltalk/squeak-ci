@@ -124,6 +124,8 @@ def update_image
 end
 
 def vm_args(os_name)
+  return "" if debug?
+
   case os_name
   when "osx"
     "-headless"
