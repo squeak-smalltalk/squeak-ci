@@ -37,8 +37,14 @@ def assert_cog_vm(os_name)
   return "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 end
 
-def assert_interpreter_vm(os_name, word_size = 32)
+def assert_interpreter_vm(os_name)
   # word_size is 32 or 64, for 32-bit or 64-bit.
+
+  word_size = if (os_name == "linux64") then
+                64
+              else
+                32
+              end
 
   interpreter_src_dir = "#{SRC}/target/#{INTERPRETER_VERSION}-src-#{word_size}"
   if File.exist?(interpreter_src_dir) then
@@ -92,7 +98,8 @@ end
 
 def identify_os
   str = `uname -a`
-  return "linux" if str.include?("Linux")
+  return "linux" if str.include?("Linux") && not str.include?("x64_64")
+  return "linux64" if str.include?("Linux") && str.include?("x64_64")
 end
 
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
@@ -133,7 +140,7 @@ def vm_args(os_name)
   case os_name
   when "osx"
     ["-headless"]
-  when "linux", "freebsd"
+  when "linux", "linux64", "freebsd"
     ["-vm-sound-null", "-vm-display-null"]
   else
     raise "Don't know what VM args to give for #{os_name}"
