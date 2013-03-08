@@ -11,6 +11,13 @@ describe "Trunk test suite" do
       FileUtils.cp("#{TRUNK_IMAGE}.image", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.image")
       FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.changes")
     }
+    @os_name = identify_os
+    @vm = case @os_name
+          when "linux64"
+            assert_interpreter_vm(@os_name)
+          else
+            assert_cog_vm(@os_name)
+          end
   end
 
   after :all do
@@ -21,9 +28,9 @@ describe "Trunk test suite" do
 
   it "should pass all tests on a Cog VM" do
     Dir.chdir("#{SRC}/target") {
-      run_cmd("#{@cog_vm} -version")
-      run_image_with_cmd(@cog_vm, vm_args(@os_name) + ["-reportheadroom"], RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")
-      run_image_with_cmd(@cog_vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st")
+      run_cmd("#{@vm} -version")
+      run_image_with_cmd(@vm, vm_args(@os_name) + ["-reportheadroom"], RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")
+      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st")
     }
   end
 end
