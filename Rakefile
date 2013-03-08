@@ -7,7 +7,7 @@ require 'rake/testtask'
 
 CLEAN.include('target')
 
-task :test => :build do |test|
+RSpec::Core::RakeTask.new(:test => :build) do |test|
   test.pattern = 'test/*_test.rb'
   test.verbose = true
 end
