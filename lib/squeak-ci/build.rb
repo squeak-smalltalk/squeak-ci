@@ -98,7 +98,7 @@ end
 
 def identify_os
   str = `uname -a`
-  return "linux" if str.include?("Linux") && not str.include?("x64_64")
+  return "linux" if str.include?("Linux") && ! str.include?("x64_64")
   return "linux64" if str.include?("Linux") && str.include?("x64_64")
 end
 
