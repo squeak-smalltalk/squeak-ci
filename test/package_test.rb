@@ -80,6 +80,11 @@ describe "External package" do
     it_behaves_like "an external package"
   end
 
+  describe "Phexample" do
+    let(:package) { "Phexample" }
+    it_behaves_like "an external package"
+  end
+
   describe "RoelTyper" do
     let(:package) { "RoelTyper" }
     it_behaves_like "an external package"
