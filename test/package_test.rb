@@ -6,10 +6,10 @@ require 'timeout'
 describe "External package" do
   PACKAGE_TEST_IMAGE = "PackageTest"
 
-  def prepare_package_image(os_name)
+  def prepare_package_image(os_name, base_image_name)
     Dir.chdir(TARGET_DIR) {
-      FileUtils.cp("#{TRUNK_IMAGE}.image", "#{PACKAGE_TEST_IMAGE}.image")
-      FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
+      FileUtils.cp("#{base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
+      FileUtils.cp("#{base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
     }
     run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
   end
@@ -32,23 +32,14 @@ describe "External package" do
     }.should_not raise_error Timeout::Error
   end
 
-  after :all do
-    Dir.chdir(TARGET_DIR) {
-      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.image") if File.exists?("#{PACKAGE_TEST_IMAGE}.image")
-      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.changes") if File.exists?("#{PACKAGE_TEST_IMAGE}.changes")
-    }
-  end
+  shared_examples "external package" do
+    after :each do
+      Dir.chdir(TARGET_DIR) {
+        FileUtils.rm("#{package}.image") if File.exists?("#{package}.image")
+        FileUtils.rm("#{package}.changes") if File.exists?("#{package}.changes")
+      }
+    end
 
-  before :all do
-    assert_target_dir
-    @os_name = identify_os
-    @cog_vm = assert_cog_vm(@os_name)
-    @interpreter_vm = assert_interpreter_vm(@os_name)
-    update_image
-    prepare_package_image(@os_name)
-  end
-
-  shared_examples "an external package" do
     context "should pass all tests" do
       it "on Cog" do
         run_test_with_timeout(@cog_vm, @os_name, package, 60)
@@ -60,48 +51,75 @@ describe "External package" do
     end
   end
 
-  describe "Control" do
-    let(:package) { "Control" }
-    it_behaves_like "an external package"
+  shared_examples "all" do
+    describe "Control" do
+      let(:package) { "Control" }
+      it_behaves_like "external package"
+    end
+
+    describe "FFI" do
+      let(:package) { "FFI" }
+      it_behaves_like "external package"
+    end
+
+    # describe "Fuel" do
+    #   let(:package) { "Fuel" }
+    #   it_behaves_like "external package"
+    # end
+
+    describe "Quaternion" do
+      let(:package) { "Quaternion" }
+      it_behaves_like "external package"
+    end
+
+    describe "Phexample" do
+      let(:package) { "Phexample" }
+      it_behaves_like "external package"
+    end
+
+    describe "RoelTyper" do
+      let(:package) { "RoelTyper" }
+      it_behaves_like "external package"
+    end
+
+    describe "SqueakCheck" do
+      let(:package) { "SqueakCheck" }
+      it_behaves_like "external package"
+    end
+
+    describe "Xtreams" do
+      let(:package) { "Xtreams" }
+      it_behaves_like "external package"
+    end
+
+    describe "Zippers" do
+      let(:package) { "Zippers" }
+      it_behaves_like "external package"
+    end
   end
 
-  describe "FFI" do
-    let(:package) { "FFI" }
-    it_behaves_like "an external package"
+  context "Squeak 4.4" do
+    before :all do
+      assert_target_dir
+      @os_name = identify_os
+      @cog_vm = assert_cog_vm(@os_name)
+      @interpreter_vm = assert_interpreter_vm(@os_name)
+      prepare_package_image(@os_name, "Squeak4.4")
+    end
+
+    it_should_behave_like "all"
   end
 
-  # describe "Fuel" do
-  #   let(:package) { "Fuel" }
-  #   it_behaves_like "an external package"
-  # end
+  context "Squeak 4.5" do
+    before :all do
+      assert_target_dir
+      @os_name = identify_os
+      @cog_vm = assert_cog_vm(@os_name)
+      @interpreter_vm = assert_interpreter_vm(@os_name)
+      update_image
+      prepare_package_image(@os_name, TRUNK_IMAGE)
+    end
 
-  describe "Quaternion" do
-    let(:package) { "Quaternion" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Phexample" do
-    let(:package) { "Phexample" }
-    it_behaves_like "an external package"
-  end
-
-  describe "RoelTyper" do
-    let(:package) { "RoelTyper" }
-    it_behaves_like "an external package"
-  end
-
-  describe "SqueakCheck" do
-    let(:package) { "SqueakCheck" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Xtreams" do
-    let(:package) { "Xtreams" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Zippers" do
-    let(:package) { "Zippers" }
-    it_behaves_like "an external package"
+    it_should_behave_like "all"
   end
 end
