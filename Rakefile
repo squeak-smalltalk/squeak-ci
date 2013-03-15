@@ -7,7 +7,7 @@ require 'rake/testtask'
 
 CLEAN.include('target')
 
-RSpec::Core::RakeTask.new(:test => :build) do |test|
+RSpec::Core::RakeTask.new(:test) do |test|
   test.pattern = 'test/*_test.rb'
   test.verbose = true
 end
@@ -27,7 +27,7 @@ task :build do
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
   Dir.chdir(TARGET_DIR) {
     update_base_image(cog_vm, vm_args(os_name), TRUNK_IMAGE)
-    ensure_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
+    assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
 end
 
@@ -37,7 +37,7 @@ def update_base_image(vm, vm_args, image_name)
   puts "Updated to update number #{version}"
 end
 
-def ensure_interpreter_compatible_image(interpreter_vm, image_name, os_name)
+def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   # Double parent because "parent" means "dir of"
   interpreter_vm_dir = Pathname.new(interpreter_vm).parent.parent.to_s
   ckformat = run_cmd("find #{interpreter_vm_dir} -name ckformat").split("\n").first
