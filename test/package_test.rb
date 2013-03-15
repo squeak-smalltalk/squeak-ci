@@ -3,14 +3,15 @@ require 'fileutils'
 require 'rspec'
 require 'timeout'
 
-describe "External package" do
+describe "External package on" do
   PACKAGE_TEST_IMAGE = "PackageTest"
 
-  def prepare_package_image(os_name, base_image_name)
+  def prepare_package_image(os_name, base_image_name, update_script = nil)
     Dir.chdir(TARGET_DIR) {
       FileUtils.cp("#{base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
       FileUtils.cp("#{base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
     }
+    run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/#{update_script}") if update_script
     run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
   end
 
@@ -100,11 +101,14 @@ describe "External package" do
 
   context "Squeak 4.4" do
     before :all do
+      squeak44_image = "Squeak4.4"
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      prepare_package_image(@os_name, "Squeak4.4")
+      FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
+      FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
+      prepare_package_image(@os_name, squeak44_image, "update-squeak44-image.st")
     end
 
     it_should_behave_like "all"
