@@ -19,6 +19,7 @@ def assert_cog_vm(os_name)
   if File.exists?(cog_dir) then
     log("Using existing Cog r.#{COG_VERSION}")
   else
+    assert_target_dir
     log("Installing new Cog r.#{COG_VERSION}")
     FileUtils.mkdir_p(cog_dir)
     case os_name
