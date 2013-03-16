@@ -23,19 +23,16 @@ task :build do
   os_name = identify_os
   cog_vm = assert_cog_vm(os_name)
   interpreter_vm = assert_interpreter_vm(os_name)
+  puts "Cog VM at #{cog_vm}" if cog_vm
+  puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
+  raise "No VMs!" if !!!cog_vm && !!!interpreter_vm
 
   FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
   Dir.chdir(TARGET_DIR) {
-    update_base_image((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE)
+    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st")
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
-end
-
-def update_base_image(vm, vm_args, image_name)
-  run_image_with_cmd(vm, vm_args, image_name, "#{SRC}/update-image.st")
-  version = run_cmd("cat #{SRC}/target/TrunkImage.version")
-  puts "Updated to update number #{version}"
 end
 
 def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
