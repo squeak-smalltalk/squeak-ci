@@ -27,6 +27,8 @@ task :build do
   puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
   raise "No VMs!" if !!!cog_vm && !!!interpreter_vm
 
+  run_cmd "#{interpreter_vm} -help"
+
   FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
   Dir.chdir(TARGET_DIR) {
