@@ -56,13 +56,14 @@ def assert_interpreter_vm(os_name)
     log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
     assert_target_dir
     case os_name
-    when "linux", "freebsd", "osx"
+    when "linux", "linux64", "freebsd", "osx"
       Dir.chdir(TARGET_DIR) {
         Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
         run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/#{INTERPRETER_VERSION}-src.tar.gz")
         run_cmd("tar zxf interpreter.tgz")
         FileUtils.mv("#{INTERPRETER_VERSION}-src", interpreter_src_dir)
         FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
+
         Dir.chdir("#{interpreter_src_dir}/bld") {
           run_cmd("../unix/cmake/configure")
           run_cmd("make WIDTH=#{word_size}")
