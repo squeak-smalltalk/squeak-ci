@@ -22,9 +22,7 @@ describe "External package on" do
         FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{pkg_name}.changes")
       }
       run_image_with_cmd(vm, vm_args(os_name), pkg_name, "#{SRC}/package-load-tests/#{pkg_name}.st")
-      puts "finished " + Time.now.to_s
     ensure
-      puts "cleanup " + Time.now.to_s
       Dir.chdir(TARGET_DIR) {
         FileUtils.rm("#{pkg_name}.image")
         FileUtils.rm("#{pkg_name}.changes")
