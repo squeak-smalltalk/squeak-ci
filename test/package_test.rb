@@ -58,35 +58,35 @@ describe "External package on" do
   end
 
   shared_examples "all" do
-    # describe "Control" do
-    #   let(:package) { "Control" }
-    #   it_behaves_like "external package"
-    # end
+    describe "Control" do
+      let(:package) { "Control" }
+      it_behaves_like "external package"
+    end
 
-    # describe "FFI" do
-    #   let(:package) { "FFI" }
-    #   it_behaves_like "external package"
-    # end
+    describe "FFI" do
+      let(:package) { "FFI" }
+      it_behaves_like "external package"
+    end
 
     # describe "Fuel" do
     #   let(:package) { "Fuel" }
     #   it_behaves_like "external package"
     # end
 
-    # describe "Quaternion" do
-    #   let(:package) { "Quaternion" }
-    #   it_behaves_like "external package"
-    # end
+    describe "Quaternion" do
+      let(:package) { "Quaternion" }
+      it_behaves_like "external package"
+    end
 
-    # describe "Phexample" do
-    #   let(:package) { "Phexample" }
-    #   it_behaves_like "external package"
-    # end
+    describe "Phexample" do
+      let(:package) { "Phexample" }
+      it_behaves_like "external package"
+    end
 
-    # describe "RoelTyper" do
-    #   let(:package) { "RoelTyper" }
-    #   it_behaves_like "external package"
-    # end
+    describe "RoelTyper" do
+      let(:package) { "RoelTyper" }
+      it_behaves_like "external package"
+    end
 
     describe "SqueakCheck" do
       let(:package) { "SqueakCheck" }
@@ -98,23 +98,23 @@ describe "External package on" do
     #   it_behaves_like "external package"
     # end
 
-    # describe "Zippers" do
-    #   let(:package) { "Zippers" }
-    #   it_behaves_like "external package"
-    # end
+    describe "Zippers" do
+      let(:package) { "Zippers" }
+      it_behaves_like "external package"
+    end
   end
 
-  # context "Squeak 4.4" do
-  #   before :all do
-  #     squeak44_image = "Squeak4.4"
-  #     assert_target_dir
-  #     @os_name = identify_os
-  #     @cog_vm = assert_cog_vm(@os_name)
-  #     @interpreter_vm = assert_interpreter_vm(@os_name)
-  #     FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
-  #     FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
-  #     prepare_package_image(@os_name, squeak44_image, "update-squeak44-image.st")
-  #   end
+  context "Squeak 4.4" do
+    before :all do
+      squeak44_image = "Squeak4.4"
+      assert_target_dir
+      @os_name = identify_os
+      @cog_vm = assert_cog_vm(@os_name)
+      @interpreter_vm = assert_interpreter_vm(@os_name)
+      FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
+      FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
+      prepare_package_image(@os_name, squeak44_image, "update-squeak44-image.st")
+    end
 
   #   it_should_behave_like "all"
   # end
