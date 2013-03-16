@@ -26,7 +26,7 @@ describe "Trunk test suite" do
     }
   end
 
-  it "should pass all tests on a Cog VM" do
+  it "should pass all tests" do
     Dir.chdir("#{SRC}/target") {
       run_cmd("#{@vm} -version")
       run_image_with_cmd(@vm, vm_args(@os_name) + ["-reportheadroom"], RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")

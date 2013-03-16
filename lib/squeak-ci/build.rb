@@ -29,9 +29,11 @@ def assert_cog_vm(os_name)
         run_cmd "tar zxf coglinux.tgz"
       }
     when "freebsd"
-      raise "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet"
+      log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
+      return nil
     else
-      raise "Unknown OS #{os_name} for Cog VM. Aborting."
+      log("Unknown OS #{os_name} for Cog VM. Aborting.")
+      return nil
     end
   end
 
@@ -67,11 +69,12 @@ def assert_interpreter_vm(os_name)
         }
       }
     else
-      raise "Unknown OS #{os_name} for Interpreter VM. Aborting."
+      log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
+      return nil
     end
   end
 
-  return "#{interpreter_src_dir}/bld/squeak"
+  return "#{interpreter_src_dir}/bld/squeakvm"
 end
 
 def assert_trunk_image

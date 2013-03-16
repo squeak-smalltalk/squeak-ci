@@ -27,7 +27,7 @@ task :build do
   FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
   Dir.chdir(TARGET_DIR) {
-    update_base_image(cog_vm, vm_args(os_name), TRUNK_IMAGE)
+    update_base_image((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE)
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
 end
