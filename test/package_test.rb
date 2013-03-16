@@ -116,8 +116,8 @@ describe "External package on" do
       prepare_package_image(@os_name, squeak44_image, "update-squeak44-image.st")
     end
 
-  #   it_should_behave_like "all"
-  # end
+    it_should_behave_like "all"
+  end
 
   context "Squeak 4.5" do
     before :all do
