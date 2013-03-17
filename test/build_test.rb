@@ -29,7 +29,9 @@ describe "Trunk test suite" do
   it "should pass all tests" do
     Dir.chdir("#{SRC}/target") {
       run_cmd("#{@vm} -version")
-      run_image_with_cmd(@vm, vm_args(@os_name) + ["-reportheadroom"], RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")
+      args = vm_args(@os_name)
+      args << "-reportheadroom" unless @os_name == "linux64"
+      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")
       run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st")
     }
   end
