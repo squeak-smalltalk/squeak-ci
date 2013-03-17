@@ -75,7 +75,7 @@ def assert_interpreter_vm(os_name)
     end
   end
 
-  return "#{interpreter_src_dir}/bld/squeakvm"
+  return "#{interpreter_src_dir}/bld/squeak.sh"
 end
 
 def assert_trunk_image
