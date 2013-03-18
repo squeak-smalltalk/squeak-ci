@@ -63,10 +63,10 @@ def assert_interpreter_vm(os_name)
         run_cmd("tar zxf interpreter.tgz")
         FileUtils.mv("#{INTERPRETER_VERSION}-src", interpreter_src_dir)
         FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
-
         Dir.chdir("#{interpreter_src_dir}/bld") {
           run_cmd("../unix/cmake/configure")
           run_cmd("make WIDTH=#{word_size}")
+          assert_ssl("#{interpreter_src_dir}/bld", os_name)
         }
       }
     else
@@ -76,6 +76,20 @@ def assert_interpreter_vm(os_name)
   end
 
   return "#{interpreter_src_dir}/bld/squeak.sh"
+end
+
+def assert_ssl(target_dir, os_name)
+  # My hope is that this becomes a standard plugin, and this function can disappear.
+  raise "Can't install SSL on #{os_name}" if not ["linux", "linux64"].include?(os_name)
+  if not File.exist?("#{target_dir}/SqueakSSL") then
+    Dir.chdir(target_dir) {
+      run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
+      run_cmd("unzip SqueakSSL-bin-0.1.5.zip")
+      FileUtils.mkdir_p("SqueakSSL")
+      FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL/so.SqueakSSL")
+      FileUtils.rm_rf("SqueakSSL-bin")
+    }
+  end
 end
 
 def assert_trunk_image
