@@ -46,7 +46,7 @@ describe "External package on" do
 
     context "should pass all tests" do
       it "on Cog" do
-        pending "Can't run Cog on this platform" unless @cog_vm
+        pending "Can't run Cog on this platform" if @cog_vm.to_s == ""
         run_test_with_timeout(@cog_vm, @os_name, package, 120)
       end
 
