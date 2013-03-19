@@ -57,6 +57,11 @@ describe "External package on" do
   end
 
   shared_examples "all" do
+    describe "AndreasSystemProfiler" do
+      let(:package) { "AndreasSystemProfiler" }
+      it_behaves_like "external package"
+    end
+
     describe "Control" do
       let(:package) { "Control" }
       it_behaves_like "external package"
@@ -71,6 +76,21 @@ describe "External package on" do
     #   let(:package) { "Fuel" }
     #   it_behaves_like "external package"
     # end
+
+    describe "Nebraska" do
+      let(:package) { "Nebraska" }
+      it_behaves_like "external package"
+    end
+
+    describe "Nutcracker" do
+      let(:package) { "Nutcracker" }
+      it_behaves_like "external package"
+    end
+
+    describe "OSProcess" do
+      let(:package) { "OSProcess" }
+      it_behaves_like "external package"
+    end
 
     describe "Quaternion" do
       let(:package) { "Quaternion" }
@@ -89,6 +109,21 @@ describe "External package on" do
 
     describe "SqueakCheck" do
       let(:package) { "SqueakCheck" }
+      it_behaves_like "external package"
+    end
+
+    describe "Universes" do
+      let(:package) { "Universes" }
+      it_behaves_like "external package"
+    end
+
+    describe "WebClient" do
+      let(:package) { "WebClient" }
+      it_behaves_like "external package"
+    end
+
+    describe "XML-Parser" do
+      let(:package) { "XML-Parser" }
       it_behaves_like "external package"
     end
 
