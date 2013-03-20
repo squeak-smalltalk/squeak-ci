@@ -46,12 +46,12 @@ describe "External package on" do
 
     context "should pass all tests" do
       it "on Cog" do
-        pending "Can't run Cog on this platform" unless @cog_vm
-        run_test_with_timeout(@cog_vm, @os_name, package, 120)
+        pending "Can't run Cog on this platform" if @cog_vm.to_s == ""
+        run_test_with_timeout(@cog_vm, @os_name, package, 240)
       end
 
       it "on Interpreter" do
-        run_test_with_timeout(@interpreter_vm, @os_name, package, 120)
+        run_test_with_timeout(@interpreter_vm, @os_name, package, 240)
       end
     end
   end
@@ -138,6 +138,9 @@ describe "External package on" do
     end
   end
 
+  # The issue with Squeak 4.3 is that its Installer is a bit dated, and can't
+  # process versioned package names like "Control (1.2)" because it ends up
+  # looking for a package named "Control " (note the trailing whitespace).
   # context "Squeak 4.3" do
   #   before :all do
   #     squeak43_image = "Squeak4.3"
