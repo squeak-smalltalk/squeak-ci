@@ -14,3 +14,13 @@ Basic CI scripts for Squeak.
 `resources\wallpaper.png` contains the official background for the current Squeak release.
 
 `run-test.sh` runs the tests for individual packages against (a copy of) the latest published Trunk image. Look in the `package-load-tests` directory to see the currently supported packages. Run it thusly: `run-test.sh MyPackage`.
+
+Next-gen tests
+--------------
+
+I've started reimplementing all the test suites in Rake. On Windows this assumes you're using [Cygwin](http://www.cygwin.com) and [pik](https://github.com/vertiginous/pik):
+
+    # Install pik
+    pik install ruby 1.9.3
+    pik use 193
+    rake
