@@ -6,13 +6,13 @@ require 'timeout'
 describe "External package on" do
   PACKAGE_TEST_IMAGE = "PackageTest"
 
-  def prepare_package_image(os_name, base_image_name, update_script = nil)
+  def prepare_package_image(vm, os_name, base_image_name, update_script = nil)
     Dir.chdir(TARGET_DIR) {
       FileUtils.cp("#{base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
       FileUtils.cp("#{base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
     }
-    run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/#{update_script}") if update_script
-    run_image_with_cmd(COG_VM, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
+    run_image_with_cmd(vm, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/#{update_script}") if update_script
+    run_image_with_cmd(vm, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
   end
 
   def run_test(vm, os_name, pkg_name)
@@ -150,7 +150,7 @@ describe "External package on" do
   #     @interpreter_vm = assert_interpreter_vm(@os_name)
   #     FileUtils.cp("#{squeak43_image}.image", "#{TARGET_DIR}/#{squeak43_image}.image")
   #     FileUtils.cp("#{squeak43_image}.changes", "#{TARGET_DIR}/#{squeak43_image}.changes")
-  #     prepare_package_image(@os_name, squeak43_image, "update-squeak43-image.st")
+  #     prepare_package_image(@interpreter_vm, @os_name, squeak43_image, "update-squeak43-image.st")
   #   end
 
   #   it_should_behave_like "all"
@@ -165,7 +165,7 @@ describe "External package on" do
       @interpreter_vm = assert_interpreter_vm(@os_name)
       FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
       FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
-      prepare_package_image(@os_name, squeak44_image, "update-squeak44-image.st")
+      prepare_package_image(@interpreter_vm, @os_name, squeak44_image, "update-squeak44-image.st")
     end
 
     it_should_behave_like "all"
@@ -178,7 +178,7 @@ describe "External package on" do
       @cog_vm = assert_cog_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
       update_image
-      prepare_package_image(@os_name, TRUNK_IMAGE)
+      prepare_package_image(@interpreter_vm, @os_name, TRUNK_IMAGE)
     end
 
     it_should_behave_like "all"

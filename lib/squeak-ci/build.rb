@@ -9,6 +9,13 @@ COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
 
+def as_relative_path(script_path)
+  # Windows doesn't let you use a script with a full path, so we turn all script
+  # references into relative paths.
+  Pathname.new(script_path).relative_path_from(Pathname.new(TARGET_DIR)).to_s
+end
+
+
 def assert_cog_vm(os_name)
   cog_dir = "#{SRC}/target/cog.r#{COG_VERSION}"
 
@@ -87,6 +94,7 @@ def assert_interpreter_vm(os_name)
     when "windows"
       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
       interpreter_src_dir = "#{SRC}/target/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
+      FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
         Zip::ZipFile.open("interpreter.zip") { |z|
@@ -96,6 +104,7 @@ def assert_interpreter_vm(os_name)
             z.extract(f, f_path) unless File.exist?(f_path)
           }
         }
+
         FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
       return "#{interpreter_src_dir}/Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
@@ -153,7 +162,7 @@ def identify_os
 end
 
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
-  run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{cmd}"
+  run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(cmd)}"
 end
 
 def latest_downloaded_trunk_version
