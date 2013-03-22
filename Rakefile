@@ -5,6 +5,7 @@ require 'rake'
 require 'rspec/core/rake_task'
 require 'rake/clean'
 require 'rake/testtask'
+require 'pathname'
 
 CLEAN.include('target')
 
@@ -40,7 +41,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   interpreter_vm_dir = Pathname.new(interpreter_vm).parent.parent.to_s
   ckformat = run_cmd("find #{interpreter_vm_dir} -name ckformat").split("\n").first
 
-  if File.exists?(ckformat) then
+  if ckformat && File.exists?(ckformat) then
     format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
     puts "Before format conversion: \"#{SRC}/target/#{image_name} image format #{format}"
   else
@@ -53,7 +54,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
     puts "WARNING: #{interpreter_vm} not found, image not converted to format 6504"
   end
 
-  if File.exists?(ckformat) then
+  if ckformat && File.exists?(ckformat) then
     format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
     puts "After format conversion: \"#{SRC}/target/#{image_name}.image\" image format #{format}"
   end

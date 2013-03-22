@@ -1,6 +1,9 @@
+require 'zip/zip'
+
 BASE_URL="http://build.squeak.org/"
 COG_VERSION=2701
-INTERPRETER_VERSION="Squeak-4.10.2.2614"
+INTERPRETER_VERSION="4.10.2.2614"
+WINDOWS_INTERPRETER_VERSION="4.10.2-2612"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, the horror!
 COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 TARGET_DIR = "#{SRC}/target"
@@ -28,16 +31,27 @@ def assert_cog_vm(os_name)
         run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/coglinux.tgz"
         run_cmd "tar zxf coglinux.tgz"
       }
+      return "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
     when "freebsd"
       log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
       return nil
+    when "windows"
+      Dir.chdir(cog_dir) {
+        run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/cogwin.zip"
+        Zip::ZipFile.open("cogwin.zip") { |z|
+          z.each { |f|
+            f_path = File.join(Dir.pwd, f.name)
+            FileUtils.mkdir_p(File.dirname(f_path))
+            z.extract(f, f_path) unless File.exist?(f_path)
+          }
+        }
+      }
+      return "#{SRC}/target/cog.r#{COG_VERSION}/cogwin/Croquet.exe"
     else
       log("Unknown OS #{os_name} for Cog VM. Aborting.")
       return nil
     end
   end
-
-  return "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 end
 
 def assert_interpreter_vm(os_name)
@@ -49,19 +63,19 @@ def assert_interpreter_vm(os_name)
                 32
               end
 
-  interpreter_src_dir = "#{SRC}/target/#{INTERPRETER_VERSION}-src-#{word_size}"
+  interpreter_src_dir = "#{SRC}/target/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
   if File.exist?(interpreter_src_dir) then
     log("Using pre-existing interpreter VM in #{interpreter_src_dir}")
   else
-    log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
     assert_target_dir
     case os_name
     when "linux", "linux64", "freebsd", "osx"
+      log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
       Dir.chdir(TARGET_DIR) {
         Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
-        run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/#{INTERPRETER_VERSION}-src.tar.gz")
+        run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
         run_cmd("tar zxf interpreter.tgz")
-        FileUtils.mv("#{INTERPRETER_VERSION}-src", interpreter_src_dir)
+        FileUtils.mv("Squeak-#{INTERPRETER_VERSION}-src", interpreter_src_dir)
         FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
         Dir.chdir("#{interpreter_src_dir}/bld") {
           run_cmd("../unix/cmake/configure")
@@ -69,13 +83,27 @@ def assert_interpreter_vm(os_name)
           assert_ssl("#{interpreter_src_dir}/bld", os_name)
         }
       }
+      return "#{interpreter_src_dir}/bld/squeak.sh"
+    when "windows"
+      log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
+      interpreter_src_dir = "#{SRC}/target/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
+      Dir.chdir(TARGET_DIR) {
+        run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
+        Zip::ZipFile.open("interpreter.zip") { |z|
+          z.each { |f|
+            f_path = File.join(Dir.pwd, f.name)
+            FileUtils.mkdir_p(File.dirname(f_path))
+            z.extract(f, f_path) unless File.exist?(f_path)
+          }
+        }
+        FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
+      }
+      return "#{interpreter_src_dir}/Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
       return nil
     end
   end
-
-  return "#{interpreter_src_dir}/bld/squeak.sh"
 end
 
 def assert_ssl(target_dir, os_name)
@@ -116,9 +144,12 @@ def debug?
 end
 
 def identify_os
+  return "windows" if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM)
+
   str = `uname -a`
   return "linux" if str.include?("Linux") && ! str.include?("x86_64")
   return "linux64" if str.include?("Linux") && str.include?("x86_64")
+  return "UNKNOWN"
 end
 
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
