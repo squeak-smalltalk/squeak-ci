@@ -7,17 +7,19 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'pathname'
 
+require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
+require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/version")
+
 CLEAN.include('target')
+
+task :default => :test
 
 RSpec::Core::RakeTask.new(:test => :build) do |test|
   test.pattern = 'test/package_test.rb'
   test.verbose = true
 end
 
-task :default => :test
-
 task :build do
-  require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
   TEST_IMAGE_NAME = "Squeak4.4"
 
   assert_target_dir
@@ -33,6 +35,29 @@ task :build do
   Dir.chdir(TARGET_DIR) {
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st")
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
+  }
+end
+
+task :release => :build do
+  squeak_update_number=run_cmd("cat #{SRC}/target/TrunkImage.version")
+  base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
+  os_name = identify_os
+  interpreter_vm = assert_interpreter_vm(os_name)
+
+  puts "Using #{interpreter_vm}"
+  puts "Preparing image #{base_name}"
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
+
+  run_cmd("chmod +w #{SRC}/target/#{base_name}.changes")
+  run_cmd("chmod +w #{SRC}/target/#{base_name}.image")
+
+  puts "Releasing #{base_name}"
+  run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st")
+
+  puts "Zipping #{base_name}"
+  Dir.chdir("#{SRC}/target") {
+    run_cmd("zip -j #{base_name}.zip #{base_name}.changes #{base_name}.image")
   }
 end
 
