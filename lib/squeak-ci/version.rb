@@ -1,0 +1,1 @@
+SQUEAK_VERSION = "Squeak4.5"
