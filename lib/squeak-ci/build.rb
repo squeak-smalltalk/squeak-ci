@@ -38,10 +38,8 @@ def assert_cog_vm(os_name)
         run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/coglinux.tgz"
         run_cmd "tar zxf coglinux.tgz"
       }
-      return "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
     when "freebsd"
       log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
-      return nil
     when "windows"
       Dir.chdir(cog_dir) {
         run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/cogwin.zip"
@@ -53,12 +51,12 @@ def assert_cog_vm(os_name)
           }
         }
       }
-      return "#{SRC}/target/cog.r#{COG_VERSION}/cogwin/Croquet.exe"
     else
       log("Unknown OS #{os_name} for Cog VM. Aborting.")
-      return nil
     end
   end
+
+  return cog_location(os_name)
 end
 
 def assert_interpreter_vm(os_name)
@@ -90,7 +88,6 @@ def assert_interpreter_vm(os_name)
           assert_ssl("#{interpreter_src_dir}/bld", os_name)
         }
       }
-      return "#{interpreter_src_dir}/bld/squeak.sh"
     when "windows"
       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
       interpreter_src_dir = "#{SRC}/target/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
@@ -104,15 +101,13 @@ def assert_interpreter_vm(os_name)
             z.extract(f, f_path) unless File.exist?(f_path)
           }
         }
-
         FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
-      return "#{interpreter_src_dir}/Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
-      return nil
     end
   end
+  interpreter_vm_location(os_name)
 end
 
 def assert_ssl(target_dir, os_name)
@@ -148,6 +143,15 @@ def assert_target_dir
   }
 end
 
+def cog_location(os_name)
+  case os_name
+  when "linux" then "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
+  when "windows" then "#{SRC}/target/cog.r#{COG_VERSION}/cogwin/Croquet.exe"
+  else
+    nil
+  end
+end
+
 def debug?
   ! ENV['DEBUG'].nil?
 end
@@ -160,6 +164,24 @@ def identify_os
   return "linux64" if str.include?("Linux") && str.include?("x86_64")
   return "UNKNOWN"
 end
+
+def interpreter_vm_location(os_name)
+  word_size = if (os_name == "linux64") then
+                64
+              else
+                32
+              end
+
+  interpreter_src_dir = "#{SRC}/target/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
+
+  case os_name
+  when "linux", "linux64", "freebsd", "osx" then "#{interpreter_src_dir}/bld/squeak.sh"
+  when "windows" then "#{interpreter_src_dir}/Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
+  else
+    nil
+  end
+end
+
 
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
   run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(cmd)}"
