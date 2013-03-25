@@ -150,7 +150,7 @@ describe "External package on" do
   #     @interpreter_vm = assert_interpreter_vm(@os_name)
   #     FileUtils.cp("#{squeak43_image}.image", "#{TARGET_DIR}/#{squeak43_image}.image")
   #     FileUtils.cp("#{squeak43_image}.changes", "#{TARGET_DIR}/#{squeak43_image}.changes")
-  #     prepare_package_image(@interpreter_vm, @os_name, squeak43_image, "update-squeak43-image.st")
+  #     prepare_package_image(@interpreter_vm, @os_name, squeak43_image, "#{SRC}/update-squeak43-image.st")
   #   end
 
   #   it_should_behave_like "all"
@@ -165,7 +165,7 @@ describe "External package on" do
       @interpreter_vm = assert_interpreter_vm(@os_name)
       FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
       FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
-      prepare_package_image(@interpreter_vm, @os_name, squeak44_image, "update-squeak44-image.st")
+      prepare_package_image(@interpreter_vm, @os_name, squeak44_image, "#{SRC}/update-squeak44-image.st")
     end
 
     it_should_behave_like "all"
