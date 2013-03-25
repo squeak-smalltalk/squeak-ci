@@ -9,12 +9,12 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/functions.sh"
 
 mkdir -p "${SRC}/target"
-curl -o "${SRC}/target/archive.zip" ${BASE_URL}/job/InterpreterVM/lastSuccessfulBuild/artifact/*zip*/archive.zip
+curl -sSo "${SRC}/target/archive.zip" ${BASE_URL}/job/InterpreterVM/lastSuccessfulBuild/artifact/*zip*/archive.zip
 cd "${SRC}/target/"
 unzip -o archive.zip
 mv archive/* .
 TARBALL=`find . -name 'Squeak-vm-unix-*-src*.tar.gz' | grep -v Cog | head -1`
-tar zxvf ${TARBALL}
+tar zxf ${TARBALL}
 SOURCE=`find . -name 'Squeak-vm-unix-*-src' | grep -v Cog | head -1`
 mv $SOURCE $SOURCE-32
 (cd $SOURCE-32/platforms/unix; make)

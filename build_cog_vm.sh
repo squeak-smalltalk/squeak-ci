@@ -7,7 +7,7 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/functions.sh"
 
 mkdir -p "${SRC}/target"
-curl -sS http://build.squeak.org/job/CogVM/99/artifact/*zip*/archive.zip > "${SRC}/target/archive.zip"
+curl -sSo "${SRC}/target/archive.zip" http://build.squeak.org/job/CogVM/99/artifact/*zip*/archive.zip
 (cd "${SRC}/target/"; unzip -o archive.zip)
 TARBALL=`find . -name Squeak-vm-unix-*.tar.gz | sort -r | head -1`
 tar zxf ${TARBALL}
