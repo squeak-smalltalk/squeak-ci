@@ -172,11 +172,17 @@ def interpreter_vm_location(os_name)
                 32
               end
 
-  interpreter_src_dir = "#{SRC}/target/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
+  version = if os_name == "windows" then
+              WINDOWS_INTERPRETER_VERSION
+            else
+              INTERPRETER_VERSION
+            end
+
+  interpreter_src_dir = "#{SRC}/target/Squeak-#{version}-src-#{word_size}"
 
   case os_name
   when "linux", "linux64", "freebsd", "osx" then "#{interpreter_src_dir}/bld/squeak.sh"
-  when "windows" then "#{interpreter_src_dir}/Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
+  when "windows" then "#{interpreter_src_dir}/Squeak#{version}.exe"
   else
     nil
   end
@@ -184,7 +190,7 @@ end
 
 
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
-  run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(cmd)}"
+  run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
 end
 
 def latest_downloaded_trunk_version
@@ -223,6 +229,8 @@ def vm_args(os_name)
     ["-headless"]
   when "linux", "linux64", "freebsd"
     ["-vm-sound-null", "-vm-display-null"]
+  when "windows"
+    ["-headless"]
   else
     raise "Don't know what VM args to give for #{os_name}"
   end
