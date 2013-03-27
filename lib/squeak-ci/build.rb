@@ -25,7 +25,6 @@ def assert_cog_vm(os_name)
     log("Deleting stale Cog at #{stale_cog}")
     FileUtils.rm_rf(stale_cog)
   }
-
   if File.exists?(cog_dir) then
     log("Using existing Cog r.#{COG_VERSION}")
   else
@@ -33,7 +32,7 @@ def assert_cog_vm(os_name)
     log("Installing new Cog r.#{COG_VERSION}")
     FileUtils.mkdir_p(cog_dir)
     case os_name
-    when "linux"
+    when "linux", "linux64"
       Dir.chdir(cog_dir) {
         run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/coglinux.tgz"
         run_cmd "tar zxf coglinux.tgz"
@@ -145,7 +144,7 @@ end
 
 def cog_location(os_name)
   case os_name
-  when "linux" then "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
+  when "linux", "linux64" then "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
   when "windows" then "#{SRC}/target/cog.r#{COG_VERSION}/cogwin/Croquet.exe"
   else
     nil
