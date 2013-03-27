@@ -3,4 +3,4 @@ rvm:
   - 1.9.3
 
 before_install:
-  - apt-get install ia32-libs
+  - sudo apt-get install ia32-libs
