@@ -3,4 +3,4 @@ rvm:
   - 1.9.3
 
 before_install:
-  - sudo apt-get install ia32-libs-multiarch
+  - sudo apt-get install libc6:i386
