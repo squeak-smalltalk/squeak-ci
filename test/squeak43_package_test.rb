@@ -5,17 +5,16 @@ require 'rspec'
 require 'timeout'
 
 describe "External package in" do
-  context "Squeak 4.5" do
+  context "Squeak 4.3" do
     before :all do
-      squeak45_image = "Squeak4.4"
-
+      squeak43_image = "Squeak4.3"
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      update_image
-      prepare_package_image(@interpreter_vm, @os_name, TRUNK_IMAGE)
-      prepare_package_image(@interpreter_vm, @os_name, squeak45_image, "update-image.st")
+      FileUtils.cp("#{squeak43_image}.image", "#{TARGET_DIR}/#{squeak43_image}.image")
+      FileUtils.cp("#{squeak43_image}.changes", "#{TARGET_DIR}/#{squeak43_image}.changes")
+      prepare_package_image(@interpreter_vm, @os_name, squeak43_image, "update-squeak43-image.st")
     end
 
     it_should_behave_like "all"
