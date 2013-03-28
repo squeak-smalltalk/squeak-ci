@@ -8,13 +8,12 @@ describe "External package in" do
   context "Squeak 4.5" do
     before :all do
       squeak45_image = "Squeak4.4"
-
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      update_image
-      prepare_package_image(@interpreter_vm, @os_name, TRUNK_IMAGE)
+      FileUtils.cp("#{squeak45_image}.image", "#{TARGET_DIR}/#{squeak45_image}.image")
+      FileUtils.cp("#{squeak45_image}.changes", "#{TARGET_DIR}/#{squeak45_image}.changes")
       prepare_package_image(@interpreter_vm, @os_name, squeak45_image, "update-image.st")
     end
 
