@@ -7,7 +7,7 @@ require 'timeout'
 describe "External package in" do
   context "Squeak 4.5" do
     before :all do
-      squeak45_image = "Squeak4.4"
+      squeak45_image = "Squeak4.5"
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
