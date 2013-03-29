@@ -4,7 +4,7 @@ SRC=$(cd $(dirname "$0"); pwd)
 . "${SRC}/versions.sh"
 . "${SRC}/functions.sh"
 
-TEST_IMAGE_NAME="Squeak4.4"
+TEST_IMAGE_NAME="Squeak4.5"
 IMAGE_NAME="TrunkImage"
 RUN_TEST_IMAGE_NAME="PostTestTrunkImage"
 
