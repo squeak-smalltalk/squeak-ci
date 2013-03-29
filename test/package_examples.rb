@@ -66,10 +66,10 @@ shared_examples "all" do
     it_behaves_like "external package"
   end
 
-  # describe "Fuel" do
-  #   let(:package) { "Fuel" }
-  #   it_behaves_like "external package"
-  # end
+  describe "Fuel" do
+    let(:package) { "Fuel" }
+    it_behaves_like "external package"
+  end
 
   describe "Nebraska" do
     let(:package) { "Nebraska" }
