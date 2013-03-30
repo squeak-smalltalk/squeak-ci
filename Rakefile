@@ -38,6 +38,24 @@ task :build do
   }
 end
 
+task :perf => :build do
+  perf_image = "PerfTest"
+
+  assert_target_dir
+  os_name = identify_os
+  cog_vm = assert_cog_vm(os_name)
+  interpreter_vm = assert_interpreter_vm(os_name)
+  puts "Cog VM at #{cog_vm}" if cog_vm
+  puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
+  raise "No VMs!" if !!!cog_vm && !!!interpreter_vm
+
+  Dir.chdir(TARGET_DIR) {
+    FileUtils.cp("#{TRUNK_IMAGE}.image", "#{perf_image}.image")
+    FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{perf_image}.changes")
+    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), perf_image, "#{SRC}/benchmarks.st")
+  }
+end
+
 task :release => :build do
   squeak_update_number=run_cmd("cat #{SRC}/target/TrunkImage.version")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
