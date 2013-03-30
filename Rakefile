@@ -20,7 +20,7 @@ RSpec::Core::RakeTask.new(:test => :build) do |test|
 end
 
 task :build do
-  TEST_IMAGE_NAME = "Squeak4.4"
+  TEST_IMAGE_NAME = "Squeak4.5"
 
   assert_target_dir
   os_name = identify_os
