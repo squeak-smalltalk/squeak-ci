@@ -31,8 +31,8 @@ describe "Trunk test suite" do
       run_cmd("#{@vm} -version")
       args = vm_args(@os_name)
       args << "-reportheadroom" unless @os_name == "linux64"
-      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, as_relative_path("#{SRC}/tests.st"))
-      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, as_relative_path("#{SRC}/benchmarks.st"))
+      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st")
+      run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st")
     }
   end
 end
