@@ -71,6 +71,11 @@ shared_examples "all" do
     it_behaves_like "external package"
   end
 
+  describe "Metacello" do
+    let(:package) { "Metacello" }
+    it_behaves_like "external package"
+  end
+
   describe "Nebraska" do
     let(:package) { "Nebraska" }
     it_behaves_like "external package"
