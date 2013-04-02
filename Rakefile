@@ -14,11 +14,6 @@ CLEAN.include('target')
 
 task :default => :test
 
-RSpec::Core::RakeTask.new(:test => :build) do |test|
-  test.pattern = 'test/package_test.rb'
-  test.verbose = true
-end
-
 task :build do
   TEST_IMAGE_NAME = "Squeak4.5"
 
@@ -77,6 +72,21 @@ task :release => :build do
   Dir.chdir("#{SRC}/target") {
     run_cmd("zip -j #{base_name}.zip #{base_name}.changes #{base_name}.image")
   }
+end
+
+RSpec::Core::RakeTask.new(:test => :build) do |test|
+  test.pattern = 'test/image_test.rb'
+  test.verbose = true
+end
+
+RSpec::Core::RakeTask.new(:package_test => :build) do |test|
+  test.pattern = 'test/package_test.rb'
+  test.verbose = true
+end
+
+RSpec::Core::RakeTask.new(:bleeding_edge_test => :build) do |test|
+  test.pattern = 'test/bleeding_edge_test.rb'
+  test.verbose = true
 end
 
 def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)

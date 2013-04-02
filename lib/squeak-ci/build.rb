@@ -187,7 +187,6 @@ def interpreter_vm_location(os_name)
   end
 end
 
-
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
   run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
 end

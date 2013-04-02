@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 require_relative 'package_examples'
-require 'squeak-ci/test'
 require 'fileutils'
 require 'rspec'
 
@@ -17,6 +16,9 @@ describe "External package in" do
       prepare_package_image(@interpreter_vm, @os_name, squeak45_image, "update-image.st")
     end
 
-    it_should_behave_like "all"
+    describe "Fuel (bleeding edge)" do
+      let(:package) { "Fuel-head" }
+      it_behaves_like "external package"
+    end
   end
 end
