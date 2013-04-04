@@ -1,7 +1,7 @@
 require 'zip/zip'
 
 BASE_URL="http://build.squeak.org/"
-COG_VERSION=2701
+COG_VERSION=2714
 INTERPRETER_VERSION="4.10.2.2614"
 WINDOWS_INTERPRETER_VERSION="4.10.2-2612"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, the horror!
