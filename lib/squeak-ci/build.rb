@@ -1,9 +1,7 @@
 require 'zip/zip'
+require_relative 'version'
 
 BASE_URL="http://build.squeak.org/"
-COG_VERSION=2714
-INTERPRETER_VERSION="4.10.2.2614"
-WINDOWS_INTERPRETER_VERSION="4.10.2-2612"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, the horror!
 COG_VM="#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
 TARGET_DIR = "#{SRC}/target"
