@@ -13,34 +13,33 @@ def as_relative_path(script_path)
   Pathname.new(script_path).relative_path_from(Pathname.new(TARGET_DIR)).to_s
 end
 
+def assert_coglike_vm(os_name, vm_type = :normal)
+  cog_dir = "#{SRC}/target/#{cog_name(vm_type)}.r#{COG_VERSION}"
 
-def assert_cog_vm(os_name)
-  cog_dir = "#{SRC}/target/cog.r#{COG_VERSION}"
-
-  cogs = Dir.glob("#{SRC}/target/cog.r*")
+  cogs = Dir.glob("#{SRC}/target/#{cog_name(vm_type)}.r*")
   cogs.delete(File.expand_path(cog_dir))
   cogs.each { |stale_cog|
-    log("Deleting stale Cog at #{stale_cog}")
+    log("Deleting stale #{cog_name(vm_type)} at #{stale_cog}")
     FileUtils.rm_rf(stale_cog)
   }
   if File.exists?(cog_dir) then
-    log("Using existing Cog r.#{COG_VERSION}")
+    log("Using existing #{cog_name(vm_type)} r.#{COG_VERSION}")
   else
     assert_target_dir
-    log("Installing new Cog r.#{COG_VERSION}")
+    log("Installing new #{cog_name(vm_type)} r.#{COG_VERSION}")
     FileUtils.mkdir_p(cog_dir)
     case os_name
     when "linux", "linux64"
       Dir.chdir(cog_dir) {
-        run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/coglinux.tgz"
-        run_cmd "tar zxf coglinux.tgz"
+        run_cmd "curl -sSo #{cog_name(vm_type)}linux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/#{cog_name(vm_type)}linux.tgz"
+        run_cmd "tar zxf #{cog_name(vm_type)}linux.tgz"
       }
     when "freebsd"
       log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
     when "windows"
       Dir.chdir(cog_dir) {
-        run_cmd "curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/cogwin.zip"
-        Zip::ZipFile.open("cogwin.zip") { |z|
+        run_cmd "curl -sSo #{cog_name(vm_type)}win.zip http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION}/#{cog_name(vm_type)}win.zip"
+        Zip::ZipFile.open("#{cog_name(vm_type)}win.zip") { |z|
           z.each { |f|
             f_path = File.join(Dir.pwd, f.name)
             FileUtils.mkdir_p(File.dirname(f_path))
@@ -53,7 +52,11 @@ def assert_cog_vm(os_name)
     end
   end
 
-  return cog_location(os_name)
+  return cog_location(os_name, vm_type)
+end
+
+def assert_cog_vm(os_name)
+  return assert_coglike_vm(os_name)
 end
 
 def assert_interpreter_vm(os_name)
@@ -140,12 +143,22 @@ def assert_target_dir
   }
 end
 
-def cog_location(os_name)
+def cog_location(os_name, vm_type = :normal)
+  base_name = cog_name(vm_type)
   case os_name
-  when "linux", "linux64" then "#{SRC}/target/cog.r#{COG_VERSION}/coglinux/bin/squeak"
-  when "windows" then "#{SRC}/target/cog.r#{COG_VERSION}/cogwin/Croquet.exe"
+  when "linux", "linux64" then "#{SRC}/target/#{base_name}.r#{COG_VERSION}/#{base_name}linux/bin/squeak"
+  when "windows" then "#{SRC}/target/#{base_name}.r#{COG_VERSION}/#{base_name}win/Croquet.exe"
   else
     nil
+  end
+end
+
+def cog_name(vm_type)
+  case vm_type
+  when :normal then 'cog'
+  when :mt then 'cogmt'
+  else
+    raise "Unknown vm_type #{vm_type.inspect} given to cog_name"
   end
 end
 

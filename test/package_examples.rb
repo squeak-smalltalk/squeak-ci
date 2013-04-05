@@ -16,6 +16,11 @@ shared_examples "external package" do
       run_test_with_timeout(@cog_vm, @os_name, package, 240)
     end
 
+    it "on Cog MT" do
+      pending "Can't run Cog MT on this platform (#{identify_os})" if @cog_mt_vm.to_s == ""
+      run_test_with_timeout(@cog_mt_vm, @os_name, package, 240)
+    end
+
     it "on Interpreter" do
       run_test_with_timeout(@interpreter_vm, @os_name, package, 240)
     end
