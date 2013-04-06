@@ -79,6 +79,9 @@ def assert_interpreter_vm(os_name)
       Dir.chdir(TARGET_DIR) {
         Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
         run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
+        if not File.exist?("interpreter.tgz") then
+          run_cmd("curl -sSo interpreter.tgz http://havnor.angband.za.org/squeak/vm/interpreter/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
+        end
         run_cmd("tar zxf interpreter.tgz")
         FileUtils.mv("Squeak-#{INTERPRETER_VERSION}-src", interpreter_src_dir)
         FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
