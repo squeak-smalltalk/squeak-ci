@@ -11,6 +11,7 @@ describe "External package in" do
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
+      @cog_mt_vm = assert_cogmt_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
       FileUtils.cp("#{squeak43_image}.image", "#{TARGET_DIR}/#{squeak43_image}.image")
       FileUtils.cp("#{squeak43_image}.changes", "#{TARGET_DIR}/#{squeak43_image}.changes")
