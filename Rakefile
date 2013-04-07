@@ -52,7 +52,7 @@ task :perf => :build do
 end
 
 task :release => :build do
-  squeak_update_number=run_cmd("cat #{SRC}/target/TrunkImage.version")
+  squeak_update_number = run_cmd("cat #{SRC}/target/TrunkImage.version")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
