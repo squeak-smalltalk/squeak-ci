@@ -9,11 +9,11 @@ class CogVersion
   end
 
   def to_s
-    "#{week}.#{year}"
+    "#{year}.#{week}"
   end
 
   def version_string
-    "#{week}.#{year}.#{svnid}"
+    "#{year}.#{week}.#{svnid}"
   end
 
   def filename(os_name, vm_type)
