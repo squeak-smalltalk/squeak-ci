@@ -12,14 +12,14 @@ fetch_cog_vm () {
 	case $1 in
 	    "linux")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
-		    curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux.tgz && \
+		    curl -sSo coglinux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/coglinux-${COG_TIMESTAMP}.${COG_VERSION}.tgz && \
 		    tar zxf coglinux.tgz);;
 	    "freebsd")
 		echo "Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet" && \
 		exit 1;;
 	    "osx")
 		(cd ${SRC}/target/cog.r${COG_VERSION} && \
-		    curl -sSO http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app.tgz && \
+		    curl -sSo Cog.app.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r${COG_VERSION}/Cog.app-${COG_TIMESTAMP}.${COG_VERSION}.tgz && \
 		    tar zxf Cog.app.tgz);;
 	    *) echo "Unknown OS ${1} for Cog VM. Aborting." && \
 		exit 1;;
