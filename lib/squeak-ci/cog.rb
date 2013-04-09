@@ -1,10 +1,11 @@
 require_relative 'utils'
 
 class CogVersion
-  attr_reader :week, :year, :svnid
-  def initialize(week_int, year_int, svnid)
-    @week = week_int
+  attr_reader :year, :week, :svnid
+  # Year, week are integers
+  def initialize(year_int, week_int, svnid)
     @year = year_int
+    @week = week_int
     @svnid = svnid
   end
 
