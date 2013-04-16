@@ -1,4 +1,4 @@
-| config |
+| config manifest |
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
@@ -11,6 +11,18 @@ config ifNil: [^self inform: 'Unable to retrieve updates from remote repository.
 Utilities setSystemVersionFromConfig: config.
 
 FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; close].
+
+manifest := (MCWorkingCopy allManagers asSortedCollection:
+        [ :a :b | a package name <= b package name ]) collect:
+            [:ea | ea description].
+
+FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
+    manifest do:
+        [:s | f nextPutAll: s; nextPut: Character lf].
+    f close].
+
+FileStream stdout nextPutAll: 'Package manifest:'; nextPut: Character lf; flush.
+manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush].
 
 "Save the fully updated trunk image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
