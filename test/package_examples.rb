@@ -73,6 +73,11 @@ shared_examples "all" do
     it_behaves_like "external package"
   end
 
+  describe "ParsingDerivatives" do
+    let(:package) { "ParsingDerivatives" }
+    it_behaves_like "external package"
+  end
+
   describe "Phexample" do
     let(:package) { "Phexample" }
     it_behaves_like "external package"
