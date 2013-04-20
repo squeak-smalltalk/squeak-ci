@@ -7,15 +7,15 @@ require 'timeout'
 describe "External package in" do
   context "Squeak 4.4" do
     before :all do
-      squeak44_image = "Squeak4.4"
+      @base_image_name = "Squeak4.4"
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
       @cog_mt_vm = assert_cogmt_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      FileUtils.cp("#{squeak44_image}.image", "#{TARGET_DIR}/#{squeak44_image}.image")
-      FileUtils.cp("#{squeak44_image}.changes", "#{TARGET_DIR}/#{squeak44_image}.changes")
-      prepare_package_image(@interpreter_vm, @os_name, squeak44_image, "update-squeak44-image.st")
+      FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{@base_image_name}.image")
+      FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{@base_image_name}.changes")
+      prepare_package_image(@interpreter_vm, @os_name, @base_image_name, "update-squeak44-image.st")
     end
 
     it_should_behave_like "all"

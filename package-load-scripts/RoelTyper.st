@@ -1,4 +1,6 @@
-HDTestReport runPackage: 'RoelTyper-Tests'.
+Installer squeaksource
+    project: 'RoelTyper';
+    addPackage: 'RoelTyper';
+    install.
 
-"Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].

@@ -1,4 +1,6 @@
-HDTestReport runPackage: 'RoelTyper-Tests'.
+Installer squeakmap
+    update;
+    addPackage: 'Control (head)';
+    install.
 
-"Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].

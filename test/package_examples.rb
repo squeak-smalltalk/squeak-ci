@@ -1,9 +1,13 @@
 require 'squeak-ci/test'
 
-PACKAGE_TEST_IMAGE = "PackageTest"
+TEST_TIMEOUT = 600
 
 shared_examples "external package" do
-  after :each do
+  before :all do
+    prepare_package_image(@interpreter_vm, @os_name, PACKAGE_TEST_IMAGE)
+  end
+
+  after :all do
     Dir.chdir(TARGET_DIR) {
       FileUtils.rm("#{package}.image") if File.exists?("#{package}.image")
       FileUtils.rm("#{package}.changes") if File.exists?("#{package}.changes")
@@ -11,18 +15,41 @@ shared_examples "external package" do
   end
 
   context "should pass all tests" do
+    before :all do
+      Dir.chdir(TARGET_DIR) {
+        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{package}.image")
+        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{package}.changes")
+      }
+      run_image_with_cmd(@interpreter_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
+    end
+
+    after :all do
+      Dir.chdir(TARGET_DIR) {
+        FileUtils.rm("#{package}.image") if File.exists?("#{package}.image")
+        FileUtils.rm("#{package}.changes") if File.exists?("#{package}.changes")
+      }
+    end
+
     it "on Cog" do
       pending "Can't run Cog on this platform (#{identify_os})" if @cog_vm.to_s == ""
-      run_test_with_timeout(@cog_vm, @os_name, package, 240)
+      puts "package = " + package
+      with_copy(package, "cog") { | image_name |
+        puts "image_name = " + image_name
+        run_test_with_timeout(@cog_vm, @os_name, image_name, package, TEST_TIMEOUT)
+      }
     end
 
     it "on Cog MT" do
       pending "Can't run Cog MT on this platform (#{identify_os})" if @cog_mt_vm.to_s == ""
-      run_test_with_timeout(@cog_mt_vm, @os_name, package, 240)
+      with_copy(package, "cog") { | image_name |
+        run_test_with_timeout(@cog_mt_vm, @os_name, image_name, package, TEST_TIMEOUT)
+      }
     end
 
     it "on Interpreter" do
-      run_test_with_timeout(@interpreter_vm, @os_name, package, 240)
+      with_copy(package, "cog") { | image_name |
+        run_test_with_timeout(@interpreter_vm, @os_name, image_name, package, TEST_TIMEOUT)
+      }
     end
   end
 end

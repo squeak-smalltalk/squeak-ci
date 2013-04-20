@@ -1,7 +1,3 @@
-Installer squeakmap
-    update;
-    install: 'Magma (head)'.
-
 HDTestReport runPackages: #('Ma-Collections-Dictionarys'
     'Ma-Collections-Dictionarys-Auto-Tests'
     'Ma-Collections-Tests'

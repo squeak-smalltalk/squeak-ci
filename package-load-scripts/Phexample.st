@@ -1,4 +1,6 @@
-HDTestReport runPackage: 'RoelTyper-Tests'.
+Installer squeakmap
+    update;
+    addPackage: 'Phexample (1.2)';
+    install.
 
-"Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].

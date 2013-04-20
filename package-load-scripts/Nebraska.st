@@ -1,4 +1,3 @@
-HDTestReport runPackage: 'RoelTyper-Tests'.
+Installer installUrl: 'http://source.squeak.org/trunk/Nebraska-ul.35.mcz'.
 
-"Throw away the dirty image."
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
