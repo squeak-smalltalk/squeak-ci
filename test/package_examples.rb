@@ -32,9 +32,7 @@ shared_examples "external package" do
 
     it "on Cog" do
       pending "Can't run Cog on this platform (#{identify_os})" if @cog_vm.to_s == ""
-      puts "package = " + package
       with_copy(package, "cog") { | image_name |
-        puts "image_name = " + image_name
         run_test_with_timeout(@cog_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
     end
