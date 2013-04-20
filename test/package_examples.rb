@@ -4,13 +4,17 @@ TEST_TIMEOUT = 600
 
 shared_examples "external package" do
   before :all do
+    Dir.chdir(TARGET_DIR) {
+      FileUtils.cp("#{@base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
+      FileUtils.cp("#{@base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
+    }
     prepare_package_image(@interpreter_vm, @os_name, PACKAGE_TEST_IMAGE)
   end
 
   after :all do
     Dir.chdir(TARGET_DIR) {
-      FileUtils.rm("#{package}.image") if File.exists?("#{package}.image")
-      FileUtils.rm("#{package}.changes") if File.exists?("#{package}.changes")
+      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.image") if File.exists?("#{PACKAGE_TEST_IMAGE}.image")
+      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.changes") if File.exists?("#{PACKAGE_TEST_IMAGE}.changes")
     }
   end
 
