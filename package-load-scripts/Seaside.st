@@ -1,4 +1,4 @@
-Installer squeaksource
+[6~Installer squeaksource
     project: 'MetacelloRepository';
     install: 'ConfigurationOfOmniBrowser';
     install: 'ConfigurationOfSeaside30';
@@ -35,4 +35,4 @@ Installer ss3
 ((Smalltalk at: #ConfigurationOfParasol) project version: '0.9')
     load: #('dev').
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

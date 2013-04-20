@@ -7,4 +7,4 @@ Installer squeakmap
     on: Warning
     do: [ "ignore the one-time warning dialog" ].
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

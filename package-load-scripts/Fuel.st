@@ -3,4 +3,4 @@ Installer squeakmap
     addPackage: 'Fuel (1.9)';
     install.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

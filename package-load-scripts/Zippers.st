@@ -8,4 +8,4 @@ Installer ss3
     addPackage: 'Zippers-fbs.52.mcz';
     install.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

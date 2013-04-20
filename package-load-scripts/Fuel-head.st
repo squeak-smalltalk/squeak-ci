@@ -5,4 +5,4 @@ Installer ss3
 
 (Smalltalk at: #ConfigurationOfFuel) loadBleedingEdge.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

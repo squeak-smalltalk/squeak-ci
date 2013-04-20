@@ -22,4 +22,4 @@ Installer squeaksource
 "     install: 'Xtreams-Xtras-MartinKobetic.23.mcz';
      install: 'Xtreams-XtrasTests-MartinKobetic.2.mcz'".
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

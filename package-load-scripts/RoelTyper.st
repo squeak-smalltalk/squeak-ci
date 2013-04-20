@@ -3,4 +3,4 @@ Installer squeaksource
     addPackage: 'RoelTyper';
     install.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

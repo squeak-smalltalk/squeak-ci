@@ -5,4 +5,4 @@
 ((Smalltalk at: #ConfigurationOfMetacello) project version: '1.0-beta.32')
     load: 'Tests'.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

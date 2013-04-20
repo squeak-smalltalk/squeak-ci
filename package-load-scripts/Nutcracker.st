@@ -5,4 +5,4 @@ Installer ss3
 
 (Smalltalk at: #ConfigurationOfNutcracker) loadDevelopment.
 
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
