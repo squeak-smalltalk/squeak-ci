@@ -2,7 +2,7 @@ require 'squeak-ci/test'
 
 TEST_TIMEOUT = 600
 
-shared_examples "external package" do
+shared_examples "an external package" do
   before :all do
     Dir.chdir(TARGET_DIR) {
       FileUtils.cp("#{@base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
@@ -18,7 +18,7 @@ shared_examples "external package" do
     }
   end
 
-  context "should pass all tests" do
+  context "by passing all tests" do
     before :all do
       Dir.chdir(TARGET_DIR) {
         FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{package}.image")
@@ -56,10 +56,10 @@ shared_examples "external package" do
   end
 end
 
-shared_examples "all" do
+shared_examples "external packages" do
   describe "AndreasSystemProfiler" do
     let(:package) { "AndreasSystemProfiler" }
-    it_behaves_like "external package"
+    it_behaves_like "an external package"
   end
 
   describe "Control" do
