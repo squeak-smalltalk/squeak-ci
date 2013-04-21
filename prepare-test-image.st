@@ -5,5 +5,5 @@ Smalltalk at: #Log put: [:msg | | str |
 
 Log value: 'Loading Hudson build tools... from ', (FileDirectory default fullNameFor: 'HudsonBuildTools.st').
 (FileDirectory default readOnlyFileNamed: 'HudsonBuildTools.st') fileIn.
-
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
+((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
+ToolSet default: (Smalltalk at: #CommandLineToolSet).
