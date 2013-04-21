@@ -1,4 +1,7 @@
 | config manifest |
+((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
+ToolSet default: (Smalltalk at: #CommandLineToolSet).
+
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
