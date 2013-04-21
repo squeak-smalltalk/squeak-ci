@@ -7,3 +7,5 @@ Log value: 'Loading Hudson build tools... from ', (FileDirectory default fullNam
 (FileDirectory default readOnlyFileNamed: 'HudsonBuildTools.st') fileIn.
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
+
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
