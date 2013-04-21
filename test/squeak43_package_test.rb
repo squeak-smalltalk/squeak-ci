@@ -18,6 +18,6 @@ describe "External package in" do
       prepare_package_image(@interpreter_vm, @os_name, @base_image_name, "update-squeak43-image.st")
     end
 
-    it_should_behave_like "all"
+    it_behaves_like "external packages"
   end
 end
