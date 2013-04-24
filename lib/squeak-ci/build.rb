@@ -1,4 +1,6 @@
+require 'future'
 require 'zip/zip'
+require_relative 'extensions'
 require_relative 'version'
 require_relative 'utils'
 
@@ -187,8 +189,15 @@ def interpreter_vm_location(os_name)
   end
 end
 
-def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd)
-  run_cmd "nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
+# timeout in seconds
+def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
+  log(cmd)
+  pid = spawn("nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}")
+  future {
+    sleep(timeout.seconds)
+    Process.kill('KILL', pid)
+  }
+  Process.wait(pid)
 end
 
 def latest_downloaded_trunk_version
