@@ -1,5 +1,5 @@
-'From Squeak4.5 of 16 April 2013 [latest update: #12597] on 21 April 2013 at 4:02:38 pm'!
-Object subclass: #CommandLineToolSet
+'From Squeak4.5 of 16 April 2013 [latest update: #12597] on 23 April 2013 at 3:48:25 pm'!
+StandardToolSet subclass: #CommandLineToolSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
