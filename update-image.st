@@ -2,6 +2,7 @@
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
+MCMcmUpdater updateMissingPackages: false.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
@@ -28,4 +29,5 @@ FileStream stdout nextPutAll: 'Package manifest:'; nextPut: Character lf; flush.
 manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush].
 
 "Save the fully updated trunk image."
+ToolSet default: (Smalltalk at: #StandardToolSet).
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
