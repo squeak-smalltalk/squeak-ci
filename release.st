@@ -1,3 +1,6 @@
+((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
+ToolSet default: (Smalltalk at: #CommandLineToolSet).
+
 MCMcmUpdater updateMissingPackages: true.
 Form openAsBackground: (FileDirectory default / '..' / 'resources/wallpaper.png') pathName.
 Workspace allInstances do: [:w | w topView delete].
