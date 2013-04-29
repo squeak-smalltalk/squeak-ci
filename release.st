@@ -1,3 +1,4 @@
+ToolSet default: StandardToolSet.
 MCMcmUpdater updateMissingPackages: true.
 Form openAsBackground: (FileDirectory default / '..' / 'resources/wallpaper.png') pathName.
 Workspace allInstances do: [:w | w topView delete].
