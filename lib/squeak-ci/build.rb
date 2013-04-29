@@ -163,7 +163,7 @@ def identify_os
   str = `uname -a`
   return "linux" if str.include?("Linux") && ! str.include?("x86_64")
   return "linux64" if str.include?("Linux") && str.include?("x86_64")
-  return "osx" if str.include?("darwin")
+  return "osx" if str.include?("Darwin")
   return "UNKNOWN"
 end
 
