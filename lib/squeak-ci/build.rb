@@ -76,7 +76,7 @@ def assert_interpreter_vm(os_name)
               end
 
   interpreter_src_dir = "#{SRC}/target/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
-  if File.exist?(interpreter_src_dir) then
+  if File.exist?("#{interpreter_src_dir}/bld/squeak.sh") then
     log("Using existing interpreter VM in #{interpreter_src_dir}")
   else
     assert_target_dir
