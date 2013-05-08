@@ -19,7 +19,7 @@ debugError: anError
 	(anError isKindOf: MessageNotUnderstood) ifTrue: [
 		s
 			nextPutAll: anError messageText; cr;
-			nextPutAll: problemPlace sender sender methodNode printString; cr].
+			nextPutAll: problemPlace sender methodNode printString; cr].
 	(problemPlace stackOfSize: 20) do: [:ctx | s cr. ctx printOn: s].
 	s flush.
 
