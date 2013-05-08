@@ -18,14 +18,22 @@ debugError: anError
 	s := FileStream stderr.
 	(anError isKindOf: MessageNotUnderstood) ifTrue: [
 		s
-			nextPutAll: anError messageText;
-			nextPutAll: String cr;
-			nextPutAll: problemPlace sender sender methodNode printString;
-			nextPutAll: String cr].
+			nextPutAll: anError messageText; cr;
+			nextPutAll: problemPlace sender sender methodNode printString; cr].
 	(problemPlace stackOfSize: 20) do: [:ctx | s cr. ctx printOn: s].
 	s flush.
 
 	SmalltalkImage current snapshot: false andQuit: true! !
+
+!CommandLineToolSet class methodsFor: 'as yet unclassified' stamp: 'fbs 5/08/2013 09:04'!
+debugSyntaxError: anError
+	| s |
+	s := FileStream stderr.
+	s nextPutAll: '----- Syntax error -----'; cr.
+	s nextPutAll: anError errorCode; cr.
+	s nextPutAll: '----- Syntax error -----'; cr.
+
+	self debugError: anError! !
 
 !CommandLineToolSet class methodsFor: 'as yet unclassified' stamp: 'fbs 4/21/2013 13:42'!
 unload
