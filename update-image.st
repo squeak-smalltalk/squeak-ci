@@ -1,4 +1,4 @@
-| config manifest |
+[| config manifest |
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
@@ -30,4 +30,5 @@ manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush
 
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ]]
+    on: Error do: [Smalltalk snapshot: false andQuitWithExitCode: 1]
