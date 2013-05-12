@@ -14,3 +14,5 @@ Installer gemsource
   version: #stable;
   repository: 'github://dalehenrich/metacello-work:configuration';
   load.
+
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
