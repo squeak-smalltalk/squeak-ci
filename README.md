@@ -11,10 +11,17 @@ Requirements
 
 On Windows this assumes you're using [Cygwin](http://www.cygwin.com) and [pik](https://github.com/vertiginous/pik):
 
+````shell
     # Install pik
     pik install ruby 1.9.3
     pik use 193
-    rake
+
+After you have a Ruby installed, set up the initial environment:
+
+````ruby
+    gem install bundle # if necessary
+    bundle install
+````
 
 What does what?
 ---------------
