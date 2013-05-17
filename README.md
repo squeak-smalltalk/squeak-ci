@@ -12,15 +12,26 @@ Requirements
 On Windows this assumes you're using [Cygwin](http://www.cygwin.com) and [pik](https://github.com/vertiginous/pik):
 
 ````shell
-    # Install pik
-    pik install ruby 1.9.3
-    pik use 193
+# Install pik
+pik install ruby 1.9.3
+pik use 193
+````
+
+On other OSes:
+
+````shell
+# Install RVM
+$ \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3
+$ cd squeak-ci
+$ which ruby
+/home/frank/.rvm/rubies/ruby-1.9.3-p392/bin/ruby
+````
 
 After you have a Ruby installed, set up the initial environment:
 
 ````ruby
-    gem install bundle # if necessary
-    bundle install
+gem install bundle # if necessary
+bundle install
 ````
 
 What does what?
