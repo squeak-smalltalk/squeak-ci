@@ -53,6 +53,13 @@ What does what?
 
 `run-test.sh` runs the tests for individual packages against (a copy of) the latest published Trunk image. Look in the `package-load-tests` directory to see the currently supported packages. Run it thusly: `run-test.sh MyPackage`. (This script will probably fall away at some stage.)
 
+Additional reading
+------------------
+
+If you run into any issues, please raise an issue here. If it looks like the issue's not a build in the scripts but a problem in building the VM, please mail vm-dev@lists.squeak.org with details of your operating system and the output showing the problem.
+
+While waiting for a reply, take a look the the [official VM guides](http://squeakvm.org/index.html) and see if you can solve the issue yourself. (If you do, please tell someone about it, either here as an issue, or in a post to the vm-dev list.)
+
 Licence
 -------
 
