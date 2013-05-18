@@ -18,12 +18,12 @@ describe "External package in" do
 
     describe "Fuel (bleeding edge)" do
       let(:package) { "Fuel-head" }
-      it_behaves_like "external package"
+      it_behaves_like "an external package"
     end
 
     describe "Metacello (bleeding edge)" do
       let(:package) { "Metacello-head" }
-      it_behaves_like "external package"
+      it_behaves_like "an external package"
     end
   end
 end
