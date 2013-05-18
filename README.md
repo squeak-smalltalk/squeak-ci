@@ -30,8 +30,8 @@ $ which ruby
 After you have a Ruby installed, set up the initial environment:
 
 ````ruby
-gem install bundle # if necessary
-bundle install
+$ gem install bundle # if necessary
+$ bundle install
 ````
 
 What does what?
