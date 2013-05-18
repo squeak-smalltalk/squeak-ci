@@ -29,7 +29,7 @@ $ which ruby
 
 After you have a Ruby installed, set up the initial environment:
 
-````ruby
+````shell
 $ gem install bundle # if necessary
 $ bundle install
 ````
