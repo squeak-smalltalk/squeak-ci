@@ -32,13 +32,13 @@ def assert_coglike_vm(os_name, vm_type)
     log("Installing new #{COG_VERSION.dir_name(vm_type)} r.#{COG_VERSION.svnid}")
     FileUtils.mkdir_p(cog_dir)
     case os_name
+    when "freebsd"
+      log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
     when "linux", "linux64"
       Dir.chdir(cog_dir) {
         run_cmd "curl -sSo #{COG_VERSION.dir_name(vm_type)}linux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
         run_cmd "tar zxf #{COG_VERSION.dir_name(vm_type)}linux.tgz"
       }
-    when "freebsd"
-      log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
     when "windows"
       Dir.chdir(cog_dir) {
         run_cmd "curl -sSo #{COG_VERSION.dir_name(vm_type)}win.zip http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
