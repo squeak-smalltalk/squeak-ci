@@ -40,7 +40,7 @@ class CogVersion
     case os_name
     when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux/bin/squeak"
     when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win/Croquet.exe"
-    when "osx" then log("CogVersion#cog_location not implemented for #{os_name}")
+    when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/MacOS/Squeak"
     else
       nil
     end
