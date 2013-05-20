@@ -18,16 +18,7 @@ class CogVersion
   end
 
   def filename(os_name, vm_type)
-    basename = if os_name == "osx" then
-                 case vm_type
-                 when :normal then "Cog.app"
-                 when :mt then "CogMT.app"
-                 else
-                   raise "Unknown vm_type #{vm_type.inspect} passed to CogVersion#filename"
-                 end
-               else
-                 dir_name(vm_type)
-               end
+    basename = dir_name(vm_type)
     case os_name
     when "linux", "linux64" then "#{basename}linux-#{version_string}.tgz"
     when "windows" then "#{basename}win-#{version_string}.zip"
@@ -46,12 +37,21 @@ class CogVersion
     end
   end
 
-  def dir_name(vm_type)
-    case vm_type
-    when :normal then 'cog'
-    when :mt then 'cogmt'
+  def dir_name(os_name, vm_type)
+    if os_name == "osx" then
+      case vm_type
+      when :normal then "Cog.app"
+      when :mt then "CogMT.app"
+      else
+        raise "Unknown vm_type #{vm_type.inspect} for 'osx' passed to CogVersion#filename"
+      end
     else
-      raise "Unknown vm_type #{vm_type.inspect} given to CogVersion#dir_name"
+      case vm_type
+      when :normal then 'cog'
+      when :mt then 'cogmt'
+      else
+        raise "Unknown vm_type #{vm_type.inspect} for '#{os_name}' given to CogVersion#dir_name"
+      end
     end
   end
 end
