@@ -17,37 +17,37 @@ end
 
 # vm_type element_of [:mt, :normal]
 def assert_coglike_vm(os_name, vm_type)
-  cog_dir = "#{SRC}/target/#{COG_VERSION.dir_name(vm_type)}.r#{COG_VERSION.svnid}"
+  cog_dir = "#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r#{COG_VERSION.svnid}"
 
-  cogs = Dir.glob("#{SRC}/target/#{COG_VERSION.dir_name(vm_type)}.r*")
+  cogs = Dir.glob("#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r*")
   cogs.delete(File.expand_path(cog_dir))
   cogs.each { |stale_cog|
-    log("Deleting stale #{COG_VERSION.dir_name(vm_type)} at #{stale_cog}")
+    log("Deleting stale #{COG_VERSION.dir_name(os_name, vm_type)} at #{stale_cog}")
     FileUtils.rm_rf(stale_cog)
   }
   if File.exists?(cog_dir) then
-    log("Using existing #{COG_VERSION.dir_name(vm_type)} r.#{COG_VERSION.svnid}")
+    log("Using existing #{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}")
   else
     assert_target_dir
-    log("Installing new #{COG_VERSION.dir_name(vm_type)} r.#{COG_VERSION.svnid}")
+    log("Installing new #{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}")
     FileUtils.mkdir_p(cog_dir)
     case os_name
     when "freebsd"
       log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
     when "linux", "linux64"
       Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(vm_type)}linux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        run_cmd "tar zxf #{COG_VERSION.dir_name(vm_type)}linux.tgz"
+        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}linux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+        run_cmd "tar zxf #{COG_VERSION.dir_name(os_name, vm_type)}linux.tgz"
       }
     when "osx"
       Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(vm_type)}osx.tgz http://www.mirandabanda.org/files/Cosg/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        run_cmd "tar zxf #{COG_VERSION.dir_name(vm_type)}osx.tgz"
+        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}osx.tgz http://www.mirandabanda.org/files/Cosg/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+        run_cmd "tar zxf #{COG_VERSION.dir_name(os_name, vm_type)}osx.tgz"
       }
     when "windows"
       Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(vm_type)}win.zip http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        Zip::ZipFile.open("#{COG_VERSION.dir_name(vm_type)}win.zip") { |z|
+        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}win.zip http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+        Zip::ZipFile.open("#{COG_VERSION.dir_name(os_name, vm_type)}win.zip") { |z|
           z.each { |f|
             f_path = File.join(Dir.pwd, f.name)
             FileUtils.mkdir_p(File.dirname(f_path))
