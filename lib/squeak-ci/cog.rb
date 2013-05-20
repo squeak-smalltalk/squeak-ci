@@ -18,7 +18,7 @@ class CogVersion
   end
 
   def filename(os_name, vm_type)
-    basename = dir_name(vm_type)
+    basename = dir_name(os_name, vm_type)
     case os_name
     when "linux", "linux64" then "#{basename}linux-#{version_string}.tgz"
     when "windows" then "#{basename}win-#{version_string}.zip"
@@ -27,7 +27,7 @@ class CogVersion
   end
 
   def cog_location(base_path, os_name, vm_type = :normal)
-    base_name = dir_name(vm_type)
+    base_name = dir_name(os_name, vm_type)
     case os_name
     when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux/bin/squeak"
     when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win/Croquet.exe"
@@ -43,7 +43,7 @@ class CogVersion
       when :normal then "Cog.app"
       when :mt then "CogMT.app"
       else
-        raise "Unknown vm_type #{vm_type.inspect} for 'osx' passed to CogVersion#filename"
+        raise "Unknown vm_type #{vm_type.inspect} for 'osx' passed to CogVersion#dir_name"
       end
     else
       case vm_type
