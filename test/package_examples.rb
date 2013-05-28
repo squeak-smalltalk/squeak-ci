@@ -72,6 +72,16 @@ shared_examples "external packages" do
     it_behaves_like "an external package"
   end
 
+  describe "FileSystem" do
+    let(:package) { "FileSystem" }
+    it_behaves_like "an external package"
+  end
+
+  describe "FileSystem-with-Xtreams" do
+    let(:package) { "FileSystem-with-Xtreams" }
+    it_behaves_like "an external package"
+  end
+
   describe "Fuel" do
     let(:package) { "Fuel" }
     it_behaves_like "an external package"
