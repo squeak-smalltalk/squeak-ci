@@ -20,7 +20,7 @@ pik use 193
 On other OSes:
 
 ````shell
-# Install RVM
+# Install RVM (or chruby, or rbenv, or...)
 $ \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3
 $ cd squeak-ci
 $ which ruby
@@ -33,6 +33,11 @@ After you have a Ruby installed, set up the initial environment:
 $ gem install bundle # if necessary
 $ bundle install
 ````
+
+How do I contribute?
+--------------------
+
+Report bugs in the issue list, or on squeak-dev@lists.squeak.org. Ideally I'd like to see a pull request raised against the master branch, but if you've only got time to drop a mail or a note in the issue tracker, that's fine too.
 
 What does what?
 ---------------
