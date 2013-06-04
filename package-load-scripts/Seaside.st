@@ -1,4 +1,4 @@
-[6~Installer squeaksource
+Installer squeaksource
     project: 'MetacelloRepository';
     install: 'ConfigurationOfOmniBrowser';
     install: 'ConfigurationOfSeaside30';
