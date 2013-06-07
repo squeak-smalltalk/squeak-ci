@@ -57,103 +57,29 @@ shared_examples "an external package" do
 end
 
 shared_examples "external packages" do
-  describe "AndreasSystemProfiler" do
-    let(:package) { "AndreasSystemProfiler" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Control" do
-    let(:package) { "Control" }
-    it_behaves_like "an external package"
-  end
-
-  describe "FFI" do
-    let(:package) { "FFI" }
-    it_behaves_like "an external package"
-  end
-
-  describe "FileSystem" do
-    let(:package) { "FileSystem" }
-    it_behaves_like "an external package"
-  end
-
-  describe "FileSystem-with-Xtreams" do
-    let(:package) { "FileSystem-with-Xtreams" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Fuel" do
-    let(:package) { "Fuel" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Metacello" do
-    let(:package) { "Metacello" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Nebraska" do
-    let(:package) { "Nebraska" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Nutcracker" do
-    let(:package) { "Nutcracker" }
-    it_behaves_like "an external package"
-  end
-
-  describe "OSProcess" do
-    let(:package) { "OSProcess" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Quaternion" do
-    let(:package) { "Quaternion" }
-    it_behaves_like "an external package"
-  end
-
-  describe "ParsingDerivatives" do
-    let(:package) { "ParsingDerivatives" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Phexample" do
-    let(:package) { "Phexample" }
-    it_behaves_like "an external package"
-  end
-
-  describe "RoelTyper" do
-    let(:package) { "RoelTyper" }
-    it_behaves_like "an external package"
-  end
-
-  describe "SqueakCheck" do
-    let(:package) { "SqueakCheck" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Universes" do
-    let(:package) { "Universes" }
-    it_behaves_like "an external package"
-  end
-
-  describe "WebClient" do
-    let(:package) { "WebClient" }
-    it_behaves_like "an external package"
-  end
-
-  describe "XML-Parser" do
-    let(:package) { "XML-Parser" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Xtreams" do
-    let(:package) { "Xtreams" }
-    it_behaves_like "an external package"
-  end
-
-  describe "Zippers" do
-    let(:package) { "Zippers" }
-    it_behaves_like "an external package"
-  end
+  ["AndreasSystemProfiler",
+   "Control",
+   "FFI",
+   "FileSystem",
+   "FileSystem-with-Xtreams",
+   "Fuel",
+   "Metacello",
+   "Nebraska",
+   "Nutcracker",
+   "OSProcess",
+   "Quaternion",
+   "ParsingDerivatives",
+   "Phexample",
+   "RoelTyper",
+   "SqueakCheck",
+   "Universes",
+   "WebClient",
+   "XML-Parser",
+   "Xtreams",
+   "Zippers"].each { |pkg_name|
+    describe pkg_name, pkg_name.to_sym => true do
+      let(:package) { pkg_name }
+      it_behaves_like "an external package"
+    end
+  }
 end
