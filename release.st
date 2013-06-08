@@ -7,4 +7,4 @@ Workspace allInstances do: [:w | w topView delete].
 ReleaseBuilder prepareNewBuild.
 ToolSet default: StandardToolSet.
 Smalltalk snapshot: true andQuit: true]
-    on: Error do: [Smalltalk snapshot: true andQuitWithExitCode: 1]
+    on: Error do: [Smalltalk snapshot: true andQuit: true]

@@ -31,4 +31,4 @@ manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ]]
-    on: Error do: [Smalltalk snapshot: false andQuitWithExitCode: 1]
+    on: Error do: [Smalltalk snapshot: false andQuit: true]
