@@ -27,3 +27,5 @@ Installer squeaksource
   addPackage: 'FS-Tests-FileStream';
   addPackage: 'FS-Tests-Xtreams';
   install.
+
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
