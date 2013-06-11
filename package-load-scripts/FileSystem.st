@@ -9,3 +9,5 @@
   addPackage: 'FS-Tests-Disk';
   addPackage: 'FS-Tests-FileStream';
   install.
+
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
