@@ -18,14 +18,11 @@ describe "External package in" do
       prepare_package_image(@interpreter_vm, @os_name, @base_image_name, "update-image.st")
     end
 
-    describe "Fuel (bleeding edge)" do
-      let(:package) { "Fuel-head" }
-      it_behaves_like "an external package"
-    end
-
-    describe "Metacello (bleeding edge)" do
-      let(:package) { "Metacello-head" }
-      it_behaves_like "an external package"
-    end
+    ['Fuel', 'Metacello'].each { |pkg_name|
+      describe "#{pkg_name} (bleeding edge)", pkg_name.to_sym => true do
+        let(:package) { "#{pkg_name}-head" }
+        it_behaves_like "an external package"
+      end
+    }
   end
 end
