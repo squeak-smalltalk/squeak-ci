@@ -65,6 +65,22 @@ If you run into any issues, please raise an issue here. If it looks like the iss
 
 While waiting for a reply, take a look the the [official VM guides](http://squeakvm.org/index.html) and see if you can solve the issue yourself. (If you do, please tell someone about it, either here as an issue, or in a post to the vm-dev list.)
 
+Volunteering to run a build slave
+---------------------------------
+
+We are very happy to accept offers of build slaves! To run a build slave you'll need some additional software:
+
+* Java (1.6 or later),
+* git (1.7 or later)
+
+Ask on squeak-dev@lists.squeak.org, and you'll get a user account. Then
+* add a new node, labelling it with either `32bit` or `64bit`, and the OS - `linux`, `windows`, `osx`, `freebsd`, and so on.
+* `apt-get install openjdk-7-jdk cmake ruby1.9 zip unzip` or equivalent
+* `wget http://build.squeak.org/jnlpJars/slave.jar`
+* `java -jar slave.jar -jnlpUrl http://build.squeak.org/computer/${SLAVENAME}/slave-agent.jnlp -jnlpCredentials username:password`
+
+To keep your slave persistently connected, you could always write a small upstart or systemd script to run Java.
+
 Licence
 -------
 
