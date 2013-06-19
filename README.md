@@ -51,6 +51,7 @@ We are very happy to accept offers of build slaves! To run a build slave you'll 
 Ask on squeak-dev@lists.squeak.org, and you'll get a user account. Then
 * add a new node, labelling it with either `32bit` or `64bit`, and the OS - `linux`, `windows`, `osx`, `freebsd`, and so on.
 * `apt-get install openjdk-7-jdk cmake ruby1.9 zip unzip` or equivalent
+* 64 bit Linux users will need to `apt-get install libc6:i386`
 * `wget http://build.squeak.org/jnlpJars/slave.jar`
 * `java -jar slave.jar -jnlpUrl http://build.squeak.org/computer/${SLAVENAME}/slave-agent.jnlp -jnlpCredentials username:password`
 
