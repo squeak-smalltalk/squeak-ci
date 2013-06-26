@@ -30,7 +30,7 @@ class CogVersion
     base_name = dir_name(os_name, vm_type)
     case os_name
     when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux/bin/squeak"
-    when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win/Croquet.exe"
+    when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win/Squeak.exe"
     when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/MacOS/Squeak"
     else
       nil

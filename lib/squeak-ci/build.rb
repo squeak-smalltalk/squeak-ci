@@ -198,12 +198,17 @@ end
 # timeout in seconds
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   log(cmd)
-  pid = spawn("nice #{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}")
-  future {
-    sleep(timeout.seconds)
-    Process.kill('KILL', pid)
-  }
-  Process.wait(pid)
+  base_cmd = "#{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
+  case identify_os
+    when "windows" then system(base_cmd)
+  else
+    pid = spawn("nice #{base_cmd}")
+    future {
+      sleep(timeout.seconds)
+      Process.kill('KILL', pid)
+    }
+    Process.wait(pid)
+  end
 end
 
 def latest_downloaded_trunk_version
