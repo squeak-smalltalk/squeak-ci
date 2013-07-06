@@ -20,6 +20,8 @@ manifest := (MCWorkingCopy allManagers asSortedCollection:
         [ :a :b | a package name <= b package name ]) collect:
             [:ea | ea description].
 
+"Avoid trailing cruft if the manifest shrinks in length."
+FileDirectory deleteFilePath: fileName.
 FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
     manifest do:
         [:s | f nextPutAll: s; nextPut: Character lf].
