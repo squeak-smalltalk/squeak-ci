@@ -5,6 +5,7 @@
     'SmallLand-ColorTheme'
     'ST80'
     'ST80Tools'
+    'SystemReporter'
     'Universes'
     'XML-Parser')
     do: [:pkgName|
