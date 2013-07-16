@@ -74,6 +74,8 @@ end
 def assert_interpreter_vm(os_name)
   # word_size is 32 or 64, for 32-bit or 64-bit.
 
+  raise "Missing Cmake. Please install it!" unless run_cmd "cmake"
+
   word_size = if (os_name == "linux64") then
                 64
               else
