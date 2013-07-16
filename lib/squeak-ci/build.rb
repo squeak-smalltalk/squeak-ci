@@ -142,10 +142,10 @@ def assert_ssl(target_dir, os_name)
 end
 
 def assert_trunk_image
-  if File.exists?("#{SRC}/target/TrunkImage.image") then
-    log("Using existing TrunkImage")
+  if File.exists?("#{SRC}/target/#{TRUNK_IMAGE}.image") then
+    log("Using existing #{TRUNK_IMAGE}")
   else
-    log("Downloading new TrunkImage")
+    log("Downloading new #{TRUNK_IMAGE}")
     Dir.chdir(TARGET_DIR) {
       run_cmd "curl -sSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image"
       run_cmd "curl -sSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes"
