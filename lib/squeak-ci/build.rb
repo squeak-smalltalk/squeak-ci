@@ -221,16 +221,6 @@ def latest_downloaded_trunk_version
   end
 end
 
-def update_image
-  # There's actually a race here, between time-of-check (getting the latest update)
-  # and time-of-use (actually downloading the image)
-
-  latest_released_update = `curl -sS #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.version`.to_i
-  if latest_downloaded_trunk_version < latest_released_update then
-    assert_trunk_image
-  end
-end
-
 def vm_args(os_name)
   return [] if debug?
 
