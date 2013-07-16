@@ -6,6 +6,7 @@
     'ST80'
     'ST80Tools'
     'SystemReporter'
+    'ToolBuilder-MVC'
     'Universes'
     'XML-Parser')
     do: [:pkgName|

@@ -72,6 +72,8 @@ shared_examples "external packages" do
    "Phexample",
    "RoelTyper",
    "SqueakCheck",
+   "ST80",
+   "ToolBuilder-MVC",
    "Universes",
    "WebClient",
    "XML-Parser",
