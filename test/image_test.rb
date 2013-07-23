@@ -16,6 +16,9 @@ describe "Trunk test suite" do
             assert_cog_vm(@os_name)
           end
     Dir.chdir(TARGET_DIR) {
+      # Update the base image.
+      prepare_package_image(@vm, @os_name, TRUNK_IMAGE, "update-image.st")
+
       # Copy the clean image so we can run the tests without touching the artifact.
       FileUtils.cp("#{TRUNK_IMAGE}.image", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.image")
       FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.changes")
