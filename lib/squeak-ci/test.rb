@@ -5,8 +5,8 @@ require 'timeout'
 PACKAGE_TEST_IMAGE = "PackageTest"
 
 def prepare_package_image(vm, os_name, base_image_name, update_script = nil)
-  run_image_with_cmd(vm, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/#{update_script}") if update_script
-  run_image_with_cmd(vm, vm_args(os_name), PACKAGE_TEST_IMAGE, "#{SRC}/prepare-test-image.st")
+  run_image_with_cmd(vm, vm_args(os_name), base_image_name, "#{SRC}/#{update_script}") if update_script
+  run_image_with_cmd(vm, vm_args(os_name), base_image_name, "#{SRC}/prepare-test-image.st")
 end
 
 def run_test(vm, os_name, image_name, pkg_name)
