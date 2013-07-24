@@ -2,7 +2,7 @@
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
 MCMcmUpdater updateMissingPackages: true.
-Form openAsBackground: (FileDirectory default / '..' / 'resources/wallpaper.png') pathName.
+Form openAsBackground: (FileDirectory default / '..' / 'resources' / 'wallpaper.png') pathName.
 Workspace allInstances do: [:w | w topView delete].
 ReleaseBuilder prepareNewBuild.
 ToolSet default: StandardToolSet.
