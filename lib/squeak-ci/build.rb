@@ -9,6 +9,15 @@ SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, 
 TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
 
+class UnknownOS < Exception
+  def initialize(os_name)
+    @os_name = os_name
+    super "Unknown OS #{os_name}"
+  end
+
+  attr_accessor :os_name
+end
+
 def as_relative_path(script_path)
   # Windows doesn't let you use a script with a full path, so we turn all script
   # references into relative paths.
@@ -17,6 +26,8 @@ end
 
 # vm_type element_of [:mt, :normal]
 def assert_coglike_vm(os_name, vm_type)
+  cog_desc = "#{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}"
+
   cog_dir = "#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r#{COG_VERSION.svnid}"
 
   cogs = Dir.glob("#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r*")
@@ -26,37 +37,22 @@ def assert_coglike_vm(os_name, vm_type)
     FileUtils.rm_rf(stale_cog)
   }
   if File.exists?(cog_dir) then
-    log("Using existing #{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}")
+    log("Using existing #{cog_desc}")
   else
     assert_target_dir
-    log("Installing new #{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}")
+    log("Installing new #{cog_desc}")
     FileUtils.mkdir_p(cog_dir)
-    case os_name
-    when "freebsd"
-      log("Sadly, FreeBSD doesn't have prebuilt binaries for Cog yet")
-    when "linux", "linux64"
-      Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}linux.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        run_cmd "tar zxf #{COG_VERSION.dir_name(os_name, vm_type)}linux.tgz"
-      }
-    when "osx"
-      Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}osx.tgz http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        run_cmd "tar zxf #{COG_VERSION.dir_name(os_name, vm_type)}osx.tgz"
-      }
-    when "windows"
-      Dir.chdir(cog_dir) {
-        run_cmd "curl -sSo #{COG_VERSION.dir_name(os_name, vm_type)}win.zip http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
-        Zip::ZipFile.open("#{COG_VERSION.dir_name(os_name, vm_type)}win.zip") { |z|
-          z.each { |f|
-            f_path = File.join(Dir.pwd, f.name)
-            FileUtils.mkdir_p(File.dirname(f_path))
-            z.extract(f, f_path) unless File.exist?(f_path)
-          }
-        }
-      }
-    else
-      log("Unknown OS #{os_name} for Cog VM. Aborting.")
+    begin
+      begin
+        download_cog(os_name, vm_type, cog_version)
+      rescue UnknownOS => e
+        log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
+        raise e
+      end
+    rescue e
+      FileUtils.rm_rf(cog_dir)
+      log("Cleaning up failed install of #{cog_desc}")
+      nil
     end
   end
 
@@ -160,8 +156,44 @@ def assert_target_dir
   }
 end
 
+def cog_archive_name(os_name, vm_type, cog_version)
+  suffix, ext = case os_name
+                when "freebsd"
+                  ["fbsd", "tgz"]
+                when "linux", "linux64"
+                  ["linux", "tgz"]
+                when "osx"
+                  ["osx", "tgz"]
+                when "windows"
+                  ["win", "zip"]
+                else
+                  raise UnknownOS.new(os_name)
+                end
+  "#{cog_version.dir_name(os_name, vm_type)}#{suffix}.#{ext}"
+end
+
 def debug?
   ! ENV['DEBUG'].nil?
+end
+
+def download_cog(cog_dir, os_name, vm_type, cog_version)
+  local_name = cog_archive_name(os_name, vm_type, cog_version)
+  Dir.chdir(cog_dir) {
+    case os_name
+    when "windows"
+      run_cmd "curl -sSo #{local_name} http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+      Zip::ZipFile.open("#{local_name}") { |z|
+        z.each { |f|
+          f_path = File.join(Dir.pwd, f.name)
+          FileUtils.mkdir_p(File.dirname(f_path))
+          z.extract(f, f_path) unless File.exist?(f_path)
+        }
+      }
+    else
+      run_cmd "curl -sSo #{local_name} http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+      run_cmd "tar zxf #{local_name}"
+    end
+  }
 end
 
 def identify_os
@@ -232,6 +264,6 @@ def vm_args(os_name)
   when "windows"
     ["-headless"]
   else
-    raise "Don't know what VM args to give for #{os_name}"
+    raise UnknownOS.new(os_name)
   end
 end
