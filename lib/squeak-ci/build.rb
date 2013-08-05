@@ -45,7 +45,7 @@ def assert_coglike_vm(os_name, vm_type)
     FileUtils.mkdir_p(cog_dir)
     begin
       begin
-        download_cog(os_name, vm_type, cog_version)
+        download_cog(os_name, vm_type, COG_VERSION)
         return COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
