@@ -14,6 +14,7 @@ config := MCMcmUpdater updateFromDefaultRepository.
 config ifNil: [^self inform: 'Unable to retrieve updates from remote repository.' translated].
 Utilities setSystemVersionFromConfig: config.
 
+FileDirectory deleteFilePath: 'TrunkImage.version'.
 FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; close].
 
 manifest := (MCWorkingCopy allManagers asSortedCollection:
@@ -32,5 +33,10 @@ manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush
 
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
+CommandLineToolSet unload.
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ]]
-    on: Error do: [Smalltalk snapshot: false andQuit: true]
+    on: Error do: [|e|
+        FileStream stderr
+            nextPutAll: 'Exception ', e className, ' raised:'; lf;
+            nextPutAll: e messageText; lf.
+        Smalltalk snapshot: false andQuit: true].
