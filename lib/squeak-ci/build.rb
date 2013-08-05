@@ -26,14 +26,15 @@ end
 
 # vm_type element_of [:mt, :normal]
 def assert_coglike_vm(os_name, vm_type)
-  cog_desc = "#{COG_VERSION.dir_name(os_name, vm_type)} r.#{COG_VERSION.svnid}"
+  cog = COG_VERSION.dir_name(os_name, vm_type)
+  cog_desc = "#{cog} r.#{COG_VERSION.svnid}"
 
-  cog_dir = "#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r#{COG_VERSION.svnid}"
+  cog_dir = "#{SRC}/target/#{cog_desc}.r#{COG_VERSION.svnid}"
 
-  cogs = Dir.glob("#{SRC}/target/#{COG_VERSION.dir_name(os_name, vm_type)}.r*")
+  cogs = Dir.glob("#{SRC}/target/#{cog}.r*")
   cogs.delete(File.expand_path(cog_dir))
   cogs.each { |stale_cog|
-    log("Deleting stale #{COG_VERSION.dir_name(os_name, vm_type)} at #{stale_cog}")
+    log("Deleting stale #{cog} at #{stale_cog}")
     FileUtils.rm_rf(stale_cog)
   }
   if File.exists?(cog_dir) then
@@ -45,6 +46,7 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, cog_version)
+        return COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
@@ -55,8 +57,6 @@ def assert_coglike_vm(os_name, vm_type)
       nil
     end
   end
-
-  return COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
 end
 
 def assert_cog_vm(os_name)
@@ -178,10 +178,12 @@ end
 
 def download_cog(cog_dir, os_name, vm_type, cog_version)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
+  download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
+    run_cmd "curl -sSo #{local_name} #{download_url}"
+
     case os_name
     when "windows"
-      run_cmd "curl -sSo #{local_name} http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
       Zip::ZipFile.open("#{local_name}") { |z|
         z.each { |f|
           f_path = File.join(Dir.pwd, f.name)
@@ -190,7 +192,6 @@ def download_cog(cog_dir, os_name, vm_type, cog_version)
         }
       }
     else
-      run_cmd "curl -sSo #{local_name} http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
       run_cmd "tar zxf #{local_name}"
     end
   }
