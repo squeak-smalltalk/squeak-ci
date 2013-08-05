@@ -29,7 +29,7 @@ def assert_coglike_vm(os_name, vm_type)
   cog = COG_VERSION.dir_name(os_name, vm_type)
   cog_desc = "#{cog} r.#{COG_VERSION.svnid}"
 
-  cog_dir = "#{SRC}/target/#{cog_desc}.r#{COG_VERSION.svnid}"
+  cog_dir = "#{SRC}/target/#{cog}.r#{COG_VERSION.svnid}"
 
   cogs = Dir.glob("#{SRC}/target/#{cog}.r*")
   cogs.delete(File.expand_path(cog_dir))
@@ -45,7 +45,7 @@ def assert_coglike_vm(os_name, vm_type)
     FileUtils.mkdir_p(cog_dir)
     begin
       begin
-        download_cog(os_name, vm_type, COG_VERSION)
+        download_cog(os_name, vm_type, COG_VERSION, cog_dir)
         return COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
