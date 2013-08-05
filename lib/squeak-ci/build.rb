@@ -176,7 +176,7 @@ def debug?
   ! ENV['DEBUG'].nil?
 end
 
-def download_cog(cog_dir, os_name, vm_type, cog_version)
+def download_cog(os_name, vm_type, cog_version, cog_dir)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
   download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
