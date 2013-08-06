@@ -39,6 +39,7 @@ def assert_coglike_vm(os_name, vm_type)
   }
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
+    COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
   else
     assert_target_dir
     log("Installing new #{cog_desc}")
@@ -46,7 +47,7 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
-        return COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
+        COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
