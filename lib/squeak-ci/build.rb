@@ -238,6 +238,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   case identify_os
     when "windows" then system(base_cmd)
   else
+    log("spawning: nice #{base_cmd}")
     pid = spawn("nice #{base_cmd}")
     future {
       sleep(timeout.seconds)
