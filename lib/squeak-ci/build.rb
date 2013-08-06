@@ -257,8 +257,6 @@ def latest_downloaded_trunk_version
 end
 
 def vm_args(os_name)
-  return [] if debug?
-
   case os_name
   when "osx"
     ["-headless"]
