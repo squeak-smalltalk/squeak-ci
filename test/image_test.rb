@@ -34,6 +34,7 @@ describe "Trunk test suite" do
   context "image test suite" do
     it "should pass all tests" do
       Dir.chdir("#{SRC}/target") {
+        log("VM: #{@vm}")
         run_cmd("#{@vm} -version")
         args = vm_args(@os_name)
         args << "-reportheadroom" unless @os_name == "linux64"
