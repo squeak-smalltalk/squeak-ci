@@ -11,8 +11,12 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 "Flush all caches. If a previous download failed this is often helpful"
 MCFileBasedRepository flushAllCaches.
 config := MCMcmUpdater updateFromDefaultRepository.
-config ifNil: [^self inform: 'Unable to retrieve updates from remote repository.' translated].
+config ifNil: [
+    Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
 Utilities setSystemVersionFromConfig: config.
+FileStream stdout
+    nextPutAll: 'Updated to 4.5-', SystemVersion current highestUpdate printString);
+    lf.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
 FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; close].
