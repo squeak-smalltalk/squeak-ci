@@ -23,7 +23,7 @@ task :build do
   interpreter_vm = assert_interpreter_vm(os_name)
   puts "Cog VM at #{cog_vm}" if cog_vm
   puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
-  raise "No VMs!" if !!!cog_vm && !!!interpreter_vm
+  raise "No VMs!" if !cog_vm && !interpreter_vm
 
   FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
@@ -42,7 +42,7 @@ task :perf => :build do
   interpreter_vm = assert_interpreter_vm(os_name)
   puts "Cog VM at #{cog_vm}" if cog_vm
   puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
-  raise "No VMs!" if !!!cog_vm && !!!interpreter_vm
+  raise "No VMs!" if !cog_vm && !interpreter_vm
 
   Dir.chdir(TARGET_DIR) {
     FileUtils.cp("#{TRUNK_IMAGE}.image", "#{perf_image}.image")
