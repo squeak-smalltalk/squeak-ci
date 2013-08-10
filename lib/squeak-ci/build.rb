@@ -52,7 +52,7 @@ def assert_coglike_vm(os_name, vm_type)
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
       end
-    rescue e
+    rescue => e
       FileUtils.rm_rf(cog_dir)
       log("Cleaning up failed install of #{cog_desc}")
       nil
