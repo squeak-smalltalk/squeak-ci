@@ -3,7 +3,7 @@ StandardToolSet subclass: #CommandLineToolSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Tools-CommandLine'!
+	category: 'CommandLine-Tools'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
