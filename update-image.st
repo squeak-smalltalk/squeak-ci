@@ -7,15 +7,19 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
 
-"Update the image by loading all pending updates from the server."
-"Flush all caches. If a previous download failed this is often helpful"
-MCFileBasedRepository flushAllCaches.
-config := MCMcmUpdater updateFromDefaultRepository.
-config ifNil: [
-    Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
-Utilities setSystemVersionFromConfig: config.
+"Only attempt to update if we have network connectivity. This lets build scripts
+ work in an offline manner."
+(NetNameResolver addressForName: 'www.google.com' timeout: 1)
+    ifNotNil: [
+       "Update the image by loading all pending updates from the server."
+       "Flush all caches. If a previous download failed this is often helpful"
+        MCFileBasedRepository flushAllCaches.
+        config := MCMcmUpdater updateFromDefaultRepository.
+        config ifNil: [
+            Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
+        Utilities setSystemVersionFromConfig: config].
 FileStream stdout
-    nextPutAll: 'Updated to 4.5-', SystemVersion current highestUpdate printString);
+    nextPutAll: ('Updated to 4.5-', SystemVersion current highestUpdate printString);
     lf.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
