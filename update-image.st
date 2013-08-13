@@ -2,6 +2,11 @@
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
+"Until the far away day we unload Traits and Monticello from the base image, we need to ensure that Monticello still supports Traits."
+Installer squeak
+    project: 'trunk';
+    install: 'MonticelloForTraits'.
+
 MCMcmUpdater updateMissingPackages: false.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
