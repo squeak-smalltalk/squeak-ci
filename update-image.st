@@ -28,7 +28,7 @@ FileStream stdout
     lf.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
-FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; close].
+FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; flush].
 
 manifest := (MCWorkingCopy allManagers asSortedCollection:
         [ :a :b | a package name <= b package name ]) collect:
@@ -39,7 +39,7 @@ FileDirectory deleteFilePath: 'TrunkImage.manifest'.
 FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
     manifest do:
         [:s | f nextPutAll: s; nextPut: Character lf].
-    f close].
+    f flush].
 
 FileStream stdout nextPutAll: 'Package manifest:'; nextPut: Character lf; flush.
 manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush].
