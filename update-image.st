@@ -2,7 +2,8 @@
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
-"Until the far away day we unload Traits and Monticello from the base image, we need to ensure that Monticello still supports Traits."
+"Until the far away day we unload Traits and Monticello from the base image,
+ we need to ensure that Monticello still supports Traits."
 Installer squeak
     project: 'trunk';
     install: 'MonticelloForTraits'.
@@ -10,7 +11,9 @@ Installer squeak
 MCMcmUpdater updateMissingPackages: false.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
-"This comes from Utilities class >> #updateFromServer, but leaves off the #inform: call, which puts up a modal dialog. When running headless there's still a MorphicUIManager running"
+"This comes from Utilities class >> #updateFromServer, but leaves off the
+ #inform: call, which puts up a modal dialog. When running headless there's
+ still a MorphicUIManager running"
 
 "Only attempt to update if we have network connectivity. This lets build scripts
  work in an offline manner."
