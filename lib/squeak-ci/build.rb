@@ -132,7 +132,12 @@ def assert_ssl(target_dir, os_name)
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
       run_cmd("unzip SqueakSSL-bin-0.1.5.zip")
       FileUtils.mkdir_p("SqueakSSL")
-      FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL/so.SqueakSSL")
+      case os_name
+      when "windows" then
+        FileUtils.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
+      else
+        FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL/so.SqueakSSL")
+      end
       FileUtils.rm_rf("SqueakSSL-bin")
     }
   end
