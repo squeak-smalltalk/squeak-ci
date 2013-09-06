@@ -47,6 +47,8 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
+        lib_dir = COG_VERSION.lib_dir("#{SRC}/target/", os_name, vm_type)
+        assert_ssl("#{lib_dir}", os_name)
         COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
@@ -54,7 +56,7 @@ def assert_coglike_vm(os_name, vm_type)
       end
     rescue => e
       FileUtils.rm_rf(cog_dir)
-      log("Cleaning up failed install of #{cog_desc}")
+      log("Cleaning up failed install of #{cog_desc} (#{e.message})")
       nil
     end
   end
@@ -126,7 +128,7 @@ end
 
 def assert_ssl(target_dir, os_name)
   # My hope is that this becomes a standard plugin, and this function can disappear.
-  raise "Can't install SSL on #{os_name}" if not ["linux", "linux64"].include?(os_name)
+  raise "Can't install SSL on #{os_name}" if not ["linux", "linux64", "windows"].include?(os_name)
   if not File.exist?("#{target_dir}/SqueakSSL") then
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
@@ -136,7 +138,7 @@ def assert_ssl(target_dir, os_name)
       when "windows" then
         FileUtils.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
       else
-        FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL/so.SqueakSSL")
+        FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
       end
       FileUtils.rm_rf("SqueakSSL-bin")
     }
