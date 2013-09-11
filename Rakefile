@@ -27,10 +27,6 @@ task :build do
 
   FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
   FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
-  Dir.chdir(TARGET_DIR) {
-    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st")
-    assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
-  }
 end
 
 task :perf => :build do
@@ -51,7 +47,29 @@ task :perf => :build do
   }
 end
 
-task :release => :build do
+# Create a new base image by taking the target/TrunkImage image, updating it,
+# and storing it in something like target/Squeak4.5.image. You can then update
+# the repository's base image by copying the file into the repository's root
+# image. THIS IS DELIBERATELY MANUAL.
+task :update_base_image => :build do
+  squeak_update_number = run_cmd("cat #{SRC}/target/TrunkImage.version")
+  base_name = "#{SQUEAK_VERSION}"
+  os_name = identify_os
+  cog_vm = assert_cog_vm(os_name)
+  interpreter_vm = assert_interpreter_vm(os_name)
+
+  puts "Using #{interpreter_vm}"
+  puts "Preparing image #{base_name}"
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
+
+  Dir.chdir(TARGET_DIR) {
+    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st")
+    assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
+  }
+end
+
+task :release => :update_base_image do
   squeak_update_number = run_cmd("cat #{SRC}/target/TrunkImage.version")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
   os_name = identify_os
