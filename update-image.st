@@ -55,4 +55,5 @@ WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; lf;
             nextPutAll: e messageText; lf.
-        Smalltalk snapshot: false andQuit: true].
+        "This only works on a Cog VM (at the moment)."
+        Smalltalk snapshot: false andQuitWithExitCode: 1].
