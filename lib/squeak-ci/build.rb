@@ -255,9 +255,10 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   end
 end
 
-def latest_downloaded_trunk_version
-  if File.exist?('target/#{TRUNK_IMAGE}.version') then
-    `cat target/#{TRUNK_IMAGE}.version`.to_i
+def latest_downloaded_trunk_version(base_path)
+  if File.exist?('#{base_path}/target/#{TRUNK_IMAGE}.version') then
+    v = File.read('#{base_path}/target/#{TRUNK_IMAGE}.version', 'r') { |f| f.read }
+    v.to_i
   else
     0
   end

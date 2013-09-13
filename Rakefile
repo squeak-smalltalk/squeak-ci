@@ -55,7 +55,7 @@ end
 # the repository's base image by copying the file into the repository's root
 # image. THIS IS DELIBERATELY MANUAL.
 task :update_base_image => :build do
-  squeak_update_number = run_cmd("cat #{SRC}/target/TrunkImage.version")
+  squeak_update_number = latest_downloaded_trunk_version(SRC)
   base_name = "#{SQUEAK_VERSION}"
   os_name = identify_os
   cog_vm = assert_cog_vm(os_name)
@@ -73,7 +73,7 @@ task :update_base_image => :build do
 end
 
 task :release => :update_base_image do
-  squeak_update_number = run_cmd("cat #{SRC}/target/TrunkImage.version")
+  squeak_update_number = latest_downloaded_trunk_version(SRC)
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
