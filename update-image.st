@@ -53,7 +53,7 @@ manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush
 ToolSet default: (Smalltalk at: #StandardToolSet).
 CommandLineToolSet unload.
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ]]
-    on: Error do: [|e|
+    on: Error do: [:e|
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; lf;
             nextPutAll: e messageText; lf.
