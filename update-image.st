@@ -1,6 +1,4 @@
 [| config manifest |
-FileStream stderr open.
-FileStream stdout open.
 ((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 

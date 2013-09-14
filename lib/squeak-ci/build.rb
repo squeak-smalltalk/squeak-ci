@@ -243,7 +243,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   log(cmd)
   base_cmd = "#{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
   case identify_os
-    when "windows" then system(base_cmd)
+    when "windows" then system(base_cmd, err: STDERR, out: STDOUT)
   else
     log("spawning: nice #{base_cmd}")
     pid = spawn("nice #{base_cmd}", err: STDERR, out: STDOUT)
