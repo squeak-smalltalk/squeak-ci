@@ -250,6 +250,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     future {
       sleep(timeout.seconds)
       Process.kill('KILL', pid)
+      log("Killed command: exceeded allotted time.")
     }
     Process.wait(pid)
   end
