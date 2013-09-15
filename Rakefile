@@ -95,17 +95,17 @@ task :release => :update_base_image do
   }
 end
 
-RSpec::Core::RakeTask.new(:test => :build) do |test|
+RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:package_test => :build) do |test|
+RSpec::Core::RakeTask.new(:package_test => :update_base_image) do |test|
   test.pattern = 'test/package_test.rb'
   test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:bleeding_edge_test => :build) do |test|
+RSpec::Core::RakeTask.new(:bleeding_edge_test => :update_base_image) do |test|
   test.pattern = 'test/bleeding_edge_test.rb'
   test.verbose = true
 end
