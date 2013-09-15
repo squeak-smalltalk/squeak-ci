@@ -22,7 +22,8 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
        "Update the image by loading all pending updates from the server."
        "Flush all caches. If a previous download failed this is often helpful"
         MCFileBasedRepository flushAllCaches.
-        config := MCMcmUpdater updateFromDefaultRepository.
+        config := [MCMcmUpdater updateFromDefaultRepository]
+            on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume: true].
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
         Utilities setSystemVersionFromConfig: config].
