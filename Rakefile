@@ -83,8 +83,8 @@ task :release => :update_base_image do
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
 
-  run_cmd("chmod +w #{SRC}/target/#{base_name}.changes")
-  run_cmd("chmod +w #{SRC}/target/#{base_name}.image")
+  FileUtils.chmod('+w', "#{SRC}/target/#{base_name}.changes")
+  FileUtils.chmod('+w', "#{SRC}/target/#{base_name}.image"
 
   puts "Releasing #{base_name}"
   run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st")
