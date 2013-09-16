@@ -6,6 +6,7 @@ require 'rspec/core/rake_task'
 require 'rake/clean'
 require 'rake/testtask'
 require 'pathname'
+require 'zip'
 
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/version")
@@ -90,8 +91,10 @@ task :release => :update_base_image do
   run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st")
 
   puts "Zipping #{base_name}"
-  Dir.chdir("#{SRC}/target") {
-    run_cmd("zip -j #{base_name}.zip #{base_name}.changes #{base_name}.image")
+  Zip::File.open("#{SRC}/target/#{base_name}.zip", Zip::File::CREATE) { |z|
+    ['changes', 'image'].each { |suffix|
+      z.add("#{SRC}/target/#{base_name}.#{suffix}")
+    }
   }
 end
 
