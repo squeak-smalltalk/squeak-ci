@@ -6,7 +6,7 @@ require 'rspec/core/rake_task'
 require 'rake/clean'
 require 'rake/testtask'
 require 'pathname'
-require 'zip'
+require 'zip/zip'
 
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/version")
