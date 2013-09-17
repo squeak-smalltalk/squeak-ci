@@ -249,8 +249,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     pid = spawn("nice #{base_cmd}", err: STDERR, out: STDOUT)
     future {
       sleep(timeout.seconds)
-      Process.kill('KILL', pid)
       log("Killed command for exceeding allotted time: nice #{base_cmd}.")
+      Process.kill('KILL', pid)
     }
     Process.wait(pid)
   end
