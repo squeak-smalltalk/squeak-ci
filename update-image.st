@@ -24,11 +24,14 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         MCFileBasedRepository flushAllCaches.
         config := [MCMcmUpdater updateFromDefaultRepository]
             on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume]
-            on: ProgressInitiationException do: [:e | FileStream stdout nextPutAll: e messageText; lf; flush. e resume]
+            on: ProgressInitiationException do: [:e | |s|
+                s := e instVarNamed: 'progressTitle'.
+                s ifNotEmpty: [FileStream stdout nextPutAll: s; lf; flush].
+                e resume]
             on: MCMergeResolutionRequest do: [:e |
                 e merger conflicts do: [:conflict |
                 FileStream stdout
-                    nextPutAll: 'Conflict, choosing remote:'; lf;
+                    nextPutAll: 'Conflict; choosing remote:'; lf;
                     nextPutAll: conflict summary asString; lf.
                 conflict chooseRemote.
                 FileStream stdout nextPutAll: 'Resolved? ', conflict isResolved printString; lf].
