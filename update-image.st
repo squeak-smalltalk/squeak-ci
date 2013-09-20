@@ -22,9 +22,17 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
        "Update the image by loading all pending updates from the server."
        "Flush all caches. If a previous download failed this is often helpful"
         MCFileBasedRepository flushAllCaches.
-        config := [[MCMcmUpdater updateFromDefaultRepository]
-            on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume: true].
-                on: ProgressInitiationException do: [:e | FileStream stdout nextPutAll: (e instVarNamed: 'progressTitle') ]
+        config := [MCMcmUpdater updateFromDefaultRepository]
+            on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume]
+            on: ProgressInitiationException do: [:e | FileStream stdout nextPutAll: e messageText; lf; flush. e resume]
+            on: MCMergeResolutionRequest do: [:e |
+                e merger conflicts do: [:conflict |
+                FileStream stdout
+                    nextPutAll: 'Conflict, choosing remote:'; lf;
+                    nextPutAll: conflict summary asString; lf.
+                conflict chooseRemote.
+                FileStream stdout nextPutAll: 'Resolved? ', conflict isResolved printString; lf].
+                e resume: true].
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
         Utilities setSystemVersionFromConfig: config].
