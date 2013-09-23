@@ -73,13 +73,12 @@ task :update_base_image => :build do
   }
 end
 
-task :release => :update_base_image do
-  squeak_update_number = latest_downloaded_trunk_version(SRC)
-  base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
+task :release do#=> :update_base_image do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
+  squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
+  base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
 
-  puts "Using #{interpreter_vm}"
   puts "Preparing to release image #{base_name}"
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
@@ -135,4 +134,10 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
     format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
     puts "After format conversion: \"#{SRC}/target/#{image_name}.image\" image format #{format}"
   end
+end
+
+def image_version(vm, vm_args, image_name)
+  s = "#{vm} #{vm_args.join(" ")} \"#{image_name}\" #{as_relative_path(Pathname.new(SRC + "/image-version.st"))}"
+  puts s
+  `#{s}`.split("\n").last.to_i
 end
