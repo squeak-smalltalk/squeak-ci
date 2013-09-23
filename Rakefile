@@ -80,7 +80,7 @@ task :release => :update_base_image do
   interpreter_vm = assert_interpreter_vm(os_name)
 
   puts "Using #{interpreter_vm}"
-  puts "Preparing image #{base_name}"
+  puts "Preparing to release image #{base_name}"
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
 
