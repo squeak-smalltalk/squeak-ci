@@ -252,7 +252,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     when "windows" then system(base_cmd)
   else
     log("spawning with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
-    pid = spawn("nice #{base_cmd}", err: STDERR, out: STDOUT)
+    pid = spawn("nice #{base_cmd}")
     future {
       sleep(timeout.seconds)
       log("Killed command for exceeding allotted time: nice #{base_cmd}.")
