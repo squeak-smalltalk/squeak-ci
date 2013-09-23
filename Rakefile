@@ -6,7 +6,7 @@ require 'rspec/core/rake_task'
 require 'rake/clean'
 require 'rake/testtask'
 require 'pathname'
-require 'zip/zip'
+require 'zip'
 
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/build")
 require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak-ci/version")
@@ -63,7 +63,7 @@ task :update_base_image => :build do
   interpreter_vm = assert_interpreter_vm(os_name)
 
   puts "Using #{interpreter_vm}"
-  puts "Preparing image #{base_name}"
+  puts "Preparing to update image #{base_name}"
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
 
@@ -93,7 +93,7 @@ task :release => :update_base_image do
   puts "Zipping #{base_name}"
   Zip::File.open("#{SRC}/target/#{base_name}.zip", Zip::File::CREATE) { |z|
     ['changes', 'image'].each { |suffix|
-      z.add("#{SRC}/target/#{base_name}.#{suffix}")
+      z.add("#{base_name}.#{suffix}", "#{SRC}/target/#{base_name}.#{suffix}")
     }
   }
 end

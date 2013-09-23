@@ -1,5 +1,5 @@
 require 'future'
-require 'zip/zip'
+require 'zip'
 require_relative 'extensions'
 require_relative 'version'
 require_relative 'utils'
@@ -132,7 +132,13 @@ def assert_ssl(target_dir, os_name)
   if not File.exist?("#{target_dir}/SqueakSSL") then
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
-      run_cmd("unzip SqueakSSL-bin-0.1.5.zip")
+      Zip::ZipFile.open("SqueakSSL-bin-0.1.5.zip") { |z|
+        z.each { |f|
+          f_path = File.join(Dir.pwd, f.name)
+          FileUtils.mkdir_p(File.dirname(f_path))
+          z.extract(f, f_path) unless File.exist?(f_path)
+        }
+      }
       FileUtils.mkdir_p("SqueakSSL")
       case os_name
       when "windows" then
