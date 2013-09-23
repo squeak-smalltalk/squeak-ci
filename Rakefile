@@ -88,7 +88,7 @@ task :release => :update_base_image do
   FileUtils.chmod('+w', "#{SRC}/target/#{base_name}.image")
 
   puts "Releasing #{base_name}"
-  run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st")
+  run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st", 15.minutes)
 
   puts "Zipping #{base_name}"
   Zip::File.open("#{SRC}/target/#{base_name}.zip", Zip::File::CREATE) { |z|
