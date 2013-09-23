@@ -110,7 +110,7 @@ def assert_interpreter_vm(os_name)
       FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
-        Zip::ZipFile.open("interpreter.zip") { |z|
+        Zip::File.open("interpreter.zip") { |z|
           z.each { |f|
             f_path = File.join(Dir.pwd, f.name)
             FileUtils.mkdir_p(File.dirname(f_path))
@@ -132,7 +132,7 @@ def assert_ssl(target_dir, os_name)
   if not File.exist?("#{target_dir}/SqueakSSL") then
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
-      Zip::ZipFile.open("SqueakSSL-bin-0.1.5.zip") { |z|
+      Zip::File.open("SqueakSSL-bin-0.1.5.zip") { |z|
         z.each { |f|
           f_path = File.join(Dir.pwd, f.name)
           FileUtils.mkdir_p(File.dirname(f_path))
@@ -198,7 +198,7 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
 
     case os_name
     when "windows"
-      Zip::ZipFile.open("#{local_name}") { |z|
+      Zip::File.open("#{local_name}") { |z|
         z.each { |f|
           f_path = File.join(Dir.pwd, f.name)
           FileUtils.mkdir_p(File.dirname(f_path))
