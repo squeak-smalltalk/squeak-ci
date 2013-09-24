@@ -9,7 +9,7 @@ ToolSet default: StandardToolSet.
 CommandLineToolSet unload.
 
 Smalltalk snapshot: true andQuit: true]
-    on: Error do: [|e|
+    on: Error do: [:e|
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; lf;
             nextPutAll: e messageText; lf.
