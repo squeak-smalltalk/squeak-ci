@@ -73,7 +73,7 @@ task :update_base_image => :build do
   }
 end
 
-task :release do#=> :update_base_image do
+task :release => :update_base_image do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
