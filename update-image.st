@@ -1,6 +1,11 @@
-[| config manifest |
-((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
-ToolSet default: (Smalltalk at: #CommandLineToolSet).
+| config manifest |
+[((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
+ToolSet default: (Smalltalk at: #CommandLineToolSet).]
+    on: Error do: [:e|
+        FileStream stderr
+            nextPutAll: 'Exception ', e className, ' raised:'; lf;
+            nextPutAll: e messageText; lf.
+        Smalltalk snapshot: false andQuit: true].
 
 "Until the far away day we unload Traits and Monticello from the base image,
  we need to ensure that Monticello still supports Traits."
@@ -25,6 +30,9 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         config := [MCMcmUpdater updateFromDefaultRepository]
             on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume]
             on: ProgressInitiationException do: [:e | |s|
+                "We have to reach into the exception because there is no #progressTitle
+                 accessor. Even if there were, this script must work with images that
+                 predate such an accessor."
                 s := e instVarNamed: 'progressTitle'.
                 s ifNotEmpty: [FileStream stdout nextPutAll: s; lf; flush].
                 e resume]
@@ -63,9 +71,4 @@ manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
 CommandLineToolSet unload.
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ]]
-    on: Error do: [:e|
-        FileStream stderr
-            nextPutAll: 'Exception ', e className, ' raised:'; lf;
-            nextPutAll: e messageText; lf.
-        Smalltalk snapshot: false andQuit: true].
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
