@@ -97,7 +97,7 @@ task :release => :update_base_image do
   }
 end
 
-RSpec::Core::RakeTask.new(:test => :release) do |test|
+RSpec::Core::RakeTask.new(:test) do |test|
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
