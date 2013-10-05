@@ -73,7 +73,7 @@ task :update_base_image => :build do
   }
 end
 
-task :release => :update_base_image do
+task :release => :test do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
@@ -97,7 +97,7 @@ task :release => :update_base_image do
   }
 end
 
-RSpec::Core::RakeTask.new(:test) do |test|
+RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
