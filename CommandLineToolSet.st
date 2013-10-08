@@ -25,7 +25,7 @@ debugError: anError
 
 	SmalltalkImage current snapshot: false andQuit: true! !
 
-!CommandLineToolSet class methodsFor: 'as yet unclassified' stamp: 'fbs 5/08/2013 09:04'!
+!CommandLineToolSet class methodsFor: 'debugging' stamp: 'fbs 5/08/2013 09:04'!
 debugSyntaxError: anError
 	| s |
 	s := FileStream stderr.
@@ -35,6 +35,7 @@ debugSyntaxError: anError
 
 	self debugError: anError! !
 
-!CommandLineToolSet class methodsFor: 'as yet unclassified' stamp: 'fbs 4/21/2013 13:42'!
+
+!CommandLineToolSet class methodsFor: 'class initialization' stamp: 'fbs 4/21/2013 13:42'!
 unload
 	ToolSet unregister: self.! !
