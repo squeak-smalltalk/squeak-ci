@@ -1,4 +1,9 @@
 | config manifest |
+Smalltalk at: #Log put: [:msg | | str |
+	str := DateAndTime now printString, ': ', msg.
+	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
+	Transcript cr; show: str].
+
 [((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).]
     on: Error do: [:e|
@@ -29,29 +34,26 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         MCFileBasedRepository flushAllCaches.
         config := [[MCMcmUpdater updateFromDefaultRepository]
                 "There's no (#on:do){4+}"
-                on: ProgressNotification do: [:e | FileStream stdout nextPutAll: e extraParam; lf; flush. e resume]]
-            on: MCNoChangesException do: [:e | FileStream stdout nextPutAll: 'Caught a no changes and resuming'; lf; flush. e resume]
+                on: ProgressNotification do: [:e | Log value: e extraParam. e resume]]
+            on: MCNoChangesException do: [:e | Log value: 'Caught a no changes and resuming'. e resume]
             on: ProgressInitiationException do: [:e | |s|
                 "We have to reach into the exception because there is no #progressTitle
                  accessor. Even if there were, this script must work with images that
                  predate such an accessor."
                 s := e instVarNamed: 'progressTitle'.
-                s ifNotEmpty: [FileStream stdout nextPutAll: s; lf; flush].
+                s ifNotEmpty: [Log value: s].
                 e resume]
             on: MCMergeResolutionRequest do: [:e |
                 e merger conflicts do: [:conflict |
-                FileStream stdout
-                    nextPutAll: 'Conflict; choosing remote:'; lf;
-                    nextPutAll: conflict summary asString; lf.
+                Log value: 'Conflict; choosing remote:'.
+                Log value: conflict summary asString.
                 conflict chooseRemote.
-                FileStream stdout nextPutAll: 'Resolved? ', conflict isResolved printString; lf].
+                Log value: 'Resolved? ', conflict isResolved printString].
                 e resume: true].
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
         Utilities setSystemVersionFromConfig: config].
-FileStream stdout
-    nextPutAll: ('Updated to 4.5-', SystemVersion current highestUpdate printString);
-    lf.
+Log value: 'Updated to 4.5-', SystemVersion current highestUpdate printString.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
 FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; flush].
@@ -67,8 +69,8 @@ FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
         [:s | f nextPutAll: s; nextPut: Character lf].
     f flush].
 
-FileStream stdout nextPutAll: 'Package manifest:'; nextPut: Character lf; flush.
-manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush].
+Log value: 'Package manifest:'.
+manifest do: [:s | Log value: s].
 
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
