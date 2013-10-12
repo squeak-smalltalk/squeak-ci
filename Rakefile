@@ -68,7 +68,7 @@ task :update_base_image => :build do
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
 
   Dir.chdir(TARGET_DIR) {
-    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 15.minutes)
+    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
 end
