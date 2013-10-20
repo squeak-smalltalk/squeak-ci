@@ -9,6 +9,8 @@ SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, 
 TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
 
+@@COMMAND_COUNT = 0
+
 class UnknownOS < Exception
   def initialize(os_name)
     @os_name = os_name
@@ -251,11 +253,13 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   case identify_os
     when "windows" then system(base_cmd)
   else
-    log("spawning with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
-    pid = spawn("nice #{base_cmd}")
+    cmd_count = @@COMMAND_COUNT
+    log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
+    pid = spawn("nice #{base_cmd} && echo command #{cmd_count} finished")
+    @@COMMAND_COUNT += 1
     future {
       sleep(timeout.seconds)
-      log("!!! Killed command for exceeding allotted time: nice #{base_cmd}.")
+      log("!!! Killed command #{cmd_count} for exceeding allotted time: nice #{base_cmd}.")
       Process.kill('KILL', pid)
     }
     Process.wait(pid)
