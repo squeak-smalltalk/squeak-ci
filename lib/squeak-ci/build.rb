@@ -258,9 +258,23 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     pid = spawn("nice #{base_cmd} && echo command #{cmd_count} finished")
     @@COMMAND_COUNT += 1
     future {
-      sleep(timeout.seconds)
-      log("!!! Killed command #{cmd_count} for exceeding allotted time: nice #{base_cmd}.")
-      Process.kill('KILL', pid)
+      kill_time = Time.now + timeout.seconds
+      process_gone = false
+      while (Time.now < kill_time)
+        sleep(1.second)
+        begin
+          Process.kill(0, pid)
+        rescue Errno::ESRCH
+          # The process is gone
+          process_gone = true
+          break
+        end
+      end
+
+      if ! process_gone then
+        log("!!! Killed command #{cmd_count} for exceeding allotted time: nice #{base_cmd}.")
+        Process.kill('KILL', pid)
+      end
     }
     Process.wait(pid)
   end
