@@ -14,3 +14,4 @@
         MCMcmUpdater disableUpdatesOfPackage: pkgName].
 
 Smalltalk cleanUp.
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
