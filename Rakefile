@@ -79,20 +79,24 @@ task :release => :test do
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
 
-  puts "Preparing to release image #{base_name}"
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
+  puts "Preparing to release image based on #{base_name}"
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/ReleaseCandidate.image")
+  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/ReleaseCandidate.changes")
 
-  FileUtils.chmod('+w', "#{SRC}/target/#{base_name}.changes")
-  FileUtils.chmod('+w', "#{SRC}/target/#{base_name}.image")
+  FileUtils.chmod('+w', "#{SRC}/target/ReleaseCandidate.changes")
+  FileUtils.chmod('+w', "#{SRC}/target/ReleaseCandidate.image")
 
-  puts "Releasing #{base_name}"
-  run_image_with_cmd(interpreter_vm, vm_args(os_name), base_name, "#{SRC}/release.st", 15.minutes)
+  puts "Releasing based off #{base_name}"
+  run_image_with_cmd(interpreter_vm, vm_args(os_name), 'ReleaseCandidate', "#{SRC}/release.st", 15.minutes)
 
-  puts "Zipping #{base_name}"
-  Zip::File.open("#{SRC}/target/#{base_name}.zip", Zip::File::CREATE) { |z|
+  squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/ReleaseCandidate.image")
+  release_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
+  FileUtils.cp("#{SRC}/target/ReleaseCandidate.image", "#{SRC}/target/#{release_name}.image")
+  FileUtils.cp("#{SRC}/target/ReleaseCandidate.changes", "#{SRC}/target/#{release_name}.changes")
+  puts "Zipping #{release_name}"
+  Zip::File.open("#{SRC}/target/#{release_name}.zip", Zip::File::CREATE) { |z|
     ['changes', 'image'].each { |suffix|
-      z.add("#{base_name}.#{suffix}", "#{SRC}/target/#{base_name}.#{suffix}")
+      z.add("#{release_name}.#{suffix}", "#{SRC}/target/#{release_name}.#{suffix}")
     }
   }
 end
