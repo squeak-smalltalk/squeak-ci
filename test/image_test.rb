@@ -40,7 +40,7 @@ describe "Trunk test suite" do
       }
     end
 
-    it "should pass all tests on Interpreter VM", :interpreter: true do
+    it "should pass all tests on Interpreter VM", :interpreter => true do
       Dir.chdir("#{SRC}/target") {
         vm = assert_interpreter_vm(@os_name)
         log("VM: #{vm}")
