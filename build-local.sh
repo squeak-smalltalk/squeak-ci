@@ -6,7 +6,7 @@
 
 : ${WORKSPACE:=`pwd`} # Default to the current directory to ease testing
 
-TEST_IMAGE_NAME="Squeak4.4"
+TEST_IMAGE_NAME="Squeak4.5"
 IMAGE_NAME="TrunkImage"
 VM="/usr/local/bin/squeak"
 
