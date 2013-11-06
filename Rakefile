@@ -102,7 +102,12 @@ task :release => :test do
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
-  ENV['DEBUG'] = '1'
+  test.pattern = 'test/image_test.rb'
+  test.verbose = true
+end
+
+RSpec::Core::RakeTask.new(:interpreter_test => :update_base_image) do |test|
+  test.rspec_opts = '--tag interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end

@@ -189,7 +189,9 @@ def cog_archive_name(os_name, vm_type, cog_version)
 end
 
 def debug?
-  ! ENV['DEBUG'].nil?
+  # For the nonce, always output debug info
+  true
+#  ! ENV['DEBUG'].nil?
 end
 
 def download_cog(os_name, vm_type, cog_version, cog_dir)

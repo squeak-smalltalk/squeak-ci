@@ -39,5 +39,16 @@ describe "Trunk test suite" do
         run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st", 10.minutes)
       }
     end
+
+    it "should pass all tests on Interpreter VM", :interpreter: true do
+      Dir.chdir("#{SRC}/target") {
+        vm = assert_interpreter_vm(@os_name)
+        log("VM: #{vm}")
+        run_cmd("#{vm} -version")
+        args = vm_args(@os_name)
+        args << "-reportheadroom" unless @os_name == "linux64"
+        run_image_with_cmd(vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 20.minutes)
+      }
+    end
   end
 end
