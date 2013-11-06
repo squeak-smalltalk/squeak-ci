@@ -102,7 +102,7 @@ task :release => :test do
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
-  ENV['DEBUG'] = 1
+  ENV['DEBUG'] = '1'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
