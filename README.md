@@ -8,6 +8,7 @@ Requirements
 * gcc
 * zip
 * unzip
+* curl
 
 On Windows this assumes you're using [Cygwin](http://www.cygwin.com) and [pik](https://github.com/vertiginous/pik):
 
