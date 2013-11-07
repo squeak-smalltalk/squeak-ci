@@ -265,8 +265,6 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
       while (Time.now < kill_time)
         sleep(1.second)
         begin
-          # Dump out debug info from the image before we kill it."
-          run_cmd("kill -USR1 #{pid}")
           Process.kill(0, pid)
         rescue Errno::ESRCH
           # The process is gone
@@ -277,6 +275,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
 
       if ! process_gone then
         log("!!! Killed command #{cmd_count} for exceeding allotted time: nice #{base_cmd}.")
+        # Dump out debug info from the image before we kill it."
+        Process.kill('USR1', pid)
         Process.kill('KILL', pid)
       end
     }
