@@ -5,5 +5,5 @@ end
 def run_cmd(str)
   log(str)
 
-  `#{str}`
+  system(str)
 end
