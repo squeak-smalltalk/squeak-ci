@@ -265,6 +265,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
       while (Time.now < kill_time)
         sleep(1.second)
         begin
+          # Dump out debug info from the image before we kill it."
+          run_cmd("kill -USR1 #{pid}")
           Process.kill(0, pid)
         rescue Errno::ESRCH
           # The process is gone
