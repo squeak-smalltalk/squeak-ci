@@ -259,6 +259,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
     pid = spawn("nice #{base_cmd} && echo command #{cmd_count} finished")
     @@COMMAND_COUNT += 1
+    run_cmd("pstree -Ap #{pid}")
     future {
       kill_time = Time.now + timeout.seconds
       process_gone = false
