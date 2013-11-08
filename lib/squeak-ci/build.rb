@@ -257,10 +257,10 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   else
     cmd_count = @@COMMAND_COUNT
     log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
-    pid = spawn("nice #{base_cmd} && echo command #{cmd_count} finished")
+    # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
+    # PID. We need this so we can send the process a USR1.
+    pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
     @@COMMAND_COUNT += 1
-    output = run_cmd("pstree -Ap #{pid}")
-    system("echo #{output}")
     future {
       kill_time = Time.now + timeout.seconds
       process_gone = false
