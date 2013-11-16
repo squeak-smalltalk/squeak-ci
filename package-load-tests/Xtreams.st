@@ -4,6 +4,7 @@ HDTestReport runPackages: #(
     'Xtreams-TransformsTests'
     'Xtreams-SubstreamsTests'
     'Xtreams-ParsingTests'
+    'Xtreams-TerminalsFileDirectoryTests'
 "    'Xtreams-Xtras-'
     'Xtreams-XtrasTests'").
 
