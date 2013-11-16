@@ -281,9 +281,9 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
         # Dump out debug info from the image before we kill it. Don't use Process.kill
         # bceause we want to capture stdout.
         output = run_cmd("kill -USR1 #{pid}")
-        system("echo #{output}")
+        $stdout.puts output
         output = run_cmd("pstree #{pid}")
-        system("echo #{output}")
+        $stdout.puts output
         Process.kill('KILL', pid)
       end
     }
