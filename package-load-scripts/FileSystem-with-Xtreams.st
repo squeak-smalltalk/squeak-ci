@@ -4,12 +4,12 @@
   addPackage: 'FS-Memory';
   addPackage: 'FS-Zip';
   addPackage: 'FS-FileStream';
-  addPackage: 'FS-Xtreams';
+"  addPackage: 'FS-Xtreams';"
   addPackage: 'FS-Tests-Core';
   addPackage: 'FS-Tests-Zip';
   addPackage: 'FS-Tests-Disk';
   addPackage: 'FS-Tests-FileStream';
-  addPackage: 'FS-Tests-Xtreams';
+"  addPackage: 'FS-Tests-Xtreams';"
   install.
 
 Installer squeaksource
