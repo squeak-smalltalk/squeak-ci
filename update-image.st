@@ -4,13 +4,16 @@ Smalltalk at: #Log put: [:msg | | str |
 	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
 	Transcript cr; show: str].
 
-[((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
-ToolSet default: (Smalltalk at: #CommandLineToolSet).]
-    on: Error do: [:e|
-        FileStream stderr
-            nextPutAll: 'Exception ', e className, ' raised:'; lf;
-            nextPutAll: e messageText; lf.
-        Smalltalk snapshot: false andQuit: true].
+Smalltalk
+    at: #CommandLineToolSet
+    ifAbsent: [
+        [((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn
+        ToolSet default: (Smalltalk at: #CommandLineToolSet)]
+            on: Error do: [:e|
+                FileStream stderr
+                    nextPutAll: 'Exception ', e className, ' raised:'; lf;
+                    nextPutAll: e messageText; lf.
+                Smalltalk snapshot: false andQuit: true]].
 
 "Until the far away day we unload Traits and Monticello from the base image,
  we need to ensure that Monticello still supports Traits."
@@ -52,7 +55,7 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
                 e resume: true].
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
-        Utilities setSystemVersionFromConfig: config].
+        config setSystemVersion].
 Log value: 'Updated to 4.5-', SystemVersion current highestUpdate printString.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
@@ -74,5 +77,4 @@ manifest do: [:s | Log value: s].
 
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
-CommandLineToolSet unload.
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

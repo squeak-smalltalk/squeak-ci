@@ -112,13 +112,7 @@ def assert_interpreter_vm(os_name)
       FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
-        Zip::File.open("interpreter.zip") { |z|
-          z.each { |f|
-            f_path = File.join(Dir.pwd, f.name)
-            FileUtils.mkdir_p(File.dirname(f_path))
-            z.extract(f, f_path) unless File.exist?(f_path)
-          }
-        }
+        unzip('interpreter.zip')
         FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
     else
@@ -134,13 +128,7 @@ def assert_ssl(target_dir, os_name)
   if not File.exist?("#{target_dir}/SqueakSSL") then
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
-      Zip::File.open("SqueakSSL-bin-0.1.5.zip") { |z|
-        z.each { |f|
-          f_path = File.join(Dir.pwd, f.name)
-          FileUtils.mkdir_p(File.dirname(f_path))
-          z.extract(f, f_path) unless File.exist?(f_path)
-        }
-      }
+      unzip('SqueakSSL-bin-0.1.5.zip')
       FileUtils.mkdir_p("SqueakSSL")
       case os_name
       when "windows" then
@@ -202,13 +190,7 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
 
     case os_name
     when "windows"
-      Zip::File.open("#{local_name}") { |z|
-        z.each { |f|
-          f_path = File.join(Dir.pwd, f.name)
-          FileUtils.mkdir_p(File.dirname(f_path))
-          z.extract(f, f_path) unless File.exist?(f_path)
-        }
-      }
+      unzip(local_name)
     else
       run_cmd "tar zxf #{local_name}"
     end
@@ -300,6 +282,16 @@ def latest_downloaded_trunk_version(base_path)
   else
     0
   end
+end
+
+def unzip(file_name)
+  Zip::File.open(file_name) { |z|
+    z.each { |f|
+      f_path = File.join(Dir.pwd, f.name)
+      FileUtils.mkdir_p(File.dirname(f_path))
+      z.extract(f, f_path) unless File.exist?(f_path)
+    }
+  }
 end
 
 def vm_args(os_name)
