@@ -52,7 +52,7 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
                 e resume: true].
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
-        Utilities setSystemVersionFromConfig: config].
+        config setSystemVersion].
 Log value: 'Updated to 4.5-', SystemVersion current highestUpdate printString.
 
 FileDirectory deleteFilePath: 'TrunkImage.version'.
