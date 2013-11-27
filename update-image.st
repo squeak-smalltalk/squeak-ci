@@ -74,5 +74,4 @@ manifest do: [:s | Log value: s].
 
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
-CommandLineToolSet unload.
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
