@@ -238,7 +238,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     when "windows" then system(base_cmd)
   else
     cmd_count = @@COMMAND_COUNT
-    log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: nice #{base_cmd}")
+    log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
     # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
     # PID. We need this so we can send the process a USR1.
     pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
@@ -259,7 +259,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
       end
 
       if ! process_gone then
-        log("!!! Killing command #{cmd_count} for exceeding allotted time: nice #{base_cmd}.")
+        log("!!! Killing command #{cmd_count} for exceeding allotted time: #{base_cmd}.")
         # Dump out debug info from the image before we kill it. Don't use Process.kill
         # because we want to capture stdout.
         output = run_cmd("kill -USR1 #{pid}")
@@ -269,8 +269,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
 #        $stdout.puts output
         begin
           Process.kill('KILL', pid)
-        rescue Exception => e
-            puts e.inspect
+        rescue Errno::ESRCH => e
+            puts "Tried to kill process #{pid} but it's gone"
             raise e
         end
         puts "-------------"
