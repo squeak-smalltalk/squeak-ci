@@ -96,7 +96,6 @@ run
 !HDTestReport methodsFor: 'running' stamp: 'JohanBrichau 10/25/2010 23:05'!
 runAll
 	suite tests do: [ :each |
-		Log value: each printString.
 		each run: self ]! !
 
 !HDTestReport methodsFor: 'running' stamp: 'lr 11/24/2010 20:44'!
