@@ -156,7 +156,7 @@ end
 def assert_target_dir
   FileUtils.mkdir_p(TARGET_DIR)
   ["SqueakV41.sources", "HudsonBuildTools.st"].each { |name|
-    FileUtils.cp("#{SRC}/#{name}", "#{SRC}/target/#{name}") unless File.exists?("#{SRC}/target/#{name}")
+    FileUtils.cp("#{SRC}/#{name}", "#{SRC}/target/#{name}")
   }
 end
 
