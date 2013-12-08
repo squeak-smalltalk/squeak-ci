@@ -15,6 +15,7 @@ CLEAN.include('target')
 
 task :default => :test
 
+# Take the base CI image and move it into a (possibly newly) prepared target/ environment.
 task :build do
   TEST_IMAGE_NAME = "Squeak4.5"
 
@@ -51,10 +52,7 @@ task :perf => :build do
   }
 end
 
-# Create a new base image by taking the target/TrunkImage image, updating it,
-# and storing it in something like target/Squeak4.5.image. You can then update
-# the repository's base image by copying the file into the repository's root
-# image. THIS IS DELIBERATELY MANUAL.
+# Take the prepared TrunkImage image an updated image with the same name.
 task :update_base_image => :build do
   squeak_update_number = latest_downloaded_trunk_version(SRC)
   base_name = "#{SQUEAK_VERSION}"
@@ -80,6 +78,10 @@ task :update_base_image => :build do
   }
 end
 
+# Create a new base image by taking the target/TrunkImage image, updating it,
+# and storing it in something like target/Squeak4.5.image. You can then update
+# the repository's base image by copying the file into the repository's root
+# image. THIS IS DELIBERATELY MANUAL.
 task :release => :test do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
