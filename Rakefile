@@ -37,7 +37,6 @@ end
 task :perf => :build do
   perf_image = "PerfTest"
 
-  assert_target_dir
   os_name = identify_os
   cog_vm = assert_cog_vm(os_name)
   interpreter_vm = assert_interpreter_vm(os_name)
