@@ -120,7 +120,6 @@ end
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
   test.pattern = 'test/image_test.rb'
   test.verbose = true
-  puts "=== TEST FINISHED"
 end
 
 # The rest of the targets don't need to tell us when they're finished, because
