@@ -22,6 +22,9 @@ Installer squeak
     install: 'MonticelloForTraits';
     install: 'ToolBuilder-Tests'.
 
+"Manually adjust something that Frank broke in the update stream."
+Smalltalk at: #SUnitToolBuilderTests ifPresent: [:stbt | stbt superclass: ToolBuilderTests].
+
 MCMcmUpdater updateMissingPackages: false.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
