@@ -19,7 +19,8 @@ Smalltalk
  we need to ensure that Monticello still supports Traits."
 Installer squeak
     project: 'trunk';
-    install: 'MonticelloForTraits'.
+    install: 'MonticelloForTraits';
+    install: 'ToolBuilder-Tests'.
 
 MCMcmUpdater updateMissingPackages: false.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
