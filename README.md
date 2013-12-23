@@ -65,13 +65,15 @@ What does what?
 
 `build_interpreter_vm.sh` builds an interpreter VM for the local platform from the latest published source.
 
-`rake build` takes an early 4.5 beta image and updates it from trunk. It's a minimal image. ("Minimal" is more a description of what it should be, rather than what it is.)
+`rake build` prepares a test environment.
 
-`rake test` does what `rake build` does, and runs the full suite of SUnit tests on it. It produces Hudson/Jenkins compatible test reports. It should run on Linux, OS X, and Windows machines. FreeBSD support will follow as soon as some issues are resolved.
+`rake update_base_image` takes an early 4.5 alpha image and updates it from trunk. It's a minimal image. ("Minimal" is more a description of what it should be, rather than what it is.)
+
+`rake test` does what `rake update_base_image` does, and runs the full suite of SUnit tests on it. It produces Hudson/Jenkins compatible test reports. It should run on Linux, OS X, and Windows machines. FreeBSD support will follow as soon as some issues are resolved.
 
 `rake perf` runs the performance tests in `benchmarks.st`, to allow Hudson to measure overall performance of the 4.5 image as it evolves.
 
-`rake release` produces a 4.5 image suitable for release, labelled `SqueakM.N-KKKK.image`. In particular, it loads several well-known packages.
+`rake release` produces a 4.5 image suitable for release, labelled `SqueakM.N-KKKK.image` in a zipfile called `Squeak4.5.zip`. In particular, it loads several well-known packages.
 
 `resources\wallpaper.png` contains the official background for the current Squeak release.
 

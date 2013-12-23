@@ -15,6 +15,8 @@ CLEAN.include('target')
 
 task :default => :test
 
+# Take the base CI image and move it into a (possibly newly) prepared test
+# environment in the target/ directory.
 task :build do
   TEST_IMAGE_NAME = "Squeak4.5"
 
@@ -31,12 +33,14 @@ task :build do
   Dir.chdir(TARGET_DIR) {
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
+  puts "=== BUILD FINISHED"
 end
 
+# Run performance tests on the prepared TrunkImage (regardless of which step
+# produced the current test environment.
 task :perf => :build do
   perf_image = "PerfTest"
 
-  assert_target_dir
   os_name = identify_os
   cog_vm = assert_cog_vm(os_name)
   interpreter_vm = assert_interpreter_vm(os_name)
@@ -49,12 +53,10 @@ task :perf => :build do
     FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{perf_image}.changes")
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), perf_image, "#{SRC}/benchmarks.st")
   }
+  puts "=== PERF FINISHED"
 end
 
-# Create a new base image by taking the target/TrunkImage image, updating it,
-# and storing it in something like target/Squeak4.5.image. You can then update
-# the repository's base image by copying the file into the repository's root
-# image. THIS IS DELIBERATELY MANUAL.
+# Take the prepared TrunkImage image an updated image with the same name.
 task :update_base_image => :build do
   squeak_update_number = latest_downloaded_trunk_version(SRC)
   base_name = "#{SQUEAK_VERSION}"
@@ -71,8 +73,20 @@ task :update_base_image => :build do
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
+
+  FileUtils.rm("#{SRC}/target/TrunkImage.zip") if File.exist?("#{SRC}/target/TrunkImage.zip")
+  Zip::File.open("#{SRC}/target/TrunkImage.zip", Zip::File::CREATE) { |z|
+    ['changes', 'image', 'manifest', 'version'].each { |suffix|
+      z.add("TrunkImage.#{suffix}", "#{SRC}/target/TrunkImage.#{suffix}")
+    }
+  }
+  puts "=== UPDATE_BASE_IMAGE FINISHED"
 end
 
+# Create a new base image by taking the target/TrunkImage image, updating it,
+# and storing it in something like target/Squeak4.5.image. You can then update
+# the repository's base image by copying the file into the repository's root
+# image. THIS IS DELIBERATELY MANUAL.
 task :release => :test do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
@@ -94,11 +108,13 @@ task :release => :test do
   FileUtils.cp("#{SRC}/target/ReleaseCandidate.image", "#{SRC}/target/#{release_name}.image")
   FileUtils.cp("#{SRC}/target/ReleaseCandidate.changes", "#{SRC}/target/#{release_name}.changes")
   puts "Zipping #{release_name}"
-  Zip::File.open("#{SRC}/target/#{release_name}.zip", Zip::File::CREATE) { |z|
+  FileUtils.rm("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip") if File.exist?("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip")
+  Zip::File.open("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip", Zip::File::CREATE) { |z|
     ['changes', 'image'].each { |suffix|
       z.add("#{release_name}.#{suffix}", "#{SRC}/target/#{release_name}.#{suffix}")
     }
   }
+  puts "=== RELEASE FINISHED"
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
@@ -106,11 +122,14 @@ RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
   test.verbose = true
 end
 
+# The rest of the targets don't need to tell us when they're finished, because
+# they're not links in the main build pipeline.
 RSpec::Core::RakeTask.new(:interpreter_test => :update_base_image) do |test|
   test.rspec_opts = '--tag interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
+
 
 RSpec::Core::RakeTask.new(:package_test => :update_base_image) do |test|
   test.pattern = 'test/package_test.rb'
@@ -125,9 +144,11 @@ end
 def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   # Double parent because "parent" means "dir of"
   interpreter_vm_dir = Pathname.new(interpreter_vm).parent.parent.to_s
-  ckformat = run_cmd("find #{interpreter_vm_dir} -name ckformat").split("\n").first
+  ckformat = nil
+  # Gag at the using-side-effects nonsense.
+  Pathname.new(SRC).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
 
-  if ckformat && File.exists?(ckformat) then
+  if ckformat then
     format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
     puts "Before format conversion: \"#{SRC}/target/#{image_name} image format #{format}"
   else
@@ -140,7 +161,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
     puts "WARNING: #{interpreter_vm} not found, image not converted to format 6504"
   end
 
-  if ckformat && File.exists?(ckformat) then
+  if ckformat then
     format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
     puts "After format conversion: \"#{SRC}/target/#{image_name}.image\" image format #{format}"
   end
