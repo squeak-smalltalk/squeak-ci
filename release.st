@@ -1,17 +1,15 @@
-[((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
-ToolSet default: (Smalltalk at: #CommandLineToolSet).]
-    on: Error do: [:e|
-        FileStream stderr
-            nextPutAll: 'Exception ', e className, ' raised:'; lf;
-            nextPutAll: e messageText; lf.
-        Smalltalk snapshot: false andQuit: true].
+Smalltalk at: #CommandLineToolSet ifAbsent: [
+    [((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
+    ToolSet default: (Smalltalk at: #CommandLineToolSet).]
+        on: Error do: [:e|
+            FileStream stderr
+                nextPutAll: 'Exception ', e className, ' raised:'; lf;
+                nextPutAll: e messageText; lf.
+            Smalltalk snapshot: false andQuit: true]].
+[FileStream stdout nextPutAll: 'release.st'; cr; flush.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
-
-MCMcmUpdater updateMissingPackages: true.
-MCMcmUpdater enableUpdatesForAllPackages.
-Form openAsBackground: (FileDirectory default / '..' / 'resources' / 'wallpaper.png') pathName.
-Workspace allInstances do: [:w | w topView delete].
 ReleaseBuilder prepareNewBuild.
+FileStream stdout nextPutAll: 'ReleaseBuilder set'; cr; flush.
 ToolSet default: StandardToolSet.
 
 Smalltalk snapshot: true andQuit: true]
