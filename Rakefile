@@ -118,6 +118,7 @@ task :release => :test do
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
+  test.rspec_opts = '-fdoc'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
@@ -125,13 +126,14 @@ end
 # The rest of the targets don't need to tell us when they're finished, because
 # they're not links in the main build pipeline.
 RSpec::Core::RakeTask.new(:interpreter_test => :update_base_image) do |test|
-  test.rspec_opts = '--tag interpreter'
+  test.rspec_opts = '-fdoc --tag interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
 
 
 RSpec::Core::RakeTask.new(:package_test => :update_base_image) do |test|
+  test.rspec_opts = '-fdoc'
   test.pattern = 'test/package_test.rb'
   test.verbose = true
 end
