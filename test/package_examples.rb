@@ -25,6 +25,7 @@ shared_examples "an external package" do
         FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{package}.changes")
       }
       run_image_with_cmd(@interpreter_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
+      run_image_with_cmd(@interpreter_vm, vm_args(@os_name), package, "#{SRC}/scripts/show-manifest.st")
     end
 
     after :all do
