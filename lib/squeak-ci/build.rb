@@ -1,4 +1,3 @@
-require 'future'
 require 'zip'
 require_relative 'extensions'
 require_relative 'version'
@@ -244,7 +243,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
     pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
     log("(Command started with PID #{pid})")
     @@COMMAND_COUNT += 1
-    future {
+    Thread.new {
       kill_time = Time.now + timeout.seconds
       process_gone = false
       while (Time.now < kill_time)
@@ -275,6 +274,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
         end
         puts "-------------"
         log("!!! Killed command #{cmd_count}")
+        raise "Command #{cmd_count} killed: timed out."
       end
     }
     Process.wait(pid)
