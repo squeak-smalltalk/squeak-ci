@@ -118,7 +118,7 @@ task :release => :test do
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
-  test.rspec_opts = '-fdoc'
+  test.rspec_opts = '-fdoc --tag ~interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
