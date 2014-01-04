@@ -11,3 +11,4 @@ manifest := (MCWorkingCopy allManagers asSortedCollection:
 log value: '===== Package manifest ====='.
 manifest do: [:s | log value: s].
 log value: '============================'.
+WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
