@@ -1,3 +1,4 @@
+
 require 'rubygems'
 require 'rubygems/package_task'
 require 'ci/reporter/rake/rspec'
@@ -108,8 +109,8 @@ task :release => :test do
   FileUtils.cp("#{SRC}/target/ReleaseCandidate.image", "#{SRC}/target/#{release_name}.image")
   FileUtils.cp("#{SRC}/target/ReleaseCandidate.changes", "#{SRC}/target/#{release_name}.changes")
   puts "Zipping #{release_name}"
-  FileUtils.rm("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip") if File.exist?("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip")
-  Zip::File.open("#{SRC}/target/Squeak#{SQUEAK_VERSION}.zip", Zip::File::CREATE) { |z|
+  FileUtils.rm("#{SRC}/target/#{SQUEAK_VERSION}.zip") if File.exist?("#{SRC}/target/#{SQUEAK_VERSION}.zip")
+  Zip::File.open("#{SRC}/target/#{SQUEAK_VERSION}.zip", Zip::File::CREATE) { |z|
     ['changes', 'image'].each { |suffix|
       z.add("#{release_name}.#{suffix}", "#{SRC}/target/#{release_name}.#{suffix}")
     }
