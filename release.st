@@ -1,12 +1,9 @@
-Smalltalk at: #CommandLineToolSet ifAbsent: [
-    [((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn.
-    ToolSet default: (Smalltalk at: #CommandLineToolSet).]
-        on: Error do: [:e|
-            FileStream stderr
-                nextPutAll: 'Exception ', e className, ' raised:'; lf;
-                nextPutAll: e messageText; lf.
-            Smalltalk snapshot: false andQuit: true]].
-[FileStream stdout nextPutAll: 'release.st'; cr; flush.
+[Installer squeak
+    project: 'trunk';
+    addPackage: 'CommandLine';
+    install.
+
+FileStream stdout nextPutAll: 'release.st'; cr; flush.
 ToolSet default: (Smalltalk at: #CommandLineToolSet).
 ReleaseBuilder prepareNewBuild.
 FileStream stdout nextPutAll: 'ReleaseBuilder set'; cr; flush.
