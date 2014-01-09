@@ -8,3 +8,6 @@ bin/ldiff
 bin/rake
 bin/rspec
 .bundle/
+update-*.*.log
+package-cache/
+sm/
