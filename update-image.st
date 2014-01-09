@@ -1,31 +1,20 @@
 | config manifest |
 Smalltalk at: #Log put: [:msg | | str |
-	str := DateAndTime now printString, ': ', msg.
-	FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
-	Transcript cr; show: str].
-
-Smalltalk
-    at: #CommandLineToolSet
-    ifAbsent: [
-        [((FileDirectory default / '..') readOnlyFileNamed: 'CommandLineToolSet.st') fileIn
-        ToolSet default: (Smalltalk at: #CommandLineToolSet)]
-            on: Error do: [:e|
-                FileStream stderr
-                    nextPutAll: 'Exception ', e className, ' raised:'; lf;
-                    nextPutAll: e messageText; lf.
-                Smalltalk snapshot: false andQuit: true]].
+    str := DateAndTime now printString, ': ', msg.
+    FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
+    Transcript cr; show: str].
 
 "Until the far away day we unload Traits and Monticello from the base image,
  we need to ensure that Monticello still supports Traits."
+
 Installer squeak
     project: 'trunk';
-    install: 'MonticelloForTraits';
-    install: 'ToolBuilder-Tests'.
+    addPackage: 'CommandLine';
+    install.
 
-"Manually adjust something that Frank broke in the update stream."
-Smalltalk at: #SUnitToolBuilderTests ifPresent: [:stbt | stbt superclass: ToolBuilderTests].
+ToolSet default: (Smalltalk at: #CommandLineToolSet).
 
-MCMcmUpdater updateMissingPackages: false.
+MCMcmUpdater updateMissingPackages: true.
 MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
 
 "This comes from Utilities class >> #updateFromServer, but leaves off the
@@ -62,6 +51,7 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         config setSystemVersion].
 Log value: 'Updated to 4.5-', SystemVersion current highestUpdate printString.
 
+"Avoid trailing cruft if the file shrinks in length."
 FileDirectory deleteFilePath: 'TrunkImage.version'.
 FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; flush].
 
@@ -69,7 +59,7 @@ manifest := (MCWorkingCopy allManagers asSortedCollection:
         [ :a :b | a package name <= b package name ]) collect:
             [:ea | ea description].
 
-"Avoid trailing cruft if the manifest shrinks in length."
+"Avoid trailing cruft if the file shrinks in length."
 FileDirectory deleteFilePath: 'TrunkImage.manifest'.
 FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
     manifest do:
@@ -79,6 +69,7 @@ FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
 Log value: 'Package manifest:'.
 manifest do: [:s | Log value: s].
 
+Smalltalk globals removeKey: #Log.
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
