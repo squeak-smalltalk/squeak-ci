@@ -88,9 +88,12 @@ end
 # and storing it in something like target/Squeak4.5.image. You can then update
 # the repository's base image by copying the file into the repository's root
 # image. THIS IS DELIBERATELY MANUAL.
-task :release => :test do
+task :release => :update_base_image do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
+  cog_vm = assert_cog_vm(os_name)
+  fail "Cannot release off #{os_name} OS" unless cog_vm
+
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
 
@@ -98,11 +101,9 @@ task :release => :test do
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/ReleaseCandidate.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/ReleaseCandidate.changes")
 
-  FileUtils.chmod('+w', "#{SRC}/target/ReleaseCandidate.changes")
-  FileUtils.chmod('+w', "#{SRC}/target/ReleaseCandidate.image")
-
   puts "Releasing based off #{base_name}"
-  run_image_with_cmd(interpreter_vm, vm_args(os_name), 'ReleaseCandidate', "#{SRC}/release.st", 15.minutes)
+  run_image_with_cmd(cog_vm, vm_args(os_name), 'ReleaseCandidate', "#{SRC}/release.st", 15.minutes)
+  assert_interpreter_compatible_image(interpreter_vm, 'ReleaseCandidate', os_name)
 
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/ReleaseCandidate.image")
   release_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
@@ -116,6 +117,11 @@ task :release => :test do
     }
   }
   puts "=== RELEASE FINISHED"
+end
+
+RSpec::Core::RakeTask.new(:release_and_test => :release) do |test|
+  test.pattern = 'test/release_test.rb'
+  test.verbose = true
 end
 
 RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
