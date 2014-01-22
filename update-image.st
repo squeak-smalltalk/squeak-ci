@@ -1,4 +1,4 @@
-| config manifest |
+[| config manifest |
 Smalltalk at: #Log put: [:msg | | str |
     str := DateAndTime now printString, ': ', msg.
     FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
@@ -72,4 +72,5 @@ manifest do: [:s | Log value: s].
 Smalltalk globals removeKey: #Log.
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
-WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].
+WorldState addDeferredUIMessage: [ Smalltalk snapshot: true andQuit: true ]]
+    on Error do: [Smalltalk snapshot: false andQuitWithExitCode: 1].
