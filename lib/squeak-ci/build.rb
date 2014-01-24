@@ -234,7 +234,10 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   log(cmd)
   base_cmd = "#{vm_name} #{arr_of_vm_args.join(" ")} \"#{SRC}/target/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
   case identify_os
-    when "windows" then system(base_cmd)
+    when "windows" then begin
+                          log(base_cmd)
+                          system(base_cmd)
+                        end
   else
     cmd_count = @@COMMAND_COUNT
     log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
