@@ -73,4 +73,4 @@ Smalltalk globals removeKey: #Log.
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
 WorldState addDeferredUIMessage: [ Smalltalk snapshot: true andQuit: true ]]
-    on Error do: [Smalltalk snapshot: false andQuitWithExitCode: 1].
+    on: Error do: [Smalltalk snapshot: false andQuitWithExitCode: 1].
