@@ -281,6 +281,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
       end
     }
     Process.wait(pid)
+    raise "Process #{pid} failed with exit status #{$?.exitstatus}" if $?.exitstatus != 0
   end
 end
 
