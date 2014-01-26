@@ -16,7 +16,7 @@ describe "Release test suite" do
       log("Unzipping:")
       Dir.glob('Squeak4.5-*.*') { |release_file|
         extension = Pathname.new(release_file).extname
-        dest = "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.#{extension}"
+        dest = "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}#{extension}"
         log("Moving #{release_file} to #{dest}")
         FileUtils.cp(release_file, dest)
       }
