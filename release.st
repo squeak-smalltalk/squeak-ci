@@ -20,4 +20,4 @@ Smalltalk snapshot: true andQuit: true]
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; cr;
             nextPutAll: e messageText; lf.
-        Smalltalk snapshot: false andQuitWithErrorCode: 1].
+        Smalltalk snapshot: false andQuitWithExitCode: 1].
