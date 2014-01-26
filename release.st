@@ -9,7 +9,7 @@ ToolSet default: (Smalltalk at: #CommandLineToolSet).
     on: Warning do: [:w |
         FileStream stdout
             nextPutAll: 'Warning ', w className, ' raised:'; cr;
-            nextPutAll: w messageTest; cr;
+            nextPutAll: w messageText; cr;
             flush.
         w resume].
 FileStream stdout nextPutAll: 'ReleaseBuilder set'; cr; flush.
