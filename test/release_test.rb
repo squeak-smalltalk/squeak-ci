@@ -13,9 +13,12 @@ describe "Release test suite" do
 
       # Copy the clean image so we can run the tests without touching the artifact.
       unzip('Squeak4.5.zip')
+      log("Unzipping:")
       Dir.glob('Squeak4.5-*.*') { |release_file|
         extension = Pathname.new(release_file).extname
-        FileUtils.cp(release_file, "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.#{extension}")
+        dest = "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.#{extension}"
+        log("Moving #{release_file} to #{dest}")
+        FileUtils.cp(release_file, dest)
       }
     }
   end
