@@ -307,7 +307,7 @@ end
 def vm_args(os_name)
   case os_name
   when "osx"
-    ["-vm-display-null", "-headless"]
+    ["-headless"]
   when "linux", "linux64", "freebsd"
     ["-vm-sound-null", "-vm-display-null"]
   when "windows"
