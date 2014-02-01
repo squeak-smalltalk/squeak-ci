@@ -10,8 +10,8 @@ describe "Trunk test suite" do
     @vm = case @os_name
           when "linux64"
             assert_interpreter_vm(@os_name)
-          when "osx" # Temporary: I just haven't figured out how to unpack/use the Cog on OS X.
-            assert_interpreter_vm(@os_name)
+          when "osx"
+            assert_cog_vm(@os_name)
           else
             assert_cog_vm(@os_name)
           end
