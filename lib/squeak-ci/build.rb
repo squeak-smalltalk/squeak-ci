@@ -239,6 +239,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
                           system(base_cmd)
                         end
   else
+    if identify_os == "osx" then base_cmd = "unset DISPLAY && #{base_cmd}" end
+
     cmd_count = @@COMMAND_COUNT
     log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
     # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
