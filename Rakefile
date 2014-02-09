@@ -1,4 +1,3 @@
-
 require 'rubygems'
 require 'rubygems/package_task'
 require 'ci/reporter/rake/rspec'
@@ -38,7 +37,7 @@ task :build do
 end
 
 # Run performance tests on the prepared TrunkImage (regardless of which step
-# produced the current test environment.
+# produced the current test environment).
 task :perf => :build do
   perf_image = "PerfTest"
 
@@ -57,7 +56,7 @@ task :perf => :build do
   puts "=== PERF FINISHED"
 end
 
-# Take the prepared TrunkImage image an updated image with the same name.
+# Take the prepared TrunkImage image and update it.
 task :update_base_image => :build do
   squeak_update_number = latest_downloaded_trunk_version(SRC)
   base_name = "#{SQUEAK_VERSION}"
@@ -66,9 +65,7 @@ task :update_base_image => :build do
   interpreter_vm = assert_interpreter_vm(os_name)
 
   puts "Using #{interpreter_vm}"
-  puts "Preparing to update image #{base_name}"
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/#{base_name}.image")
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{base_name}.changes")
+  puts "Preparing to update image of #{base_name} vintage"
 
   Dir.chdir(TARGET_DIR) {
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
@@ -84,11 +81,9 @@ task :update_base_image => :build do
   puts "=== UPDATE_BASE_IMAGE FINISHED"
 end
 
-# Create a new base image by taking the target/TrunkImage image, updating it,
-# and storing it in something like target/Squeak4.5.image. You can then update
-# the repository's base image by copying the file into the repository's root
-# image. THIS IS DELIBERATELY MANUAL.
-task :release => :update_base_image do
+# Take the target/TrunkImage image, run the release process on it, and store it
+# in something like target/Squeak4.5.image.
+task :release => :build do
   os_name = identify_os
   interpreter_vm = assert_interpreter_vm(os_name)
   cog_vm = assert_cog_vm(os_name)
@@ -119,12 +114,13 @@ task :release => :update_base_image do
   puts "=== RELEASE FINISHED"
 end
 
+# Take the TrunkImage, release it, and test it.
 RSpec::Core::RakeTask.new(:release_and_test => :release) do |test|
   test.pattern = 'test/release_test.rb'
   test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:test => :update_base_image) do |test|
+RSpec::Core::RakeTask.new(:test => :build) do |test|
   test.rspec_opts = '-fdoc --tag ~interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
@@ -132,20 +128,20 @@ end
 
 # The rest of the targets don't need to tell us when they're finished, because
 # they're not links in the main build pipeline.
-RSpec::Core::RakeTask.new(:interpreter_test => :update_base_image) do |test|
+RSpec::Core::RakeTask.new(:interpreter_test => :build) do |test|
   test.rspec_opts = '-fdoc --tag interpreter'
   test.pattern = 'test/image_test.rb'
   test.verbose = true
 end
 
 
-RSpec::Core::RakeTask.new(:package_test => :update_base_image) do |test|
+RSpec::Core::RakeTask.new(:package_test => :build) do |test|
   test.rspec_opts = '-fdoc'
   test.pattern = 'test/package_test.rb'
   test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:bleeding_edge_test => :update_base_image) do |test|
+RSpec::Core::RakeTask.new(:bleeding_edge_test => :build) do |test|
   test.pattern = 'test/bleeding_edge_test.rb'
   test.verbose = true
 end
