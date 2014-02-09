@@ -36,7 +36,6 @@ describe "Trunk test suite" do
         args = vm_args(@os_name)
         args << "-reportheadroom" unless @os_name == "linux64"
         run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 20.minutes)
-        run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st", 10.minutes)
       }
     end
 
@@ -48,7 +47,6 @@ describe "Trunk test suite" do
         args = vm_args(@os_name)
         args << "-reportheadroom" unless @os_name == "linux64"
         run_image_with_cmd(vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 30.minutes)
-        run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/benchmarks.st", 10.minutes)
       }
     end
   end
