@@ -20,5 +20,5 @@ Smalltalk snapshot: true andQuit: true]
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; cr;
             nextPutAll: e messageText; lf.
-        err printVerboseOn: FileStream stderr.
+        e printVerboseOn: FileStream stderr.
         Smalltalk snapshot: false andQuitWithExitCode: 1].
