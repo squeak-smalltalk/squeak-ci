@@ -23,10 +23,10 @@ Smalltalk snapshot: true andQuit: true]
             flush.
         e printVerboseOn: FileStream stderr.
 
-        FileStream stderr nextPutAll: '========================='; lf; flush.
+        FileStream stderr nextPutAll: '========================='; cr; flush.
         (e isKindOf: MessageNotUnderstood) ifTrue:
-            [FileStream stderr nextPutAll: ('Receiver: {1}' format: {e receiver}); cr; flush].
+            [FileStream stderr nextPutAll: ('Receiver: {1}' format: {e receiver printString}); cr; flush].
         e signalerContext in: [:problemPlace |
             (problemPlace stackOfSize: 1) do: [:ctx | ctx printOn: FileStream stderr]].
-        FileStream stderr nextPutAll: '========================='; lf; flush.
+        FileStream stderr nextPutAll: '========================='; cr; flush.
         Smalltalk snapshot: false andQuitWithExitCode: 1].
