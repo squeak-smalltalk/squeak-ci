@@ -16,9 +16,17 @@ FileStream stdout nextPutAll: 'ReleaseBuilder set'; cr; flush.
 ToolSet default: StandardToolSet.
 
 Smalltalk snapshot: true andQuit: true]
-    on: Error do: [:e|
+    on: Error do: [:e |
         FileStream stderr
             nextPutAll: 'Exception ', e className, ' raised:'; cr;
-            nextPutAll: e messageText; lf.
+            nextPutAll: e messageText; cr;
+            flush.
         e printVerboseOn: FileStream stderr.
+
+        FileStream stderr nextPutAll: '========================='; lf; flush.
+        (e isKindOf: MessageNotUnderstood) ifTrue:
+            [FileStream stderr nextPutAll: ('Receiver: {1}' format: {e receiver}); cr; flush].
+        e signalerContext in: [:problemPlace |
+            (problemPlace stackOfSize: 1) do: [:ctx | ctx printOn: FileStream stderr]].
+        FileStream stderr nextPutAll: '========================='; lf; flush.
         Smalltalk snapshot: false andQuitWithExitCode: 1].
