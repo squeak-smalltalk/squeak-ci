@@ -67,18 +67,19 @@ task :update_base_image => :build do
   puts "Using #{interpreter_vm}"
   puts "Preparing to update image of #{base_name} vintage"
 
-  Dir.chdir(TARGET_DIR) {
+  squeak_update_number = Dir.chdir(TARGET_DIR) {
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
+
+    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
+    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
+      ['changes', 'image', 'manifest', 'version'].each { |suffix|
+        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
+      }
+    }
+    image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/TrunkImage.image")
   }
 
-  FileUtils.rm("#{SRC}/target/TrunkImage.zip") if File.exist?("#{SRC}/target/TrunkImage.zip")
-  Zip::File.open("#{SRC}/target/TrunkImage.zip", Zip::File::CREATE) { |z|
-    ['changes', 'image', 'manifest', 'version'].each { |suffix|
-      z.add("TrunkImage.#{suffix}", "#{SRC}/target/TrunkImage.#{suffix}")
-    }
-  }
-  squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/TrunkImage.image")
   puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
 
   puts "=== UPDATE_BASE_IMAGE FINISHED"
