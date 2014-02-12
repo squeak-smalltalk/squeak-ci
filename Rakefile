@@ -78,6 +78,9 @@ task :update_base_image => :build do
       z.add("TrunkImage.#{suffix}", "#{SRC}/target/TrunkImage.#{suffix}")
     }
   }
+  squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/TrunkImage.image")
+  puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
+
   puts "=== UPDATE_BASE_IMAGE FINISHED"
 end
 
