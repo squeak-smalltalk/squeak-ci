@@ -96,7 +96,7 @@ task :release => :build do
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/#{TRUNK_IMAGE}.image")
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
 
-  puts "Preparing to release image based on #{base_name}"
+  puts "Preparing to release image based on #{base_name} (TrunkImage.version says #{File.open("r", "#{SRC}/target/#{TRUNK_IMAGE}.version")})"
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/ReleaseCandidate.image")
   FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/ReleaseCandidate.changes")
 
