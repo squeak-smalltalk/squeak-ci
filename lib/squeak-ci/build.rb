@@ -71,6 +71,10 @@ def assert_cogmt_vm(os_name)
   return assert_coglike_vm(os_name, :mt)
 end
 
+def assert_cog_spur_vm(os_name)
+  return assert_coglike_vm(os_name, :spur)
+end
+
 def assert_interpreter_vm(os_name)
   # word_size is 32 or 64, for 32-bit or 64-bit.
 

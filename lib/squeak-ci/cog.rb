@@ -53,6 +53,7 @@ class CogVersion
       case vm_type
       when :normal then "Cog.app"
       when :mt then "CogMT.app"
+      when :spur then "CogSpur.app"
       else
         raise "Unknown vm_type #{vm_type.inspect} for 'osx' passed to CogVersion#dir_name"
       end
@@ -60,6 +61,7 @@ class CogVersion
       case vm_type
       when :normal then 'cog'
       when :mt then 'cogmt'
+      when :spur then 'cogspur'
       else
         raise "Unknown vm_type #{vm_type.inspect} for '#{os_name}' given to CogVersion#dir_name"
       end
