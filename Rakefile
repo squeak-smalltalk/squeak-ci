@@ -36,6 +36,19 @@ task :build do
   puts "=== BUILD FINISHED"
 end
 
+task :spur_build do
+  assert_target_dir
+  os_name = identify_os
+  cog_vm = assert_cog_spur_vm(os_name)
+  puts "Cog VM at #{cog_vm}" if cog_vm
+  raise "No VMs!" if !cog_vm
+
+  run_cmd("curl -sSo #{SRC}/target/#{TRUNK_IMAGE}.image http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.image")
+  run_cmd("curl -sSo #{SRC}/target/#{TRUNK_IMAGE}.changes http://www.mirandabanda.org/files/Cog/VM/SpurChangess/trunk46-spur.changes")
+
+  puts "=== BUILD FINISHED"
+end
+
 # Run performance tests on the prepared TrunkImage (regardless of which step
 # produced the current test environment).
 task :perf => :build do
@@ -138,6 +151,11 @@ RSpec::Core::RakeTask.new(:interpreter_test => :build) do |test|
   test.verbose = true
 end
 
+RSpec::Core::RakeTask.new(:spur_test => :spur_build) do |test|
+  test.rspec_opts = '-fdoc'
+  test.pattern = 'test/spur_image_test.rb'
+  test.verbose = true
+end
 
 RSpec::Core::RakeTask.new(:package_test => :build) do |test|
   test.rspec_opts = '-fdoc'
