@@ -45,7 +45,12 @@ class CogVersion
   def cog_location(base_path, os_name, vm_type = :normal)
     base_name = dir_name(os_name, vm_type)
     case os_name
-    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux/bin/squeak"
+    when "linux", "linux64" then
+      if vm_type == :spur then
+        base_path + "#{base_name}.r#{svnid}/#{base_name}linuxht/bin/squeak"
+      else
+        base_path + "#{base_name}.r#{svnid}/#{base_name}linux/bin/squeak"
+      end
     when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win/SqueakConsole.exe"
     when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/MacOS/Squeak"
     else

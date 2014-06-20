@@ -49,11 +49,7 @@ def assert_coglike_vm(os_name, vm_type)
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
         lib_dir = COG_VERSION.lib_dir("#{SRC}/target/", os_name, vm_type)
-#        assert_ssl("#{lib_dir}", os_name)
-        log("#2")
-        r = COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
-        log("returning #{r}")
-        r
+        COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
