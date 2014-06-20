@@ -20,7 +20,12 @@ class CogVersion
   def filename(os_name, vm_type)
     basename = dir_name(os_name, vm_type)
     case os_name
-    when "linux", "linux64" then "#{basename}linux-#{version_string}.tgz"
+    when "linux", "linux64" then
+      if vm_type == :spur then
+        "#{basename}linuxht-#{version_string}.tgz" # Note the "ht" suffix
+      else
+        "#{basename}linux-#{version_string}.tgz"
+      end
     when "windows" then "#{basename}win-#{version_string}.zip"
     when "osx" then "#{basename}-#{version_string}.tgz"
     end
