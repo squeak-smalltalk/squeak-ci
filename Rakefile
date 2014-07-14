@@ -98,6 +98,31 @@ task :update_base_image => :build do
   puts "=== UPDATE_BASE_IMAGE FINISHED"
 end
 
+task :spur_update_base_image => :spur_build do
+  squeak_update_number = latest_downloaded_trunk_version(SRC)
+  base_name = "#{SQUEAK_VERSION}"
+  os_name = identify_os
+  cog_vm = assert_cog_spur_vm(os_name)
+
+  puts "Preparing to update image of #{base_name} vintage"
+
+  squeak_update_number = Dir.chdir(TARGET_DIR) {
+    run_image_with_cmd(cog_vm, vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
+
+    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
+    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
+      ['changes', 'image', 'manifest', 'version'].each { |suffix|
+        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
+      }
+    }
+    image_version(cog_vm, vm_args(os_name), "TrunkImage.image")
+  }
+
+  puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
+
+  puts "=== UPDATE_BASE_IMAGE FINISHED"
+end
+
 # Take the target/TrunkImage image, run the release process on it, and store it
 # in something like target/Squeak4.5.image.
 task :release => :build do
