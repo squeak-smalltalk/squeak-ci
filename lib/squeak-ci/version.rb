@@ -1,6 +1,6 @@
 require_relative 'cog'
 
-COG_VERSION = CogVersion.new(14,27,3039).freeze
+COG_VERSION = CogVersion.new(14,28,3041).freeze
 INTERPRETER_VERSION="4.10.2.2614"
 WINDOWS_INTERPRETER_VERSION="4.10.2-2612"
 
