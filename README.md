@@ -77,7 +77,7 @@ What does what?
 
 `resources\wallpaper.png` contains the official background for the current Squeak release.
 
-`run-test.sh` runs the tests for individual packages against (a copy of) the latest published Trunk image. Look in the `package-load-tests` directory to see the currently supported packages. Run it thusly: `run-test.sh MyPackage`. (This script will probably fall away at some stage.)
+To run the tests for a particular package (find the currently supported packages in the `package-load-tests` directory) like this: `rspec -fdoc --tag Xtreams test/package_test.rb`.
 
 Additional reading
 ------------------
