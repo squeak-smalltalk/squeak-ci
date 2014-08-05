@@ -194,7 +194,8 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
     when "windows"
       unzip(local_name)
     else
-      run_cmd "tar zxf #{local_name}"
+      rc = run_cmd "tar zxf #{local_name}"
+      raise "Cog zip broken: no such Cog?" if rc != 0
     end
   }
 end
