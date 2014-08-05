@@ -11,7 +11,7 @@ describe "External package in" do
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
-      @cog_mt_vm = assert_cogmt_vm(@os_name)
+      @cog_mtht_vm = assert_cogmtht_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
       FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{@base_image_name}.image")
       FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{@base_image_name}.changes")

@@ -42,10 +42,10 @@ shared_examples "an external package" do
       }
     end
 
-    it "on Cog MT" do
+    it "on Cog MT (HT)" do
       pending "Can't run Cog MT on this platform (#{identify_os})" if @cog_mt_vm.to_s == ""
-      with_copy(package, "cogmt") { | image_name |
-        run_test_with_timeout(@cog_mt_vm, @os_name, image_name, package, TEST_TIMEOUT)
+      with_copy(package, "cogmtht") { | image_name |
+        run_test_with_timeout(@cog_mtht_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
     end
 
