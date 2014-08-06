@@ -25,7 +25,7 @@ def as_relative_path(script_path)
   Pathname.new(script_path).relative_path_from(Pathname.new(TARGET_DIR)).to_s
 end
 
-# vm_type element_of [:mt, :normal, :spur]
+# vm_type element_of [:mt, :mtht, :normal, :spur]
 def assert_coglike_vm(os_name, vm_type)
   cog = COG_VERSION.dir_name(os_name, vm_type)
   cog_desc = "#{cog} r.#{COG_VERSION.svnid}"
