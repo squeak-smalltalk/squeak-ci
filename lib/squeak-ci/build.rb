@@ -70,7 +70,7 @@ def assert_cogmt_vm(os_name)
   return assert_coglike_vm(os_name, :mt)
 end
 
-def assert_cogmt_vm(os_name)
+def assert_cogmtht_vm(os_name)
   return assert_coglike_vm(os_name, :mtht)
 end
 
