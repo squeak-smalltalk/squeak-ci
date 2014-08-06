@@ -43,7 +43,7 @@ def assert_coglike_vm(os_name, vm_type)
     COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
   else
     assert_target_dir
-    log("Installing new #{cog_desc}")
+    log("Installing new #{cog_desc} (#{vm_type.to_s})")
     FileUtils.mkdir_p(cog_dir)
     begin
       begin
