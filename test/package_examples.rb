@@ -67,6 +67,7 @@ shared_examples "external packages" do
    "Metacello",
    "Nebraska",
    "Nutcracker",
+   "OMeta",
    "OSProcess",
    "Quaternion",
    "ParsingDerivatives",
