@@ -66,6 +66,7 @@ class CogVersion
     if os_name == "osx" then
       case vm_type
       when :normal then "Cog.app"
+      when :ht     then "Cog.app"
       when :mt     then "CogMT.app"
       when :spur   then "CogSpur.app"
       else
@@ -74,6 +75,7 @@ class CogVersion
     else
       case vm_type
       when :normal then 'cog'
+      when :ht     then 'cog'
       when :mt     then 'cogmt'
       when :mtht   then 'cogmt'
       when :spur   then 'cogspur'
