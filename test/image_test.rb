@@ -44,8 +44,8 @@ describe "Trunk test suite" do
         vm = assert_interpreter_vm(@os_name)
         log("VM: #{vm}")
         run_cmd("#{vm} -version")
-        args = vm_args(@os_name)
-        args << "-reportheadroom" unless @os_name == "linux64"
+        # Attempted workaround to address the different args used by the different VMs.
+        args = if @os_name = "osx" then ["-vm-sound-null", "-vm-display-null"] else vm_args(@os_name)
         run_image_with_cmd(vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 30.minutes)
       }
     end
