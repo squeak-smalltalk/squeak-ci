@@ -8,14 +8,6 @@ shared_examples "an external package" do
     @cog_vm || @interpreter_vm
   end
 
-  before :all do
-    Dir.chdir(TARGET_DIR) {
-      FileUtils.cp("#{@base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
-      FileUtils.cp("#{@base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
-    }
-    prepare_package_image(preferably_cog_vm, @os_name, PACKAGE_TEST_IMAGE)
-  end
-
   after :all do
     Dir.chdir(TARGET_DIR) {
       FileUtils.rm("#{PACKAGE_TEST_IMAGE}.image") if File.exists?("#{PACKAGE_TEST_IMAGE}.image")
