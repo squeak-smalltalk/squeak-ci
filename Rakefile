@@ -44,7 +44,7 @@ task :spur_build do
   raise "No VMs!" if !cog_vm
 
   run_cmd("curl -sSo #{SRC}/target/#{TRUNK_IMAGE}.image http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.image")
-  run_cmd("curl -sSo #{SRC}/target/#{TRUNK_IMAGE}.changes http://www.mirandabanda.org/files/Cog/VM/SpurChangess/trunk46-spur.changes")
+  run_cmd("curl -sSo #{SRC}/target/#{TRUNK_IMAGE}.changes http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.changes")
 
   puts "=== BUILD FINISHED"
 end
