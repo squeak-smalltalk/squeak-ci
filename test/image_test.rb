@@ -45,7 +45,7 @@ describe "Trunk test suite" do
         log("VM: #{vm}")
         run_cmd("#{vm} -version")
         # Attempted workaround to address the different args used by the different VMs.
-        args = if @os_name = "osx" then ["-vm-sound-null", "-vm-display-null"] else vm_args(@os_name)
+        args = if @os_name = "osx" then ["-vm-sound-null", "-vm-display-null"] else vm_args(@os_name) end
         run_image_with_cmd(vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 30.minutes)
       }
     end
