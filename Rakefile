@@ -188,35 +188,16 @@ RSpec::Core::RakeTask.new(:package_test => :build) do |test|
   test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:bleeding_edge_test => :build) do |test|
-  test.pattern = 'test/bleeding_edge_test.rb'
+# Test one package
+RSpec::Core::RakeTask.new(:test_package, [:package_name]) do |test, args|
+  test.rspec_opts = "-fdoc --tag #{args[:package_name]}"
+  test.pattern = 'test/package_test.rb'
   test.verbose = true
 end
 
-def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
-  # Double parent because "parent" means "dir of"
-  interpreter_vm_dir = Pathname.new(interpreter_vm).parent.parent.to_s
-  ckformat = nil
-  # Gag at the using-side-effects nonsense.
-  Pathname.new(SRC).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
-
-  if ckformat then
-    format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
-    puts "Before format conversion: \"#{SRC}/target/#{image_name} image format #{format}"
-  else
-    puts "WARNING: no ckformat found"
-  end
-
-  if File.exists?(interpreter_vm) then
-    run_image_with_cmd(interpreter_vm, vm_args(os_name), image_name, "#{SRC}/save-image.st")
-  else
-    puts "WARNING: #{interpreter_vm} not found, image not converted to format 6504"
-  end
-
-  if ckformat then
-    format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
-    puts "After format conversion: \"#{SRC}/target/#{image_name}.image\" image format #{format}"
-  end
+RSpec::Core::RakeTask.new(:bleeding_edge_test => :build) do |test|
+  test.pattern = 'test/bleeding_edge_test.rb'
+  test.verbose = true
 end
 
 def image_version(vm, vm_args, image_name)
