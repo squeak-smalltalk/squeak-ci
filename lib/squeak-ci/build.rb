@@ -97,7 +97,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
 
   if File.exists?(interpreter_vm) then
     # Attempted workaround to address the different args used by the different VMs.
-    args = if os_name == "osx" then ["-vm-sound-null", "-vm-display-null"] else vm_args(os_name) end
+    args = if os_name == "osx" then ["-vm-display-null"] else vm_args(os_name) end
     run_image_with_cmd(interpreter_vm, args, image_name, "#{SRC}/save-image.st")
   else
     puts "WARNING: #{interpreter_vm} not found, image not converted to format 6504"
