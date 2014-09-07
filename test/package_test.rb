@@ -7,7 +7,7 @@ require 'timeout'
 describe "External package in" do
   context "Squeak 4.6" do
     before :all do
-      @base_image_name = "Squeak4.5" # For now. We don't actually have a 4.6 base image!
+      @base_image_name = "Squeak4.6"
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
