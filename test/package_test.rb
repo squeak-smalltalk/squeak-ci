@@ -15,7 +15,6 @@ describe "External package in" do
       @interpreter_vm = assert_interpreter_vm(@os_name)
       FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{@base_image_name}.image")
       FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{@base_image_name}.changes")
-      prepare_package_image(@interpreter_vm, @os_name, @base_image_name, "update-image.st")
     end
 
     it_behaves_like "external packages"

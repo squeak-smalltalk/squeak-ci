@@ -3,12 +3,17 @@ require 'squeak-ci/test'
 TEST_TIMEOUT = 600
 
 shared_examples "an external package" do
+  def preferably_cog_vm
+    # Use Cog if it's there, but fall back to the Interpreter for non-Coggy platforms (like FreeBSD)
+    @cog_vm || @interpreter_vm
+  end
+
   before :all do
     Dir.chdir(TARGET_DIR) {
       FileUtils.cp("#{@base_image_name}.image", "#{PACKAGE_TEST_IMAGE}.image")
       FileUtils.cp("#{@base_image_name}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
     }
-    prepare_package_image(@interpreter_vm, @os_name, PACKAGE_TEST_IMAGE)
+    prepare_package_image(preferably_cog_vm, @os_name, PACKAGE_TEST_IMAGE)
   end
 
   after :all do
@@ -24,8 +29,8 @@ shared_examples "an external package" do
         FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{package}.image")
         FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{package}.changes")
       }
-      run_image_with_cmd(@interpreter_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
-      run_image_with_cmd(@interpreter_vm, vm_args(@os_name), package, "#{SRC}/scripts/show-manifest.st")
+      run_image_with_cmd(preferable_cog_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
+      run_image_with_cmd(preferable_cog_vm, vm_args(@os_name), package, "#{SRC}/scripts/show-manifest.st")
     end
 
     after :all do
@@ -50,6 +55,7 @@ shared_examples "an external package" do
     end
 
     it "on Interpreter" do
+      assert_interpreter_compatible_image(@interpreter_vm, image_name)
       with_copy(package, "interpreter") { | image_name |
         run_test_with_timeout(@interpreter_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
