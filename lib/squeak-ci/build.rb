@@ -126,7 +126,7 @@ def assert_interpreter_vm(os_name)
   else
     assert_target_dir
     case os_name
-    when "linux", "linux64", "freebsd", "osx"
+    when "linux", "linux64", "freebsd"
       log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
       Dir.chdir(TARGET_DIR) {
         Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
@@ -152,6 +152,8 @@ def assert_interpreter_vm(os_name)
         unzip('interpreter.zip')
         FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
+    when "osx"
+      log("At the moment, Frank can't get the Interpreter VM building on OS X. Aborting.")
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
     end
