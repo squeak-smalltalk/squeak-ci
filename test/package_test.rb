@@ -18,9 +18,9 @@ describe "External package in" do
       @cog_vm = assert_cog_vm(@os_name)
       @cog_mtht_vm = assert_cogmtht_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{@base_image_name}.image")
-      FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{@base_image_name}.changes")
-      prepare_package_image(preferably_cog_vm, @os_name, @base_image_name)
+      FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{PACKAGE_TEST_IMAGE}.image")
+      FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{PACKAGE_TEST_IMAGE}.changes")
+      prepare_package_image(preferably_cog_vm, @os_name, PACKAGE_TEST_IMAGE)
     end
 
     it_behaves_like "external packages"
