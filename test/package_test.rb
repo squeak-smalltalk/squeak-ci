@@ -6,6 +6,11 @@ require 'timeout'
 
 describe "External package in" do
   context "Squeak 4.6" do
+    def preferably_cog_vm
+      # Use Cog if it's there, but fall back to the Interpreter for non-Coggy platforms (like FreeBSD)
+      @cog_vm || @interpreter_vm
+    end
+
     before :all do
       @base_image_name = "Squeak4.6"
       assert_target_dir
