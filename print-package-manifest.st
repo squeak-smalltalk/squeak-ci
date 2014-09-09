@@ -8,6 +8,5 @@ manifest := (MCWorkingCopy allManagers asSortedCollection:
             [:ea | ea description].
 manifest do: [:s | FileStream stdout nextPutAll: s; nextPut: Character lf; flush].
 
-"Save the fully updated trunk image."
-ToolSet default: (Smalltalk at: #StandardToolSet).
+"Quit without saving"
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: false andQuit: true ].
