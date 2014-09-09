@@ -3,7 +3,7 @@ require 'fileutils'
 require 'rspec'
 
 describe "Trunk test suite for Spur" do
-  RUN_TEST_IMAGE_NAME = "PostTestTrunkImage"
+  RUN_TEST_IMAGE_NAME = "SpurPostTestTrunkImage"
 
   before :all do
     @os_name = identify_os
@@ -16,8 +16,8 @@ describe "Trunk test suite for Spur" do
 
     Dir.chdir(TARGET_DIR) {
       # Copy the clean image so we can run the tests without touching the artifact.
-      FileUtils.cp("#{TRUNK_IMAGE}.image", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.image")
-      FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.changes")
+      FileUtils.cp("#{SPUR_TRUNK_IMAGE}.image", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.image")
+      FileUtils.cp("#{SPUR_TRUNK_IMAGE}.changes", "#{SRC}/target/#{RUN_TEST_IMAGE_NAME}.changes")
     }
   end
 

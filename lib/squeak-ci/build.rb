@@ -7,7 +7,7 @@ BASE_URL="http://build.squeak.org/"
 SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, the horror!
 TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
-
+SPUR_TRUNK_IMAGE="SpurTrunkImage"
 @@COMMAND_COUNT = 0
 
 class UnknownOS < Exception
