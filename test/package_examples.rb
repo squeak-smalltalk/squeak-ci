@@ -43,7 +43,7 @@ shared_examples "an external package" do
 
     it "on Interpreter", :interpreter => true do
       with_copy(package, "interpreter") { | image_name |
-        assert_interpreter_compatible_image(@interpreter_vm, image_name)
+        assert_interpreter_compatible_image(@interpreter_vm, image_name, @os_name)
         run_test_with_timeout(@interpreter_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
     end
