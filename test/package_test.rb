@@ -12,15 +12,26 @@ describe "External package in" do
     end
 
     before :all do
-      @base_image_name = "Squeak4.6"
+      @base_image_name = TRUNK_IMAGE
       assert_target_dir
       @os_name = identify_os
       @cog_vm = assert_cog_vm(@os_name)
       @cog_mtht_vm = assert_cogmtht_vm(@os_name)
+      @cog_spur_vm = assert_cog_spur_vm(@os_name)
       @interpreter_vm = assert_interpreter_vm(@os_name)
-      FileUtils.cp("#{@base_image_name}.image", "#{TARGET_DIR}/#{PACKAGE_TEST_IMAGE}.image")
-      FileUtils.cp("#{@base_image_name}.changes", "#{TARGET_DIR}/#{PACKAGE_TEST_IMAGE}.changes")
+      Dir.chdir(TARGET_DIR) {
+        FileUtils.cp("#{TRUNK_IMAGE}.image", "#{PACKAGE_TEST_IMAGE}.image")
+        FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{PACKAGE_TEST_IMAGE}.changes")
+      }
       prepare_package_image(preferably_cog_vm, @os_name, PACKAGE_TEST_IMAGE)
+    end
+
+    after :all do
+      Dir.chdir(TARGET_DIR) {
+        puts "after all an external package"
+        FileUtils.rm("#{PACKAGE_TEST_IMAGE}.image") if File.exists?("#{PACKAGE_TEST_IMAGE}.image")
+        FileUtils.rm("#{PACKAGE_TEST_IMAGE}.changes") if File.exists?("#{PACKAGE_TEST_IMAGE}.changes")
+      }
     end
 
     it_behaves_like "external packages"

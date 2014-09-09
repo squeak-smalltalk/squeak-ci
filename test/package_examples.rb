@@ -3,18 +3,11 @@ require 'squeak-ci/test'
 TEST_TIMEOUT = 600
 
 shared_examples "an external package" do
-  after :all do
-    Dir.chdir(TARGET_DIR) {
-      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.image") if File.exists?("#{PACKAGE_TEST_IMAGE}.image")
-      FileUtils.rm("#{PACKAGE_TEST_IMAGE}.changes") if File.exists?("#{PACKAGE_TEST_IMAGE}.changes")
-    }
-  end
-
   context "by passing all tests" do
     before :all do
       Dir.chdir(TARGET_DIR) {
-        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{package}.image")
-        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{package}.changes")
+        FileUtils.cp("#{@base_image_name}.image", "#{package}.image")
+        FileUtils.cp("#{@base_image_name}.changes", "#{package}.changes")
       }
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/scripts/show-manifest.st")
