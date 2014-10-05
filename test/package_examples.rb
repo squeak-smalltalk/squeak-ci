@@ -49,6 +49,7 @@ shared_examples "external packages" do
    "FFI",
    "FileSystem",
    "FileSystem-with-Xtreams",
+   "Fuel-head",
    "Fuel",
    "Metacello",
    "Nebraska",
