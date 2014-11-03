@@ -33,20 +33,20 @@ task :build do
   Dir.chdir(TARGET_DIR) {
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
-  puts "=== BUILD FINISHED"
+  puts "=== BUILD (Trunk) FINISHED"
 end
 
 task :spur_build do
   assert_target_dir
   os_name = identify_os
-  cog_vm = assert_cog_spur_vm(os_name)
-  puts "Cog VM at #{cog_vm}" if cog_vm
-  raise "No VMs!" if !cog_vm
+  cog_spur_vm = assert_cog_spur_vm(os_name)
+  puts "Cog VM at #{cog_spur_vm}" if cog_spur_vm
+  raise "No VMs!" if !cog_spur_vm
 
   run_cmd("curl -sSo #{SRC}/target/#{SPUR_TRUNK_IMAGE}.image http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.image")
   run_cmd("curl -sSo #{SRC}/target/#{SPUR_TRUNK_IMAGE}.changes http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.changes")
 
-  puts "=== BUILD FINISHED"
+  puts "=== BUILD (Spur Trunk) FINISHED"
 end
 
 # Run performance tests on the prepared TrunkImage (regardless of which step
@@ -71,7 +71,22 @@ end
 
 # Take the prepared TrunkImage image and update it.
 task :update_base_image => :build do
-  squeak_update_number = latest_downloaded_trunk_version(SRC)
+  update_image SRC, TARGET_DIR, TRUNK_IMAGE, :interpreter_compatible
+
+  puts "=== UPDATE_BASE_IMAGE (Trunk) FINISHED"
+end
+
+task :spur_update_base_image => :spur_build do
+  update_image SRC, TARGET_DIR, SPUR_TRUNK_IMAGE, :not_interpreter_compatible
+
+  puts "=== UPDATE_BASE_IMAGE (Spur Trunk) FINISHED"
+end
+
+# Typically, image_name == TRUNK_IMAGE
+# Produces a zip file on disk of the form #{image_name}.zip
+# compatibility E [:interpreter_compatible, :not_interpreter_compatible]
+def update_image(base_dir, target_dir, image_name, compatibility = :not_interpreter_compatible)
+  squeak_update_number = latest_downloaded_trunk_version(base_dir)
   base_name = "#{SQUEAK_VERSION}"
   os_name = identify_os
   cog_vm = assert_cog_vm(os_name)
@@ -80,47 +95,23 @@ task :update_base_image => :build do
   puts "Using #{interpreter_vm}"
   puts "Preparing to update image of #{base_name} vintage"
 
-  squeak_update_number = Dir.chdir(TARGET_DIR) {
-    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
-    assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
+  squeak_update_number = Dir.chdir(target_dir) {
+    run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), image_name, "#{base_dir}/update-image.st", 25.minutes)
 
-    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
-    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
+    if compatibility == :interpreter_compatible
+      assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
+    end
+
+    FileUtils.rm("#{image_name}.zip") if File.exist?("#{image_name}.zip")
+    Zip::File.open("#{image_name}.zip", Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
-        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
+        z.add("#{image_name}.#{suffix}", "#{image_name}.#{suffix}")
       }
     }
-    image_version(interpreter_vm, vm_args(os_name), "TrunkImage.image")
+    image_version(interpreter_vm, vm_args(os_name), "#{image_name}.image")
   }
 
   puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
-
-  puts "=== UPDATE_BASE_IMAGE FINISHED"
-end
-
-task :spur_update_base_image => :spur_build do
-  squeak_update_number = latest_downloaded_trunk_version(SRC)
-  base_name = "#{SQUEAK_VERSION}"
-  os_name = identify_os
-  cog_vm = assert_cog_spur_vm(os_name)
-
-  puts "Preparing to update image of #{base_name} vintage"
-
-  squeak_update_number = Dir.chdir(TARGET_DIR) {
-    run_image_with_cmd(cog_vm, vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
-
-    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
-    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
-      ['changes', 'image', 'manifest', 'version'].each { |suffix|
-        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
-      }
-    }
-    image_version(cog_vm, vm_args(os_name), "TrunkImage.image")
-  }
-
-  puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
-
-  puts "=== UPDATE_BASE_IMAGE FINISHED"
 end
 
 # Take the target/TrunkImage image, run the release process on it, and store it
@@ -188,10 +179,23 @@ RSpec::Core::RakeTask.new(:package_test => :build) do |test|
   test.verbose = true
 end
 
+RSpec::Core::RakeTask.new(:spur_package_test => :build) do |test|
+  test.rspec_opts = '-fdoc --tag spur'
+  test.pattern = 'test/spur_package_test.rb'
+  test.verbose = true
+end
+
 # Test one package
 RSpec::Core::RakeTask.new(:test_package, [:package_name]) do |test, args|
   test.rspec_opts = "-fdoc --tag #{args[:package_name]}"
   test.pattern = 'test/package_test.rb'
+  test.verbose = true
+end
+
+# Test one package on Spur
+RSpec::Core::RakeTask.new(:spur_test_package, [:package_name]) do |test, args|
+  test.rspec_opts = "-fdoc --tag #{args[:package_name]} --tag ~cog --tag ~coghtmt --tag ~interpreter"
+  test.pattern = 'test/spur_package_test.rb'
   test.verbose = true
 end
 

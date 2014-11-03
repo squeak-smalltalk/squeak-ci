@@ -21,14 +21,14 @@ shared_examples "an external package" do
       }
     end
 
-    it "on Cog" do
+    it "on Cog", :cog => true do
       pending "Can't run Cog on this platform (#{identify_os})" if @cog_vm.to_s == ""
       with_copy(package, "cog") { | image_name |
         run_test_with_timeout(@cog_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
     end
 
-    it "on Cog MT (HT)" do
+    it "on Cog MT (HT)", :coghtmt => true do
       pending "Can't run Cog MT (HT) on this platform (#{identify_os})" if @cog_mtht_vm.to_s == ""
       with_copy(package, "cogmtht") { | image_name |
         run_test_with_timeout(@cog_mtht_vm, @os_name, image_name, package, TEST_TIMEOUT)
@@ -36,9 +36,17 @@ shared_examples "an external package" do
     end
 
     it "on Interpreter", :interpreter => true do
+      pending "Can't run Interpreter on this platform (#{identify_os})" if @interpreter_vm.to_s == ""
       with_copy(package, "interpreter") { | image_name |
         assert_interpreter_compatible_image(@interpreter_vm, image_name, @os_name)
         run_test_with_timeout(@interpreter_vm, @os_name, image_name, package, TEST_TIMEOUT)
+      }
+    end
+
+    it "on Spur", :spur => true do
+      pending "Can't run Cog Spur on this platform (#{identify_os})" if @cog_spur_vm.to_s == ""
+      with_copy(package, "spur") { | image_name |
+        run_test_with_timeout(@cog_spur_vm, @os_name, image_name, package, TEST_TIMEOUT)
       }
     end
   end
