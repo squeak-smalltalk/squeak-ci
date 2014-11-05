@@ -9,6 +9,7 @@ shared_examples "an external package" do
         FileUtils.cp("#{@base_image_name}.image", "#{package}.image")
         FileUtils.cp("#{@base_image_name}.changes", "#{package}.changes")
       }
+      run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/prepare-test-image.st")
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/scripts/show-manifest.st")
     end
