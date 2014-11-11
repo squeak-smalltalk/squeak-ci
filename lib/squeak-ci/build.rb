@@ -30,9 +30,9 @@ def assert_coglike_vm(os_name, vm_type)
   cog = COG_VERSION.dir_name(os_name, vm_type)
   cog_desc = "#{cog} r.#{COG_VERSION.svnid}"
 
-  cog_dir = "#{SRC}/target/#{cog}.r#{COG_VERSION.svnid}"
+  cog_dir = "#{TARGET_DIR}/#{cog}.r#{COG_VERSION.svnid}"
 
-  cogs = Dir.glob("#{SRC}/target/#{cog}.r*")
+  cogs = Dir.glob("#{TARGET_DIR}/#{cog}.r*")
   cogs.delete(File.expand_path(cog_dir))
   cogs.each { |stale_cog|
     log("Deleting stale #{cog} at #{stale_cog}")
@@ -40,7 +40,7 @@ def assert_coglike_vm(os_name, vm_type)
   }
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
-    COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
+    COG_VERSION.cog_location(Pathname.new(TARGET_DIR), os_name, vm_type)
   else
     assert_target_dir
     log("Installing new #{cog_desc} (#{vm_type})")
@@ -48,8 +48,8 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
-        lib_dir = COG_VERSION.lib_dir("#{SRC}/target/", os_name, vm_type)
-        COG_VERSION.cog_location(Pathname.new("#{SRC}/target/"), os_name, vm_type)
+        lib_dir = COG_VERSION.lib_dir(TARGET_DIR, os_name, vm_type)
+        COG_VERSION.cog_location(Pathname.new(TARGET_DIR), os_name, vm_type)
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
@@ -89,8 +89,8 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   Pathname.new(SRC).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
 
   if ckformat then
-    format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
-    puts "Before format conversion: \"#{SRC}/target/#{image_name} image format #{format}"
+    format = run_cmd("#{ckformat} #{TARGET_DIR}/#{image_name}.image")
+    puts "Before format conversion: \"#{TARGET_DIR}/#{image_name} image format #{format}"
   else
     puts "WARNING: no ckformat found"
   end
@@ -104,8 +104,9 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   end
 
   if ckformat then
-    format = run_cmd("#{ckformat} #{SRC}/target/#{image_name}.image")
-    puts "After format conversion: \"#{SRC}/target/#{image_name}.image\" image format #{format}"
+    image_location = "#{TARGET_DIR}/#{image_name}.image"
+    format = run_cmd("#{ckformat} #{image_location}")
+    puts "After format conversion: \"#{image_location}\" image format #{format}"
   end
 end
 
@@ -120,7 +121,7 @@ def assert_interpreter_vm(os_name)
                 32
               end
 
-  interpreter_src_dir = "#{SRC}/target/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
+  interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
   if File.exist?(interpreter_vm_location(os_name)) then
     log("Using existing interpreter VM in #{interpreter_src_dir}")
   else
@@ -145,7 +146,7 @@ def assert_interpreter_vm(os_name)
       }
     when "windows"
       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
-      interpreter_src_dir = "#{SRC}/target/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
+      interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
       FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
@@ -181,7 +182,7 @@ def assert_ssl(target_dir, os_name)
 end
 
 def assert_trunk_image
-  if File.exists?("#{SRC}/target/#{TRUNK_IMAGE}.image") then
+  if File.exists?("#{TARGET_DIR}/#{TRUNK_IMAGE}.image") then
     log("Using existing #{TRUNK_IMAGE}")
   else
     log("Downloading new #{TRUNK_IMAGE}")
@@ -195,7 +196,7 @@ end
 def assert_target_dir
   FileUtils.mkdir_p(TARGET_DIR)
   ["SqueakV41.sources", "HudsonBuildTools.st"].each { |name|
-    FileUtils.cp("#{SRC}/#{name}", "#{SRC}/target/#{name}")
+    FileUtils.cp("#{SRC}/#{name}", "#{TARGET_DIR}/#{name}")
   }
 end
 
@@ -261,7 +262,7 @@ def interpreter_vm_location(os_name)
               INTERPRETER_VERSION
             end
 
-  interpreter_src_dir = "#{SRC}/target/Squeak-#{version}-src-#{word_size}"
+  interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{version}-src-#{word_size}"
 
   case os_name
   when "linux", "linux64", "freebsd", "osx" then "#{interpreter_src_dir}/bld/squeak.sh"
