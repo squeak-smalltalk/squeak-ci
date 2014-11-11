@@ -187,7 +187,7 @@ end
 
 # Test one package
 RSpec::Core::RakeTask.new(:test_package, [:package_name]) do |test, args|
-  test.rspec_opts = "-fdoc --tag #{args[:package_name]}"
+  test.rspec_opts = "-fdoc --tag #{args[:package_name]} --tag ~spur"
   test.pattern = 'test/package_test.rb'
   test.verbose = true
 end

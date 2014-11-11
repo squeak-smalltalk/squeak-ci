@@ -3,6 +3,7 @@ require 'squeak-ci/build'
 require 'timeout'
 
 PACKAGE_TEST_IMAGE = "PackageTest"
+SPUR_PACKAGE_TEST_IMAGE = "PackageTest-spur"
 
 def prepare_package_image(vm, os_name, base_image_name, update_script = nil)
   run_image_with_cmd(vm, vm_args(os_name), base_image_name, "#{SRC}/#{update_script}") if update_script

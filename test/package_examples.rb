@@ -6,8 +6,8 @@ shared_examples "an external package" do
   context "by passing all tests" do
     before :all do
       Dir.chdir(TARGET_DIR) {
-        FileUtils.cp("#{@base_image_name}.image", "#{package}.image")
-        FileUtils.cp("#{@base_image_name}.changes", "#{package}.changes")
+        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.image", "#{package}.image")
+        FileUtils.cp("#{PACKAGE_TEST_IMAGE}.changes", "#{package}.changes")
       }
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/prepare-test-image.st")
       run_image_with_cmd(preferably_cog_vm, vm_args(@os_name), package, "#{SRC}/package-load-scripts/#{package}.st")
