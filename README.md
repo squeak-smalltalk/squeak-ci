@@ -79,6 +79,11 @@ What does what?
 
 To run the tests for a particular package (find the currently supported packages in the `package-load-tests` directory) like this: `rspec -fdoc --tag Xtreams test/package_test.rb`.
 
+How do I upgrade the Cog VM?
+----------------------------
+* Open up `lib/squeak-ci/version.rb`
+* Edit `COG_VERSION` with the appropriate value. You can find the year & week portions of the version from the appropriate URL: `http://www.mirandabanda.org/files/Cog/VM/VM.rNNNN/`
+
 Additional reading
 ------------------
 
@@ -89,7 +94,7 @@ While waiting for a reply, take a look the the [official VM guides](http://squea
 Licence
 -------
 
-Copyright (C) 2012-2013 by Frank Shearar
+Copyright (C) 2012-2015 by Frank Shearar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
