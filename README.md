@@ -105,4 +105,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Current status
 --------------
 
-[![Build Status](https://secure.travis-ci.org/frankshearar/squeak-ci.png?branch=master)](http://travis-ci.org/frankshearar/squeak-ci)
+[![Build Status](https://secure.travis-ci.org/squeak-smalltalk/squeak-ci.png?branch=master)](http://travis-ci.org/squeak-smalltalk/squeak-ci)
