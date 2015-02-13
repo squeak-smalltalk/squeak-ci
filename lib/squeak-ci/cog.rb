@@ -14,7 +14,7 @@ class CogVersion
   end
 
   def version_string
-    "#{year}.#{week}.#{svnid}"
+    "#{year}.#{week.to_s.rjust(2,"0")}.#{svnid}"
   end
 
   def filename(os_name, vm_type)
