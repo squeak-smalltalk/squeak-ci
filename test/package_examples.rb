@@ -53,6 +53,7 @@ shared_examples "external packages" do
    "Fuel-head",
    "Fuel",
    "Metacello",
+   "Metacello-head",
    "Nebraska",
    "Nutcracker",
    "OSProcess",
