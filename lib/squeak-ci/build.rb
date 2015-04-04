@@ -197,7 +197,7 @@ def assert_interpreter_vm(os_name)
       dist_name = os_name == "freebsd" ? "freebsd8.3" : os_name # fake here.
     
       Dir.chdir(TARGET_DIR) {
-        fil = "Squeak-#{INTERPRETER_VERSION}-#{dist}_#{arch}"
+        fil = "Squeak-#{INTERPRETER_VERSION}-#{dist_name}_#{arch}"
         run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/#{fil}.tar.gz")
         run_cmd("tar zxf interpreter.tgz")
         FileUtils.mv("#{fil}", interpreter_dir)
