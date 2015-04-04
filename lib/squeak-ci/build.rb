@@ -123,53 +123,105 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   end
 end
 
+# def assert_interpreter_vm(os_name)
+#   # word_size is 32 or 64, for 32-bit or 64-bit.
+#
+#   raise "Missing Cmake. Please install it!" unless run_cmd "cmake"
+#
+#   word_size = if (os_name == "linux64") then
+#                 64
+#               else
+#                 32
+#               end
+#
+#   interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
+#   if File.exist?(interpreter_vm_location(os_name)) then
+#     log("Using existing interpreter VM in #{interpreter_src_dir}")
+#   else
+#     assert_target_dir
+#     case os_name
+#     when "linux", "linux64", "freebsd"
+#       log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
+#       Dir.chdir(TARGET_DIR) {
+#         Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
+#         run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
+#         run_cmd("tar zxf interpreter.tgz")
+#         FileUtils.mv("Squeak-#{INTERPRETER_VERSION}-src", interpreter_src_dir)
+#         FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
+#         Dir.chdir("#{interpreter_src_dir}/bld") {
+#           run_cmd("../unix/cmake/configure")
+#           run_cmd("make WIDTH=#{word_size}")
+#           assert_ssl("#{interpreter_src_dir}/bld", os_name)
+#         }
+#       }
+#     when "windows"
+#       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
+#       interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
+#       FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
+#       Dir.chdir(TARGET_DIR) {
+#         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
+#         unzip('interpreter.zip')
+#         FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
+#       }
+#     when "osx"
+#       log("At the moment, Frank can't get the Interpreter VM building on OS X. Aborting.")
+#     else
+#       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
+#     end
+#   end
+#   interpreter_vm_location(os_name)
+# end
+
+
 def assert_interpreter_vm(os_name)
-  # word_size is 32 or 64, for 32-bit or 64-bit.
+  # compiling is brittle curently. use binaries
 
-  raise "Missing Cmake. Please install it!" unless run_cmd "cmake"
+  interpreter_dir = "#{TARGET_DIR}/Squeak-#{INTERPRETER_VERSION}"
+  vm_location = "#{interpreter_dir}/" + case os_name
+    when "linux", "freebsd"; "bin/squeak.sh"
+    when "windows"; "Squeak#{WINDOWS_INTERPRETER_VERSION}.exe"
+    when "osx"; "Contents/MacOS/Squeak VM Opt"
+    else 
+      log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
+      return nil
+    end
 
-  word_size = if (os_name == "linux64") then
-                64
-              else
-                32
-              end
-
-  interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{INTERPRETER_VERSION}-src-#{word_size}"
-  if File.exist?(interpreter_vm_location(os_name)) then
-    log("Using existing interpreter VM in #{interpreter_src_dir}")
+  if File.exist?(vm_location) then
+    log("Using existing interpreter VM in #{interpreter_dir}")
   else
     assert_target_dir
     case os_name
-    when "linux", "linux64", "freebsd"
+    when "linux", "freebsd"
+      arch = "i386"
       log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
+      dist_name = os_name == "freebsd" ? "freebsd8.3" : os_name # fake here.
+    
       Dir.chdir(TARGET_DIR) {
-        Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)}
-        run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
+        fil = "Squeak-#{INTERPRETER_VERSION}-#{dist}_#{arch}"
+        run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/#{fil}.tar.gz")
         run_cmd("tar zxf interpreter.tgz")
-        FileUtils.mv("Squeak-#{INTERPRETER_VERSION}-src", interpreter_src_dir)
-        FileUtils.mkdir_p("#{interpreter_src_dir}/bld")
-        Dir.chdir("#{interpreter_src_dir}/bld") {
-          run_cmd("../unix/cmake/configure")
-          run_cmd("make WIDTH=#{word_size}")
-          assert_ssl("#{interpreter_src_dir}/bld", os_name)
-        }
+        FileUtils.mv("#{fil}", interpreter_dir)
+        assert_ssl("#{interpreter_dir}", os_name)
       }
     when "windows"
       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
-      interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
-      FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
         unzip('interpreter.zip')
-        FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
+        FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_dir)
       }
     when "osx"
-      log("At the moment, Frank can't get the Interpreter VM building on OS X. Aborting.")
+      log("Downloading Interpreter VM #{MAC_INTERPRETER_VERSION}")
+      Dir.chdir(TARGET_DIR) {
+        run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"
+        unzip('interpreter.zip')
+        FileUtils.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
+      }
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
     end
   end
-  interpreter_vm_location(os_name)
+  vm_location
 end
 
 def assert_ssl(target_dir, os_name)
@@ -259,28 +311,28 @@ def identify_os
   return "UNKNOWN"
 end
 
-def interpreter_vm_location(os_name)
-  word_size = if (os_name == "linux64") then
-                64
-              else
-                32
-              end
-
-  version = if os_name == "windows" then
-              WINDOWS_INTERPRETER_VERSION
-            else
-              INTERPRETER_VERSION
-            end
-
-  interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{version}-src-#{word_size}"
-
-  case os_name
-  when "linux", "linux64", "freebsd", "osx" then "#{interpreter_src_dir}/bld/squeak.sh"
-  when "windows" then "#{interpreter_src_dir}/Squeak#{version}.exe"
-  else
-    nil
-  end
-end
+# def interpreter_vm_location(os_name)
+#   word_size = if (os_name == "linux64") then
+#                 64
+#               else
+#                 32
+#               end
+#
+#   version = if os_name == "windows" then
+#               WINDOWS_INTERPRETER_VERSION
+#             else
+#               INTERPRETER_VERSION
+#             end
+#
+#   interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{version}-src-#{word_size}"
+#
+#   case os_name
+#   when "linux", "linux64", "freebsd", "osx" then "#{interpreter_src_dir}/bld/squeak.sh"
+#   when "windows" then "#{interpreter_src_dir}/Squeak#{version}.exe"
+#   else
+#     nil
+#   end
+# end
 
 # timeout in seconds
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
