@@ -236,7 +236,13 @@ def assert_ssl(target_dir, os_name)
       when "windows" then
         FileUtils.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
       else
-        FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
+        # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
+        # so on Debian use one we ship.
+        if File.exists?("/etc/debian_version")
+          FileUtils.cp("#{SRC}/SqueakSSL", "#{target_dir}/SqueakSSL")
+        else
+          FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
+        end
       end
       FileUtils.rm_rf("SqueakSSL-bin")
     }
