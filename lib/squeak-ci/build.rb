@@ -8,7 +8,20 @@ SRC=File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/../..") # Oh, 
 TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
 SPUR_TRUNK_IMAGE="SpurTrunkImage"
-@@COMMAND_COUNT = 0
+
+
+module CommandCount
+  extend self
+  @@COMMAND_COUNT = 0
+  def step
+    r = @@COMMAND_COUNT
+    @@COMMAND_COUNT += 1
+    r
+  end
+end
+def counted_command
+  yield(CommandCount.step)
+end
 
 class UnknownOS < Exception
   def initialize(os_name)
@@ -284,49 +297,49 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   else
     if identify_os == "osx" then base_cmd = "unset DISPLAY && #{base_cmd}" end
 
-    cmd_count = @@COMMAND_COUNT
-    log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
-    # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
-    # PID. We need this so we can send the process a USR1.
-    pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
-    log("(Command started with PID #{pid})")
-    @@COMMAND_COUNT += 1
-    Thread.new {
-      kill_time = Time.now + timeout.seconds
-      process_gone = false
-      while (Time.now < kill_time)
-        sleep(1.second)
-        begin
-          Process.kill(0, pid)
-        rescue Errno::ESRCH
-          # The process is gone
-          process_gone = true
-          break
+    counted_command do | cmd_count |
+      log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
+      # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
+      # PID. We need this so we can send the process a USR1.
+      pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
+      log("(Command started with PID #{pid})")
+      Thread.new {
+        kill_time = Time.now + timeout.seconds
+        process_gone = false
+        while (Time.now < kill_time)
+          sleep(1.second)
+          begin
+            Process.kill(0, pid)
+          rescue Errno::ESRCH
+            # The process is gone
+            process_gone = true
+            break
+          end
         end
-      end
 
-      if ! process_gone then
-        log("!!! Killing command #{cmd_count} for exceeding allotted time: #{base_cmd}.")
-        # Dump out debug info from the image before we kill it. Don't use Process.kill
-        # because we want to capture stdout.
-        output = run_cmd("kill -USR1 #{pid}")
-        puts output
-        puts "-------------"
+        if ! process_gone then
+          log("!!! Killing command #{cmd_count} for exceeding allotted time: #{base_cmd}.")
+          # Dump out debug info from the image before we kill it. Don't use Process.kill
+          # because we want to capture stdout.
+          output = run_cmd("kill -USR1 #{pid}")
+          puts output
+          puts "-------------"
 #        output = run_cmd("pstree #{pid}")
 #        $stdout.puts output
-        begin
-          Process.kill('KILL', pid)
-        rescue Errno::ESRCH => e
-            puts "Tried to kill process #{pid} but it's gone"
-            raise e
+          begin
+            Process.kill('KILL', pid)
+          rescue Errno::ESRCH => e
+              puts "Tried to kill process #{pid} but it's gone"
+              raise e
+          end
+          puts "-------------"
+          log("!!! Killed command #{cmd_count}")
+          raise "Command #{cmd_count} killed: timed out."
         end
-        puts "-------------"
-        log("!!! Killed command #{cmd_count}")
-        raise "Command #{cmd_count} killed: timed out."
-      end
-    }
-    Process.wait(pid)
-    raise "Process #{pid} failed with exit status #{$?.exitstatus}" if $?.exitstatus != 0
+      }
+      Process.wait(pid)
+      raise "Process #{pid} failed with exit status #{$?.exitstatus}" if $?.exitstatus != 0
+    end
   end
 end
 
