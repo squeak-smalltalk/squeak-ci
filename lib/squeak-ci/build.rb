@@ -9,6 +9,9 @@ TARGET_DIR = "#{SRC}/target"
 TRUNK_IMAGE="TrunkImage"
 SPUR_TRUNK_IMAGE="SpurTrunkImage"
 
+FU = FileUtils::Verbose
+#FU = FileUtils
+
 
 module CommandCount
   extend self
@@ -49,7 +52,7 @@ def assert_coglike_vm(os_name, vm_type)
   cogs.delete(File.expand_path(cog_dir))
   cogs.each { |stale_cog|
     log("Deleting stale #{cog} at #{stale_cog}")
-    FileUtils.rm_rf(stale_cog)
+    FU.rm_rf(stale_cog)
   }
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
@@ -57,7 +60,7 @@ def assert_coglike_vm(os_name, vm_type)
   else
     assert_target_dir
     log("Installing new #{cog_desc} (#{vm_type})")
-    FileUtils.mkdir_p(cog_dir)
+    FU.mkdir_p(cog_dir)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
@@ -68,7 +71,7 @@ def assert_coglike_vm(os_name, vm_type)
         raise e
       end
     rescue => e
-      FileUtils.rm_rf(cog_dir)
+      FU.rm_rf(cog_dir)
       log("Cleaning up failed install of #{cog_desc} (#{e.message})")
       nil
     end
@@ -142,36 +145,36 @@ def assert_interpreter_vm(os_name)
     when "linux", "linux64", "freebsd"
       raise "Missing Cmake. Please install it!" unless run_cmd "cmake"
       log("Downloading Interpreter VM #{INTERPRETER_VERSION}")
-      Dir.chdir(TARGET_DIR) { Dir.glob("*-src-*") {|stale_interpreter| FileUtils.rm_rf(stale_interpreter)} }
+      Dir.chdir(TARGET_DIR) { Dir.glob("*-src-*") {|stale_interpreter| FU.rm_rf(stale_interpreter)} }
       Dir.mktmpdir do | tmpdir |
         Dir.chdir(tmpdir) {
           run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
           run_cmd("tar zxf interpreter.tgz")
           build_dir = "#{src_dir_name}/bld"
-          FileUtils.mkdir_p(build_dir)
+          FU.mkdir_p(build_dir)
           Dir.chdir(build_dir) {
             run_cmd("../unix/cmake/configure")
             run_cmd("make WIDTH=#{word_size}")
             assert_ssl(build_dir, os_name)
           }
-          FileUtils.mv(src_dir_name, interpreter_src_dir)
+          FU.mv(src_dir_name, interpreter_src_dir)
         }
       end
     when "windows"
       log("Downloading Interpreter VM #{WINDOWS_INTERPRETER_VERSION}")
       interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
-      FileUtils.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
+      FU.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
         unzip('interpreter.zip')
-        FileUtils.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
+        FU.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
     when "osx"
       log("Downloading Interpreter VM #{MAC_INTERPRETER_VERSION}")
       Dir.chdir(TARGET_DIR) {
         run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"
         unzip('interpreter.zip')
-        FileUtils.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
+        FU.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
       }
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
@@ -187,20 +190,20 @@ def assert_ssl(target_dir, os_name)
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
       unzip('SqueakSSL-bin-0.1.5.zip')
-      FileUtils.mkdir_p("SqueakSSL")
+      FU.mkdir_p("SqueakSSL")
       case os_name
       when "windows" then
-        FileUtils.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
+        FU.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
       else
         # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
         # so on Debian use one we ship.
         if File.exists?("/etc/debian_version")
-          FileUtils.cp("#{SRC}/SqueakSSL", "#{target_dir}/SqueakSSL")
+          FU.cp("#{SRC}/SqueakSSL", "#{target_dir}/SqueakSSL")
         else
-          FileUtils.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
+          FU.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
         end
       end
-      FileUtils.rm_rf("SqueakSSL-bin")
+      FU.rm_rf("SqueakSSL-bin")
     }
   end
 end
@@ -218,9 +221,9 @@ def assert_trunk_image
 end
 
 def assert_target_dir
-  FileUtils.mkdir_p(TARGET_DIR)
+  FU.mkdir_p(TARGET_DIR)
   ["SqueakV41.sources", "HudsonBuildTools.st"].each { |name|
-    FileUtils.cp("#{SRC}/#{name}", "#{TARGET_DIR}/#{name}")
+    FU.cp("#{SRC}/#{name}", "#{TARGET_DIR}/#{name}")
   }
 end
 
@@ -368,7 +371,7 @@ def unzip(file_name)
   Zip::File.open(file_name) { |z|
     z.each { |f|
       f_path = File.join(Dir.pwd, f.name)
-      FileUtils.mkdir_p(File.dirname(f_path))
+      FU.mkdir_p(File.dirname(f_path))
       z.extract(f, f_path) unless File.exist?(f_path)
     }
   }
