@@ -33,7 +33,7 @@ build_interpreter_vm () {
     # $2: "32" or "64" (defaulting to "32")
     local W=$2
     WIDTH=${W:-32}
-    echo Checking for "${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}"
+    echo "Checking for '${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}'"
     if test -d ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}; then
 	echo Using pre-existing interpreter VM in ${SRC}/target/${INTERPRETER_VERSION}-src-${WIDTH}
     else
@@ -146,10 +146,10 @@ vm_args() {
     # $1: OS
    local ARGS="-vm-sound-null -vm-display-null"
    case $1 in
-	"osx")
-	    ARGS="-headless";;
-	*)
-	    ARGS="-vm-sound-null -vm-display-null";;
+    "osx")
+        ARGS="-headless";;
+    *)
+        ARGS="-vm-sound-null -vm-display-null";;
     esac
    echo $ARGS
 }
