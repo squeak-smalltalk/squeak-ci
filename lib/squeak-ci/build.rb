@@ -41,6 +41,16 @@ def as_relative_path(script_path)
   Pathname.new(script_path).relative_path_from(Pathname.new(TARGET_DIR)).to_s
 end
 
+def temp_exec_location(src)
+  # The laucher scripts do not handle well spaces in their path
+  # so we use a temporary location (that typically has no spaces)
+  tmp_exec_dir = Dir.mktmpdir
+  at_exit { FileUtils.remove_entry_secure tmp_exec_dir }
+  FU.cp_r(src, tmp_exec_dir)
+  ret = yield(Pathname.new(tmp_exec_dir))
+  ret
+end
+
 # vm_type element_of [:mt, :mtht, :normal, :spur]
 def assert_coglike_vm(os_name, vm_type)
   cog = COG_VERSION.dir_name(os_name, vm_type)
@@ -56,7 +66,9 @@ def assert_coglike_vm(os_name, vm_type)
   }
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
-    COG_VERSION.cog_location(Pathname.new(TARGET_DIR), os_name, vm_type)
+    temp_exec_location(cog_dir) do | tmp_exec_dir |
+      COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
+    end
   else
     assert_target_dir
     log("Installing new #{cog_desc} (#{vm_type})")
@@ -65,7 +77,9 @@ def assert_coglike_vm(os_name, vm_type)
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
         lib_dir = COG_VERSION.lib_dir(TARGET_DIR, os_name, vm_type)
-        COG_VERSION.cog_location(Pathname.new(TARGET_DIR), os_name, vm_type)
+        temp_exec_location(cog_dir) do | tmp_exec_dir |
+          COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
+        end
       rescue UnknownOS => e
         log("Unknown OS #{e.os_name} for Cog VM. Aborting.")
         raise e
@@ -137,7 +151,7 @@ def assert_interpreter_vm(os_name)
   src_dir_name="Squeak-#{INTERPRETER_VERSION}-src"
   interpreter_src_dir = "#{TARGET_DIR}/#{src_dir_name}-#{word_size}"
 
-  if File.exist?(interpreter_vm_location(os_name)) then
+  if File.exist?(interpreter_vm_location(interpreter_src_dir, os_name)) then
     log("Using existing interpreter VM in #{interpreter_src_dir}")
   else
     assert_target_dir
@@ -155,7 +169,7 @@ def assert_interpreter_vm(os_name)
           Dir.chdir(build_dir) {
             run_cmd("../unix/cmake/configure")
             run_cmd("make WIDTH=#{word_size}")
-            assert_ssl(build_dir, os_name)
+            assert_ssl(Dir.pwd, os_name)
           }
           FU.mv(src_dir_name, interpreter_src_dir)
         }
@@ -180,7 +194,9 @@ def assert_interpreter_vm(os_name)
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
     end
   end
-  interpreter_vm_location(os_name)
+  temp_exec_location(interpreter_src_dir) do | tmp_exec_dir |
+    interpreter_vm_location(tmp_exec_dir, os_name)
+  end
 end
 
 def assert_ssl(target_dir, os_name)
@@ -190,7 +206,6 @@ def assert_ssl(target_dir, os_name)
     Dir.chdir(target_dir) {
       run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
       unzip('SqueakSSL-bin-0.1.5.zip')
-      FU.mkdir_p("SqueakSSL")
       case os_name
       when "windows" then
         FU.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
@@ -243,6 +258,18 @@ def cog_archive_name(os_name, vm_type, cog_version)
   "#{cog_version.dir_name(os_name, vm_type)}#{suffix}.#{ext}"
 end
 
+def fix_ssl(cog_dir, vm_type, cog_version)
+  # LINUX ONLY
+  # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
+  # so on Debian use one we ship.
+  if File.exists?("/etc/debian_version")
+    # TODO: this location might change
+    ht = (cog_version.ht? vm_type) ? "ht" : ""
+    base = cog_version.dir_name("linux", vm_type)
+    FU.cp("#{SRC}/SqueakSSL", "#{cog_dir}/#{base}linux#{ht}/lib/squeak/4.0-#{cog_version.svnid}/SqueakSSL")
+  end
+end
+
 def debug?
   # For the nonce, always output debug info
   true
@@ -251,7 +278,7 @@ end
 
 def download_cog(os_name, vm_type, cog_version, cog_dir)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
-  download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{COG_VERSION.svnid}/#{COG_VERSION.filename(os_name, vm_type)}"
+  download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{cog_version.svnid}/#{cog_version.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
     run_cmd "curl -sSo #{local_name} #{download_url}"
 
@@ -260,7 +287,8 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
       unzip(local_name)
     else
       run_cmd "tar zxf #{local_name}"
-#      rc = run_cmd "tar zxf #{local_name}"
+      fix_ssl cog_dir, vm_type, cog_version if os_name == "linux"
+      #      rc = run_cmd "tar zxf #{local_name}"
 #      raise "Cog zip broken: no such Cog?" if rc != 0
     end
   }
@@ -276,7 +304,7 @@ def identify_os
   return "UNKNOWN"
 end
 
-def interpreter_vm_location(os_name)
+def interpreter_vm_location(src_dir, os_name)
   word_size = if (os_name == "linux64") then
                 64
               else
@@ -289,12 +317,10 @@ def interpreter_vm_location(os_name)
               INTERPRETER_VERSION
             end
 
-  interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{version}-src-#{word_size}"
-
   case os_name
-  when "linux", "linux64", "freebsd" then "#{interpreter_src_dir}/bld/squeak.sh"
-  when "windows" then "#{interpreter_src_dir}/Squeak#{version}.exe"
-  when "osx" then "#{interpreter_src_dir}/Contents/MacOS/Squeak VM Opt"
+  when "linux", "linux64", "freebsd" then "#{src_dir}/bld/squeak.sh"
+  when "windows" then "#{src_dir}/Squeak#{version}.exe"
+  when "osx" then "#{src_dir}/Contents/MacOS/Squeak VM Opt"
   else
     nil
   end
