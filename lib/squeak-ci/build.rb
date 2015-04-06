@@ -335,7 +335,7 @@ def interpreter_vm_location(src_dir, os_name)
 end
 
 # timeout in seconds
-def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
+def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 6000)
   log(cmd)
   vm_args_string = arr_of_vm_args.collect {|a| %("#{a}")}.join(" ")
   base_cmd = %("#{vm_name}" #{vm_args_string} "#{TARGET_DIR}/#{image_name}.image" "#{as_relative_path(Pathname.new(cmd))}")
