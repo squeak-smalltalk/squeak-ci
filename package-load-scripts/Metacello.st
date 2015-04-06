@@ -1,4 +1,4 @@
-(Installer url: 'http://seaside.gemstone.com/ss/metacello/')
+(Installer url: 'http://seaside.gemtalksystems.com/ss/metacello/')
     addPackage: 'ConfigurationOfMetacello-dkh.754.mcz';
     install.
 
