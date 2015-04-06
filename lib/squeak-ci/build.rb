@@ -46,7 +46,7 @@ def temp_exec_location(src)
   # so we use a temporary location (that typically has no spaces)
   tmp_exec_dir = Dir.mktmpdir
   at_exit { FileUtils.remove_entry_secure tmp_exec_dir }
-  FU.cp_r(src + '/.', tmp_exec_dir)
+  FU.cp_r(src, tmp_exec_dir)
   ret = yield(Pathname.new(tmp_exec_dir))
   ret
 end
@@ -202,7 +202,7 @@ def assert_interpreter_vm(os_name)
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
     end
   end
-  temp_exec_location(interpreter_src_dir) do | tmp_exec_dir |
+  temp_exec_location(interpreter_src_dir + "/.") do | tmp_exec_dir |
     interpreter_vm_location(tmp_exec_dir, os_name)
   end
 end
