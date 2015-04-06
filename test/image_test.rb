@@ -32,7 +32,7 @@ describe "Trunk test suite" do
     it "should pass all tests" do
       Dir.chdir("#{SRC}/target") {
         log("VM: #{@vm}")
-        run_cmd("#{@vm} -version")
+        run_cmd(%("#{@vm}" -version))
         args = vm_args(@os_name)
         args << "-reportheadroom" unless @os_name == "linux64"
         run_image_with_cmd(@vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 20.minutes)
@@ -43,7 +43,7 @@ describe "Trunk test suite" do
       Dir.chdir("#{SRC}/target") {
         vm = assert_interpreter_vm(@os_name)
         log("VM: #{vm}")
-        run_cmd("#{vm} -version")
+        run_cmd(%("#{vm}" -version))
         # Attempted workaround to address the different args used by the different VMs.
         args = if @os_name == "osx" then ["-vm-display-null"] else vm_args(@os_name) end
         run_image_with_cmd(vm, vm_args(@os_name), RUN_TEST_IMAGE_NAME, "#{SRC}/tests.st", 30.minutes)

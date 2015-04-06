@@ -119,7 +119,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
   Pathname.new(SRC).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
 
   if ckformat then
-    format = run_cmd("#{ckformat} #{TARGET_DIR}/#{image_name}.image")
+    format = run_cmd(%("#{ckformat}" "#{TARGET_DIR}/#{image_name}.image"))
     puts "Before format conversion: \"#{TARGET_DIR}/#{image_name} image format #{format}"
   else
     puts "WARNING: no ckformat found"
@@ -135,7 +135,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
 
   if ckformat then
     image_location = "#{TARGET_DIR}/#{image_name}.image"
-    format = run_cmd("#{ckformat} #{image_location}")
+    format = run_cmd(%("#{ckformat}" "#{image_location}"))
     puts "After format conversion: \"#{image_location}\" image format #{format}"
   end
 end
@@ -162,13 +162,13 @@ def assert_interpreter_vm(os_name)
       Dir.chdir(TARGET_DIR) { Dir.glob("*-src-*") {|stale_interpreter| FU.rm_rf(stale_interpreter)} }
       Dir.mktmpdir do | tmpdir |
         Dir.chdir(tmpdir) {
-          run_cmd("curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz")
-          run_cmd("tar zxf interpreter.tgz")
+          run_cmd(%(curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz))
+          run_cmd(%(tar zxf interpreter.tgz))
           build_dir = "#{src_dir_name}/bld"
           FU.mkdir_p(build_dir)
           Dir.chdir(build_dir) {
-            run_cmd("../unix/cmake/configure")
-            run_cmd("make WIDTH=#{word_size}")
+            run_cmd(%(../unix/cmake/configure))
+            run_cmd(%(make WIDTH=#{word_size}))
             assert_ssl(Dir.pwd, os_name)
           }
           FU.mv(src_dir_name, interpreter_src_dir)
@@ -204,7 +204,7 @@ def assert_ssl(target_dir, os_name)
   raise "Can't install SSL on #{os_name}" if not ["linux", "linux64", "windows"].include?(os_name)
   if not File.exist?("#{target_dir}/SqueakSSL") then
     Dir.chdir(target_dir) {
-      run_cmd("curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip")
+      run_cmd(%(curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip))
       unzip('SqueakSSL-bin-0.1.5.zip')
       case os_name
       when "windows" then
@@ -329,7 +329,8 @@ end
 # timeout in seconds
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   log(cmd)
-  base_cmd = "\"#{vm_name}\" #{arr_of_vm_args.join(" ")} \"#{TARGET_DIR}/#{image_name}.image\" #{as_relative_path(Pathname.new(cmd))}"
+  vm_args_string = arr_of_vm_args.collect {|a| %("a")}.join(" ")
+  base_cmd = %("#{vm_name}" #{vm_args_string} "#{TARGET_DIR}/#{image_name}.image" "#{as_relative_path(Pathname.new(cmd))}")
   case identify_os
     when "windows" then begin
                           log(base_cmd)
@@ -342,7 +343,7 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
       log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
       # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
       # PID. We need this so we can send the process a USR1.
-      pid = spawn("#{base_cmd} && echo command #{cmd_count} finished")
+      pid = spawn(%(#{base_cmd} && echo command #{cmd_count} finished))
       log("(Command started with PID #{pid})")
       Thread.new {
         kill_time = Time.now + timeout.seconds
@@ -362,10 +363,10 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
           log("!!! Killing command #{cmd_count} for exceeding allotted time: #{base_cmd}.")
           # Dump out debug info from the image before we kill it. Don't use Process.kill
           # because we want to capture stdout.
-          output = run_cmd("kill -USR1 #{pid}")
+          output = run_cmd(%(kill -USR1 #{pid}))
           puts output
           puts "-------------"
-#        output = run_cmd("pstree #{pid}")
+#        output = run_cmd(%(pstree #{pid}))
 #        $stdout.puts output
           begin
             Process.kill('KILL', pid)
