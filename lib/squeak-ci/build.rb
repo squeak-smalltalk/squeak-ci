@@ -337,7 +337,7 @@ end
 # timeout in seconds
 def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 240)
   log(cmd)
-  vm_args_string = arr_of_vm_args.collect {|a| %("a")}.join(" ")
+  vm_args_string = arr_of_vm_args.collect {|a| %("#{a}")}.join(" ")
   base_cmd = %("#{vm_name}" #{vm_args_string} "#{TARGET_DIR}/#{image_name}.image" "#{as_relative_path(Pathname.new(cmd))}")
   case identify_os
     when "windows" then begin
