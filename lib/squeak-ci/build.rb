@@ -46,7 +46,7 @@ def temp_exec_location(src)
   # so we use a temporary location (that typically has no spaces)
   tmp_exec_dir = Dir.mktmpdir
   at_exit { FileUtils.remove_entry_secure tmp_exec_dir }
-  FU.cp_r(src, tmp_exec_dir)
+  FU.cp_r(src + '/.', tmp_exec_dir)
   ret = yield(Pathname.new(tmp_exec_dir))
   ret
 end
