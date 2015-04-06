@@ -112,15 +112,23 @@ def assert_cog_spur_vm(os_name)
 end
 
 def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
+
+  interpreter_format = "6504"
+
   # Double parent because "parent" means "dir of"
   interpreter_vm_dir = Pathname.new(interpreter_vm).parent.parent.to_s
   ckformat = nil
   # Gag at the using-side-effects nonsense.
-  Pathname.new(SRC).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
+  Pathname.new(interpreter_vm_dir).find {|path| ckformat = path if path.basename.to_s == 'ckformat'}
 
   if ckformat then
     format = run_cmd(%("#{ckformat}" "#{TARGET_DIR}/#{image_name}.image"))
     puts "Before format conversion: \"#{TARGET_DIR}/#{image_name} image format #{format}"
+
+    # if format == interpreter_format
+    #   puts "nothing to be done"
+    #   return
+    # end
   else
     puts "WARNING: no ckformat found"
   end
@@ -130,7 +138,7 @@ def assert_interpreter_compatible_image(interpreter_vm, image_name, os_name)
     args = if os_name == "osx" then ["-vm-display-null"] else vm_args(os_name) end
     run_image_with_cmd(interpreter_vm, args, image_name, "#{SRC}/save-image.st")
   else
-    puts "WARNING: #{interpreter_vm} not found, image not converted to format 6504"
+    puts "WARNING: #{interpreter_vm} not found, image not converted to format #{interpreter_format}"
   end
 
   if ckformat then
