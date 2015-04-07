@@ -23,6 +23,6 @@ Installer gemsource
   baseline: 'Metacello';
   repository: 'github://dalehenrich/metacello-work:master/repository';
   onConflict: [:ex | ex allow];
-  load.
+  load: #('default' 'Tests').
 
 WorldState addDeferredUIMessage: [ SmalltalkImage current snapshot: true andQuit: true ].

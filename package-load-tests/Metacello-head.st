@@ -1,3 +1,9 @@
+MetacelloPlatform current authorName: 'testMonkey'. "These tests save code ... need an Author"
+
+"no deprecated messages should be used"
+(Deprecation respondsTo: #raiseWarning:)
+  ifTrue: [ Deprecation raiseWarning: false].
+
 HDTestReport runPackages: #(
     'Metacello-TestsCore'
     'Metacello-TestsMC-Configurations'
