@@ -46,30 +46,8 @@ shared_examples "an external package" do
 end
 
 shared_examples "external packages" do
-  ["AndreasSystemProfiler",
-   "Control",
-   "FFI",
-   "FileSystem",
-   "FileSystem-with-Xtreams",
-   "Fuel-head",
-   "Fuel",
-   "Metacello",
-   "Metacello-head",
-   "Nebraska",
-   "Nutcracker",
-   "OSProcess",
-   "Quaternion",
-   "ParsingDerivatives",
-   "Phexample",
-   "RoelTyper",
-   "SqueakCheck",
-   "ST80",
-   "ToolBuilder-MVC",
-   "Universes",
-   "WebClient",
-   "XML-Parser",
-   "Xtreams",
-   "Zippers"].each { |pkg_name|
+  Packages = Dir.glob("#{SRC}/package-load-scripts/*.st").collect { | dir | File.basename(dir, '.st') }
+  Packages.each { |pkg_name|
     describe pkg_name, pkg_name.to_sym => true do
       let(:package) { pkg_name }
       it_behaves_like "an external package"
