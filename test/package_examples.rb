@@ -28,12 +28,13 @@ shared_examples "an external package" do
       }
     end
 
-    it "on Cog MT (HT)" do
-      pending "Can't run Cog MT (HT) on this platform (#{identify_os})" if @cog_mtht_vm.to_s == ""
-      with_copy(package, "cogmtht") { | image_name |
-        run_test_with_timeout(@cog_mtht_vm, @os_name, image_name, package, TEST_TIMEOUT)
-      }
-    end
+    # This is not easy to ensure on slaves.
+    # it "on Cog MT (HT)" do
+    #   pending "Can't run Cog MT (HT) on this platform (#{identify_os})" if @cog_mtht_vm.to_s == ""
+    #   with_copy(package, "cogmtht") { | image_name |
+    #     run_test_with_timeout(@cog_mtht_vm, @os_name, image_name, package, TEST_TIMEOUT)
+    #   }
+    # end
 
     it "on Interpreter", :interpreter => true do
       with_copy(package, "interpreter") { | image_name |
