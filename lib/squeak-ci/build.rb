@@ -93,10 +93,12 @@ def assert_coglike_vm(os_name, vm_type)
 end
 
 def assert_cog_vm(os_name)
-  return case os_name
-         when "linux", "linux64" then assert_coglike_vm(os_name, :ht)
-         else assert_coglike_vm(os_name, :normal)
-         end
+  # This is not easy to ensure on slaves.
+  # return case os_name
+  #        when "linux", "linux64" then assert_coglike_vm(os_name, :ht)
+  #        else assert_coglike_vm(os_name, :normal)
+  #        end
+  assert_coglike_vm(os_name, :normal)
 end
 
 def assert_cogmt_vm(os_name)
