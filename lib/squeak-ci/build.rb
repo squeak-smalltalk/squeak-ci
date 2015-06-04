@@ -273,10 +273,10 @@ def fix_ssl(cog_dir, vm_type, cog_version)
   # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
   # so on Debian use one we ship.
   if File.exists?("/etc/debian_version")
-    # TODO: this location might change
     ht = (cog_version.ht? vm_type) ? "ht" : ""
     base = cog_version.dir_name("linux", vm_type)
-    FU.cp("#{SRC}/SqueakSSL", "#{cog_dir}/#{base}linux#{ht}/lib/squeak/4.0-#{cog_version.svnid}/SqueakSSL")
+    libdir = Dir.new('#{cog_dir}/#{base}linux#{ht}/lib/squeak').entries.detect { | e | e =~ /#{cog_version.svnid}$/ }
+    FU.cp("#{SRC}/SqueakSSL", "#{cog_dir}/#{base}linux#{ht}/lib/squeak/#{libdir}/SqueakSSL")
   end
 end
 
