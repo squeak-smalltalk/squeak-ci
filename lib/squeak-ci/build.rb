@@ -275,7 +275,7 @@ def fix_ssl(cog_dir, vm_type, cog_version)
   if File.exists?("/etc/debian_version")
     ht = (cog_version.ht? vm_type) ? "ht" : ""
     base = cog_version.dir_name("linux", vm_type)
-    libdir = Dir.new('#{cog_dir}/#{base}linux#{ht}/lib/squeak').entries.detect { | e | e =~ /#{cog_version.svnid}$/ }
+    libdir = Dir.new("#{cog_dir}/#{base}linux#{ht}/lib/squeak").entries.detect { | e | e =~ /#{cog_version.svnid}$/ }
     FU.cp("#{SRC}/SqueakSSL", "#{cog_dir}/#{base}linux#{ht}/lib/squeak/#{libdir}/SqueakSSL")
   end
 end
