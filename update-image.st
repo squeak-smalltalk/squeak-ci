@@ -1,4 +1,4 @@
-[| config manifest |
+[| config manifest imageName |
 Smalltalk at: #Log put: [:msg | | str |
     str := DateAndTime now printString, ': ', msg.
     FileStream stdout nextPutAll: str; nextPut: Character lf; flush.
@@ -51,19 +51,22 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         config ifNil: [
             Exception new signal: 'Unable to retrieve updates from remote repository.' translated].
         config setSystemVersion].
-Log value: 'Updated to 4.5-', SystemVersion current highestUpdate printString.
+Log value: 'Updated to ', SystemVersion current majorMinorVersion, '-', SystemVersion current highestUpdate printString.
+
+
+imageName := FileDirectory localNameFor: Smalltalk imageName.
 
 "Avoid trailing cruft if the file shrinks in length."
-FileDirectory deleteFilePath: 'TrunkImage.version'.
-FileStream fileNamed: 'TrunkImage.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; flush].
+FileDirectory deleteFilePath: imageName, '.version'.
+FileStream fileNamed: imageName, '.version' do: [:f | f nextPutAll: SystemVersion current highestUpdate printString; flush].
 
 manifest := (MCWorkingCopy allManagers asSortedCollection:
         [ :a :b | a package name <= b package name ]) collect:
             [:ea | ea description].
 
 "Avoid trailing cruft if the file shrinks in length."
-FileDirectory deleteFilePath: 'TrunkImage.manifest'.
-FileStream fileNamed: 'TrunkImage.manifest' do: [:f |
+FileDirectory deleteFilePath: imageName, '.manifest'.
+FileStream fileNamed: imageName, '.manifest' do: [:f |
     manifest do:
         [:s | f nextPutAll: s; nextPut: Character lf].
     f flush].
@@ -74,6 +77,10 @@ manifest do: [:s | Log value: s].
 Smalltalk globals removeKey: #Log.
 "Save the fully updated trunk image."
 ToolSet default: (Smalltalk at: #StandardToolSet).
+
+(ReleaseBuilder respondsTo: #setPreferences46) ifTrue: [
+  ReleaseBuilder setPreferences46].
+
 WorldState addDeferredUIMessage: [ Smalltalk snapshot: true andQuit: true ]]
     on: Error do: [:err |
         err printVerboseOn: FileStream stderr.
