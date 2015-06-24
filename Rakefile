@@ -84,13 +84,15 @@ task :update_base_image => :build do
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
 
-    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
-    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
+    zImage = "#{TRUNK_IMAGE}.zip"
+    FileUtils.rm(zImage) if File.exist?(zImage)
+    Zip::File.open(zImage, Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
-        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
+        fName = "#{TRUNK_IMAGE}.#{suffix}"
+        z.add(fName, fName) if File.exist?(fName)
       }
     }
-    image_version(interpreter_vm, vm_args(os_name), "TrunkImage.image")
+    image_version(interpreter_vm, vm_args(os_name), "#{TRUNK_IMAGE}.image")
   }
 
   puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
@@ -107,15 +109,17 @@ task :spur_update_base_image => :spur_build do
   puts "Preparing to update image of #{base_name} vintage"
 
   squeak_update_number = Dir.chdir(TARGET_DIR) {
-    run_image_with_cmd(cog_vm, vm_args(os_name), TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
+    run_image_with_cmd(cog_vm, vm_args(os_name), SPUR_TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
 
-    FileUtils.rm("TrunkImage.zip") if File.exist?("TrunkImage.zip")
-    Zip::File.open("TrunkImage.zip", Zip::File::CREATE) { |z|
+    zImage = "#{SPUR_TRUNK_IMAGE}.zip"
+    FileUtils.rm(zImage) if File.exist?(zImage)
+    Zip::File.open(zImage, Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
-        z.add("TrunkImage.#{suffix}", "TrunkImage.#{suffix}")
+        fName = "#{SPUR_TRUNK_IMAGE}.#{suffix}"
+        z.add(fName, fName) if File.exist?(fName)
       }
     }
-    image_version(cog_vm, vm_args(os_name), "TrunkImage.image")
+    image_version(interpreter_vm, vm_args(os_name), "#{SPUR_TRUNK_IMAGE}.image")
   }
 
   puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
