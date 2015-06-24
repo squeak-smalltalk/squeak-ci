@@ -28,9 +28,11 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
        "Update the image by loading all pending updates from the server."
        "Flush all caches. If a previous download failed this is often helpful"
         MCFileBasedRepository flushAllCaches.
-        config := [[MCMcmUpdater updateFromDefaultRepository]
-                "There's no (#on:do){4+}"
-                on: ProgressNotification do: [:e | Log value: e extraParam. e resume]]
+        config := [ |u|
+                    u := (MCMcmUpdater respondsTo: #default) ifTrue: [MCMcmUpdater default] ifFalse: [MCMcmUpdater].
+                    [u updateFromDefaultRepository]
+                    "There's no (#on:do){4+}"
+                    on: ProgressNotification do: [:e | Log value: e extraParam. e resume]]
             on: MCNoChangesException do: [:e | Log value: 'Caught a no changes and resuming'. e resume]
             on: ProgressInitiationException do: [:e | |s|
                 "We have to reach into the exception because there is no #progressTitle
