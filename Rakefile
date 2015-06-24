@@ -119,7 +119,7 @@ task :spur_update_base_image => :spur_build do
         z.add(fName, fName) if File.exist?(fName)
       }
     }
-    image_version(interpreter_vm, vm_args(os_name), "#{SPUR_TRUNK_IMAGE}.image")
+    image_version(cog_vm, vm_args(os_name), "#{SPUR_TRUNK_IMAGE}.image")
   }
 
   puts "Updated to #{SQUEAK_VERSION}-#{squeak_update_number}"
