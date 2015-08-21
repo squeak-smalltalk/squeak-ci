@@ -13,6 +13,11 @@ require File.expand_path("#{File.expand_path(File.dirname(__FILE__))}/lib/squeak
 
 CLEAN.include('target')
 
+
+FU = FileUtils::Verbose
+#FU = FileUtils
+
+
 task :default => :test
 
 # Take the base CI image and move it into a (possibly newly) prepared test
@@ -28,8 +33,8 @@ task :build do
   puts "Interpreter VM at #{interpreter_vm}" if interpreter_vm
   raise "No VMs!" if !cog_vm && !interpreter_vm
 
-  FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
-  FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
+  FU.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{TRUNK_IMAGE}.image")
+  FU.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{TRUNK_IMAGE}.changes")
   Dir.chdir(TARGET_DIR) {
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
   }
@@ -45,8 +50,8 @@ task :spur_build do
   puts "Cog VM at #{cog_vm}" if cog_vm
   raise "No VMs!" if !cog_vm
 
-  FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.image")
-  FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.changes")
+  FU.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.image")
+  FU.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.changes")
 
   puts "=== BUILD FINISHED"
 end
@@ -64,8 +69,8 @@ task :perf => :build do
   raise "No VMs!" if !cog_vm && !interpreter_vm
 
   Dir.chdir(TARGET_DIR) {
-    FileUtils.cp("#{TRUNK_IMAGE}.image", "#{perf_image}.image")
-    FileUtils.cp("#{TRUNK_IMAGE}.changes", "#{perf_image}.changes")
+    FU.cp("#{TRUNK_IMAGE}.image", "#{perf_image}.image")
+    FU.cp("#{TRUNK_IMAGE}.changes", "#{perf_image}.changes")
     run_image_with_cmd((cog_vm || interpreter_vm), vm_args(os_name), perf_image, "#{SRC}/benchmarks.st")
   }
   puts "=== PERF FINISHED"
@@ -87,7 +92,7 @@ task :update_base_image => :build do
     assert_interpreter_compatible_image(interpreter_vm, TRUNK_IMAGE, os_name)
 
     zImage = "#{TRUNK_IMAGE}.zip"
-    FileUtils.rm(zImage) if File.exist?(zImage)
+    FU.rm(zImage) if File.exist?(zImage)
     Zip::File.open(zImage, Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
         fName = "#{TRUNK_IMAGE}.#{suffix}"
@@ -114,7 +119,7 @@ task :spur_update_base_image => :spur_build do
     run_image_with_cmd(cog_vm, vm_args(os_name), SPUR_TRUNK_IMAGE, "#{SRC}/update-image.st", 25.minutes)
 
     zImage = "#{SPUR_TRUNK_IMAGE}.zip"
-    FileUtils.rm(zImage) if File.exist?(zImage)
+    FU.rm(zImage) if File.exist?(zImage)
     Zip::File.open(zImage, Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
         fName = "#{SPUR_TRUNK_IMAGE}.#{suffix}"
@@ -141,8 +146,8 @@ task :release => :build do
   base_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
 
   puts "Preparing to release image based on #{base_name} (TrunkImage.version says #{File.read("#{SRC}/target/#{TRUNK_IMAGE}.version")})"
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/ReleaseCandidate.image")
-  FileUtils.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/ReleaseCandidate.changes")
+  FU.cp("#{SRC}/target/#{TRUNK_IMAGE}.image", "#{SRC}/target/ReleaseCandidate.image")
+  FU.cp("#{SRC}/target/#{TRUNK_IMAGE}.changes", "#{SRC}/target/ReleaseCandidate.changes")
 
   puts "Releasing based off #{base_name}"
   run_image_with_cmd(cog_vm, vm_args(os_name), 'ReleaseCandidate', "#{SRC}/release.st", 15.minutes)
@@ -150,10 +155,10 @@ task :release => :build do
 
   squeak_update_number = image_version(interpreter_vm, vm_args(os_name), "#{SRC}/target/ReleaseCandidate.image")
   release_name = "#{SQUEAK_VERSION}-#{squeak_update_number}"
-  FileUtils.cp("#{SRC}/target/ReleaseCandidate.image", "#{SRC}/target/#{release_name}.image")
-  FileUtils.cp("#{SRC}/target/ReleaseCandidate.changes", "#{SRC}/target/#{release_name}.changes")
+  FU.cp("#{SRC}/target/ReleaseCandidate.image", "#{SRC}/target/#{release_name}.image")
+  FU.cp("#{SRC}/target/ReleaseCandidate.changes", "#{SRC}/target/#{release_name}.changes")
   puts "Zipping #{release_name}"
-  FileUtils.rm("#{SRC}/target/#{SQUEAK_VERSION}.zip") if File.exist?("#{SRC}/target/#{SQUEAK_VERSION}.zip")
+  FU.rm("#{SRC}/target/#{SQUEAK_VERSION}.zip") if File.exist?("#{SRC}/target/#{SQUEAK_VERSION}.zip")
   Zip::File.open("#{SRC}/target/#{SQUEAK_VERSION}.zip", Zip::File::CREATE) { |z|
     ['changes', 'image'].each { |suffix|
       z.add("#{release_name}.#{suffix}", "#{SRC}/target/#{release_name}.#{suffix}")
