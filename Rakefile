@@ -18,7 +18,7 @@ task :default => :test
 # Take the base CI image and move it into a (possibly newly) prepared test
 # environment in the target/ directory.
 task :build do
-  TEST_IMAGE_NAME = "Squeak4.5"
+  TEST_IMAGE_NAME = "Squeak4.6"
 
   assert_target_dir
   os_name = identify_os
@@ -37,14 +37,16 @@ task :build do
 end
 
 task :spur_build do
+  TEST_IMAGE_NAME = "Squeak5.1"
+
   assert_target_dir
   os_name = identify_os
   cog_vm = assert_cog_spur_vm(os_name)
   puts "Cog VM at #{cog_vm}" if cog_vm
   raise "No VMs!" if !cog_vm
 
-  run_cmd("curl -sSo #{SRC}/target/#{SPUR_TRUNK_IMAGE}.image http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.image")
-  run_cmd("curl -sSo #{SRC}/target/#{SPUR_TRUNK_IMAGE}.changes http://www.mirandabanda.org/files/Cog/VM/SpurImages/trunk46-spur.changes")
+  FileUtils.cp("#{TEST_IMAGE_NAME}.image", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.image")
+  FileUtils.cp("#{TEST_IMAGE_NAME}.changes", "#{SRC}/target/#{SPUR_TRUNK_IMAGE}.changes")
 
   puts "=== BUILD FINISHED"
 end
