@@ -247,9 +247,7 @@ end
 
 def assert_target_dir
   FU.mkdir_p(TARGET_DIR)
-  ["SqueakV41.sources", "HudsonBuildTools.st"].each { |name|
-    FU.cp("#{SRC}/#{name}", "#{TARGET_DIR}/#{name}")
-  }
+  FU.cp(Dir.chdir(SRC) { Dir["*.sources"]} + ["HudsonBuildTools.st"], TARGET_DIR)
 end
 
 def cog_archive_name(os_name, vm_type, cog_version)
