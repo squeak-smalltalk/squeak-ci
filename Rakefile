@@ -122,7 +122,7 @@ task :spur_update_base_image => :spur_build do
     FU.rm(zImage) if File.exist?(zImage)
     Zip::File.open(zImage, Zip::File::CREATE) { |z|
       ['changes', 'image', 'manifest', 'version'].each { |suffix|
-        fName = "#{TRUNK_IMAGE}.#{suffix}"
+        fName = "#{SPUR_TRUNK_IMAGE}.#{suffix}"
         z.add(fName, fName) if File.exist?(fName)
       }
     }
