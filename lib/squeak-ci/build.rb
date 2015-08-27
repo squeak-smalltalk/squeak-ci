@@ -67,8 +67,6 @@ def assert_coglike_vm(os_name, vm_type)
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
     temp_exec_location(cog_dir) do | tmp_exec_dir |
-      plugin_dir = COG_VERSION.lib_dir(tmp_exec_dir, os_name, vm_type)
-      assert_ssl(plugin_dir, os_name)
       COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
     end
   else
