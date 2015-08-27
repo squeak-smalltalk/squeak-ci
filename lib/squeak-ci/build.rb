@@ -213,7 +213,6 @@ def assert_interpreter_vm(os_name)
 end
 
 def assert_ssl(target_dir, os_name)
-  SQUEAK_SSL_RELEASE='v0.2.0a'
   res_url = "https://github.com/itsmeront/squeakssl/releases/download/#{SQUEAK_SSL_RELEASE}"
   case os_name
   when 'linux'
