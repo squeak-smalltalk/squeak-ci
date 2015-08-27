@@ -37,8 +37,9 @@ class CogVersion
 
   def lib_dir(base_path, os_name, vm_type = :normal)
     base_name = dir_name(os_name, vm_type)
+    ht = ht? vm_type ? 'ht' : ''
     case os_name
-    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux/lib"
+    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht}/lib"
     when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win"
     when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/Resources"
     else
