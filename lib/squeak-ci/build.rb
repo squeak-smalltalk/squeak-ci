@@ -275,7 +275,7 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
   download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{cog_version.svnid}/#{cog_version.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
-    run_cmd(%(curl -LsSo "#{local_name}" "#{download_url}")
+    run_cmd(%(curl -LsSo "#{local_name}" "#{download_url}"))
 
     case os_name
     when "windows"
