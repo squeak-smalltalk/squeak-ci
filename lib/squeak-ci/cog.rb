@@ -20,14 +20,9 @@ class CogVersion
   def filename(os_name, vm_type)
     basename = dir_name(os_name, vm_type)
     case os_name
-    when "linux", "linux64" then
-      if ht? vm_type then
-        "#{basename}linuxht-#{version_string}.tgz" # Note the "ht" suffix
-      else
-        "#{basename}linux-#{version_string}.tgz"
-      end
-    when "windows" then "#{basename}win-#{version_string}.zip"
-    when "osx"     then "#{basename}-#{version_string}.tgz"
+    when "linux", "linux64" then "#{basename}linux#{ht vm_type}-#{version_string}.tgz"
+    when "windows"          then "#{basename}win-#{version_string}.zip"
+    when "osx"              then "#{basename}-#{version_string}.tgz"
     end
   end
 
@@ -35,11 +30,19 @@ class CogVersion
     [:spur, :mtht, :ht].include? vm_type
   end
 
+  def ht vm_type
+    if ht? vm_type
+      'ht'
+    else
+      ''
+    end
+  end
+
+
   def lib_dir(base_path, os_name, vm_type = :normal)
     base_name = dir_name(os_name, vm_type)
-    ht = (ht? vm_type) ? 'ht' : ''
     case os_name
-    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht}/lib"
+    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht vm_type}/lib"
     when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win"
     when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/Resources"
     else
@@ -52,8 +55,7 @@ class CogVersion
     base = base_path + "#{base_name}.r#{svnid}/#{base_name}"
     case os_name
     when "linux", "linux64" then
-      ht = (ht? vm_type) ? 'ht' : ''
-      base + "linux#{ht}/bin/squeak"
+      base + "linux#{ht vm_type}/bin/squeak"
     when "windows" then
       base + "win/SqueakConsole.exe"
     when "osx"     then

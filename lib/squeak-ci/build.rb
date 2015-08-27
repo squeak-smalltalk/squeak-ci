@@ -192,14 +192,14 @@ def assert_interpreter_vm(os_name)
       interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
       FU.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
-        run_cmd "curl -LsSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
+        run_cmd(%(curl -LsSo interpreter.zip "http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"))
         unzip('interpreter.zip')
         FU.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
     when "osx"
       log("Downloading Interpreter VM #{MAC_INTERPRETER_VERSION}")
       Dir.chdir(TARGET_DIR) {
-        run_cmd "curl -LsSo interpreter.zip http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"
+        run_cmd(%(curl -LsSo interpreter.zip "http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"))
         unzip('interpreter.zip')
         FU.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
       }
@@ -215,7 +215,7 @@ end
 def assert_ssl(target_dir, os_name)
   res_url = "https://github.com/itsmeront/squeakssl/releases/download/#{SQUEAK_SSL_RELEASE}"
   case os_name
-  when 'linux'
+  when "linux", "linux64"
     run_cmd(%(curl -LsSO "#{res_url}/linux32.zip"))
     unzip('linux32.zip')
     FU.cp('linux32/SqueakSSL', target_dir)
@@ -238,8 +238,8 @@ def assert_trunk_image
   else
     log("Downloading new #{TRUNK_IMAGE}")
     Dir.chdir(TARGET_DIR) {
-      run_cmd "curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image"
-      run_cmd "curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes"
+      run_cmd(%(curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image)
+      run_cmd(%(curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes)
     }
   end
 end
@@ -265,18 +265,6 @@ def cog_archive_name(os_name, vm_type, cog_version)
   "#{cog_version.dir_name(os_name, vm_type)}#{suffix}.#{ext}"
 end
 
-def fix_ssl(cog_dir, vm_type, cog_version)
-  # LINUX ONLY
-  # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
-  # so on Debian use one we ship.
-  if File.exists?("/etc/debian_version")
-    ht = (cog_version.ht? vm_type) ? "ht" : ""
-    base = cog_version.dir_name("linux", vm_type)
-    libdir = Dir.new("#{cog_dir}/#{base}linux#{ht}/lib/squeak").entries.detect { | e | e =~ /#{cog_version.svnid}$/ }
-    FU.cp("#{SRC}/SqueakSSL", "#{cog_dir}/#{base}linux#{ht}/lib/squeak/#{libdir}/SqueakSSL")
-  end
-end
-
 def debug?
   # For the nonce, always output debug info
   true
@@ -287,16 +275,13 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
   download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{cog_version.svnid}/#{cog_version.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
-    run_cmd "curl -LsSo #{local_name} #{download_url}"
+    run_cmd(%(curl -LsSo "#{local_name}" "#{download_url}")
 
     case os_name
     when "windows"
       unzip(local_name)
     else
-      run_cmd "tar zxf #{local_name}"
-      fix_ssl cog_dir, vm_type, cog_version if os_name == "linux"
-      #      rc = run_cmd "tar zxf #{local_name}"
-#      raise "Cog zip broken: no such Cog?" if rc != 0
+      run_cmd(%(tar zxf "#{local_name}"))
     end
   }
 end
