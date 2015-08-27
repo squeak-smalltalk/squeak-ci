@@ -67,6 +67,8 @@ def assert_coglike_vm(os_name, vm_type)
   if File.exists?(cog_dir) then
     log("Using existing #{cog_desc}")
     temp_exec_location(cog_dir) do | tmp_exec_dir |
+      plugin_dir = COG_VERSION.lib_dir(tmp_exec_dir, os_name, vm_type)
+      assert_ssl(plugin_dir, os_name)
       COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
     end
   else
@@ -76,7 +78,8 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
-        lib_dir = COG_VERSION.lib_dir(TARGET_DIR, os_name, vm_type)
+        plugin_dir = COG_VERSION.lib_dir(tmp_exec_dir, os_name, vm_type)
+        assert_ssl(plugin_dir, os_name)
         temp_exec_location(cog_dir) do | tmp_exec_dir |
           COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
         end
@@ -172,7 +175,7 @@ def assert_interpreter_vm(os_name)
       Dir.chdir(TARGET_DIR) { Dir.glob("*-src-*") {|stale_interpreter| FU.rm_rf(stale_interpreter)} }
       Dir.mktmpdir do | tmpdir |
         Dir.chdir(tmpdir) {
-          run_cmd(%(curl -sSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz))
+          run_cmd(%(curl -LsSo interpreter.tgz http://www.squeakvm.org/unix/release/Squeak-#{INTERPRETER_VERSION}-src.tar.gz))
           run_cmd(%(tar zxf interpreter.tgz))
           build_dir = "#{src_dir_name}/bld"
           FU.mkdir_p(build_dir)
@@ -189,14 +192,14 @@ def assert_interpreter_vm(os_name)
       interpreter_src_dir = "#{TARGET_DIR}/Squeak-#{WINDOWS_INTERPRETER_VERSION}-src-#{word_size}"
       FU.rm_rf(interpreter_src_dir) if File.exist?(interpreter_src_dir)
       Dir.chdir(TARGET_DIR) {
-        run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
+        run_cmd "curl -LsSo interpreter.zip http://www.squeakvm.org/win32/release/Squeak#{WINDOWS_INTERPRETER_VERSION}.win32-i386.zip"
         unzip('interpreter.zip')
         FU.mv("Squeak#{WINDOWS_INTERPRETER_VERSION}", interpreter_src_dir)
       }
     when "osx"
       log("Downloading Interpreter VM #{MAC_INTERPRETER_VERSION}")
       Dir.chdir(TARGET_DIR) {
-        run_cmd "curl -sSo interpreter.zip http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"
+        run_cmd "curl -LsSo interpreter.zip http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"
         unzip('interpreter.zip')
         FU.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
       }
@@ -210,26 +213,23 @@ def assert_interpreter_vm(os_name)
 end
 
 def assert_ssl(target_dir, os_name)
-  # My hope is that this becomes a standard plugin, and this function can disappear.
-  raise "Can't install SSL on #{os_name}" if not ["linux", "linux64", "windows"].include?(os_name)
-  if not File.exist?("#{target_dir}/SqueakSSL") then
-    Dir.chdir(target_dir) {
-      run_cmd(%(curl -sSO https://squeakssl.googlecode.com/files/SqueakSSL-bin-0.1.5.zip))
-      unzip('SqueakSSL-bin-0.1.5.zip')
-      case os_name
-      when "windows" then
-        FU.cp("SqueakSSL-bin/win/SqueakSSL.dll", "#{target_dir}/SqueakSSL.dll")
-      else
-        # Ok, the downloaded SqueakSSL links against a non-debian-named SquakSSL
-        # so on Debian use one we ship.
-        if File.exists?("/etc/debian_version")
-          FU.cp("#{SRC}/SqueakSSL", "#{target_dir}/SqueakSSL")
-        else
-          FU.cp("SqueakSSL-bin/unix/so.SqueakSSL", "#{target_dir}/SqueakSSL")
-        end
-      end
-      FU.rm_rf("SqueakSSL-bin")
-    }
+  SQUEAK_SSL_RELEASE='v0.2.0a'
+  res_url = "https://github.com/itsmeront/squeakssl/releases/download/#{SQUEAK_SSL_RELEASE}"
+  case os_name
+  when 'linux'
+    run_cmd(%(curl -LsSO "#{res_url}/linux32.zip"))
+    unzip('linux32.zip')
+    FU.cp('linux32/SqueakSSL', target_dir)
+  when 'windows'
+    run_cmd(%(curl -LsSO "#{res_url}/windows.zip"))
+    unzip('windows.zip')
+    FU.cp('windows/SqueakSSL.DLL', "#{}/SqueakSSL.dll")
+  when 'osx'
+    run_cmd(%(curl -LsSO "#{res_url}/macosx.zip"))
+    unzip('macosx.zip')
+    FU.cp_r('macosx/SqueakSSL.bundle', target_dir)
+  else
+    raise "Can't install SSL on #{os_name} yet"
   end
 end
 
@@ -239,8 +239,8 @@ def assert_trunk_image
   else
     log("Downloading new #{TRUNK_IMAGE}")
     Dir.chdir(TARGET_DIR) {
-      run_cmd "curl -sSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image"
-      run_cmd "curl -sSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes"
+      run_cmd "curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image"
+      run_cmd "curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes"
     }
   end
 end
@@ -288,7 +288,7 @@ def download_cog(os_name, vm_type, cog_version, cog_dir)
   local_name = cog_archive_name(os_name, vm_type, cog_version)
   download_url = "http://www.mirandabanda.org/files/Cog/VM/VM.r#{cog_version.svnid}/#{cog_version.filename(os_name, vm_type)}"
   Dir.chdir(cog_dir) {
-    run_cmd "curl -sSo #{local_name} #{download_url}"
+    run_cmd "curl -LsSo #{local_name} #{download_url}"
 
     case os_name
     when "windows"
