@@ -238,8 +238,8 @@ def assert_trunk_image
   else
     log("Downloading new #{TRUNK_IMAGE}")
     Dir.chdir(TARGET_DIR) {
-      run_cmd(%(curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image)
-      run_cmd(%(curl -LsSO #{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes)
+      run_cmd(%(curl -LsSO "#{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.image"))
+      run_cmd(%(curl -LsSO "#{BASE_URL}/job/SqueakTrunk/lastSuccessfulBuild/artifact/target/#{TRUNK_IMAGE}.changes"))
     }
   end
 end
