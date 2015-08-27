@@ -43,8 +43,8 @@ class CogVersion
     base_name = dir_name(os_name, vm_type)
     case os_name
     when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht vm_type}/lib"
-    when "windows" then base_path + "#{base_name}.r#{svnid}/#{base_name}win"
-    when "osx" then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/Resources"
+    when "windows"          then base_path + "#{base_name}.r#{svnid}/#{base_name}win"
+    when "osx"              then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/Resources"
     else
       nil
     end
@@ -52,14 +52,10 @@ class CogVersion
 
   def cog_location(base_path, os_name, vm_type = :normal)
     base_name = dir_name(os_name, vm_type)
-    base = base_path + "#{base_name}.r#{svnid}/#{base_name}"
     case os_name
-    when "linux", "linux64" then
-      base + "linux#{ht vm_type}/bin/squeak"
-    when "windows" then
-      base + "win/SqueakConsole.exe"
-    when "osx"     then
-      base + "/Contents/MacOS/Squeak"
+    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht vm_type}/bin/squeak"
+    when "windows"          then base_path + "#{base_name}.r#{svnid}/#{base_name}win/SqueakConsole.exe"
+    when "osx"              then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/MacOS/Squeak"
     else
       nil
     end
