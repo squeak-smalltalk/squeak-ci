@@ -76,7 +76,7 @@ def assert_coglike_vm(os_name, vm_type)
     begin
       begin
         download_cog(os_name, vm_type, COG_VERSION, cog_dir)
-        plugin_dir = COG_VERSION.lib_dir(cog_dir, os_name, vm_type)
+        plugin_dir = COG_VERSION.lib_dir(TARGET_DIR, os_name, vm_type)
         assert_ssl(plugin_dir, os_name)
         temp_exec_location(cog_dir) do | tmp_exec_dir |
           COG_VERSION.cog_location(tmp_exec_dir, os_name, vm_type)
