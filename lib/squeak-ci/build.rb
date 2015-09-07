@@ -333,7 +333,14 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 600)
       log("spawning command #{cmd_count} with timeout #{timeout.to_s} seconds: #{base_cmd}")
       # Don't nice(1), because then the PID we get it nice's PID, not the Squeak process'
       # PID. We need this so we can send the process a USR1.
-      pid = spawn(%(#{base_cmd} && echo command #{cmd_count} finished))
+      case identify_os
+        when "linux", "linux64"
+            # For a linker error in SqueakSSL, preload librt
+            pid = spawn({"LD_PRELOAD" => "/usr/lib/librt.so"}, 
+                        %(#{base_cmd} && echo command #{cmd_count} finished))
+        else
+            pid = spawn(%(#{base_cmd} && echo command #{cmd_count} finished))
+      end
       log("(Command started with PID #{pid})")
       Thread.new {
         kill_time = Time.now + timeout.seconds
