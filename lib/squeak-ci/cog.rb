@@ -41,8 +41,9 @@ class CogVersion
 
   def lib_dir(base_path, os_name, vm_type = :normal)
     base_name = dir_name(os_name, vm_type)
+    major_rev = vm_type == :spur ? "5.0" : "4.0"
     case os_name
-    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht vm_type}/lib"
+    when "linux", "linux64" then base_path + "#{base_name}.r#{svnid}/#{base_name}linux#{ht vm_type}/lib/squeak/#{major_rev}-#{svnid}"
     when "windows"          then base_path + "#{base_name}.r#{svnid}/#{base_name}win"
     when "osx"              then base_path + "#{base_name}.r#{svnid}/#{base_name}/Contents/Resources"
     else
