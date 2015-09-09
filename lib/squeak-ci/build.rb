@@ -338,8 +338,8 @@ def run_image_with_cmd(vm_name, arr_of_vm_args, image_name, cmd, timeout = 600)
             # For a linker error in SqueakSSL, preload librt
             librt = if File.exist?("/usr/lib/i386-linux-gnu/librt.so")
               "/usr/lib/i386-linux-gnu/librt.so"
-            elsif File.exist?("/usr/lib32/librt.so")
-              "/usr/lib32/librt.so"
+            elsif File.exist?("/lib32/librt-2.13.so")
+              "/lib32/librt-2.13.so"
             else
                "/usr/lib/librt.so"
              end
