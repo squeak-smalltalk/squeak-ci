@@ -7,12 +7,7 @@ describe "Trunk test suite for Spur" do
 
   before :all do
     @os_name = identify_os
-    @vm = case @os_name
-          when "linux64"
-            fail "linux64 not supported by Spur"
-          else
-            assert_cog_spur_vm(@os_name)
-          end
+    assert_cog_spur_vm(@os_name)
 
     Dir.chdir(TARGET_DIR) {
       # Copy the clean image so we can run the tests without touching the artifact.
