@@ -7,7 +7,7 @@ describe "Trunk test suite for Spur" do
 
   before :all do
     @os_name = identify_os
-    assert_cog_spur_vm(@os_name)
+    @vm = assert_cog_spur_vm(@os_name)
 
     Dir.chdir(TARGET_DIR) {
       # Copy the clean image so we can run the tests without touching the artifact.
