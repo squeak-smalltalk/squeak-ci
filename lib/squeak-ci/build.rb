@@ -220,7 +220,7 @@ def assert_ssl(target_dir, os_name)
   when 'windows'
     run_cmd(%(curl -LsSO "#{res_url}/windows.zip"))
     unzip('windows.zip')
-    FU.cp('windows/SqueakSSL.DLL', "#{}/SqueakSSL.dll")
+    FU.cp('windows/SqueakSSL.DLL', "#{target_dir}/SqueakSSL.dll")
   when 'osx'
     run_cmd(%(curl -LsSO "#{res_url}/macosx.zip"))
     unzip('macosx.zip')
