@@ -1,0 +1,3 @@
+build_script:
+  - bundle install
+  - rake test
