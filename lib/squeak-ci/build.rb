@@ -199,7 +199,7 @@ def assert_interpreter_vm(os_name)
       Dir.chdir(TARGET_DIR) {
         run_cmd(%(curl -LsSo interpreter.zip "http://www.squeakvm.org/mac/release/Squeak%20#{MAC_INTERPRETER_VERSION}.zip"))
         unzip('interpreter.zip')
-        FU.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_dir)
+        FU.mv("Squeak #{MAC_INTERPRETER_VERSION}.app", interpreter_src_dir)
       }
     else
       log("Unknown OS #{os_name} for Interpreter VM. Aborting.")
