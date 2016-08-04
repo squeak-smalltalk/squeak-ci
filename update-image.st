@@ -30,7 +30,7 @@ MCMcmUpdater defaultUpdateURL: 'http://source.squeak.org/trunk'.
         MCFileBasedRepository flushAllCaches.
         config := [ |u|
                     u := (MCMcmUpdater respondsTo: #default) ifTrue: [MCMcmUpdater default] ifFalse: [MCMcmUpdater].
-                    [u updateFromDefaultRepository]
+                    [u updateFromServer]
                     "There's no (#on:do){4+}"
                     on: ProgressNotification do: [:e | Log value: e extraParam. e resume]]
             on: MCNoChangesException do: [:e | Log value: 'Caught a no changes and resuming'. e resume]
